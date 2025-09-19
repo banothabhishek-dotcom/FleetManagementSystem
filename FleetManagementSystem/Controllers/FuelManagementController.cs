@@ -1,12 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FleetManagementSystem.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FleetManagementSystem.Controllers
 {
     public class FuelManagementController : Controller
     {
-        public IActionResult Index()
+
+        private readonly ApplicationDbContext _db;
+        public FuelManagementController(ApplicationDbContext db)
         {
-            return View();
+            _db = db;
         }
+        public IActionResult FuelEntries()
+        {
+            List<Models.Fuel_Management> objFuelEntries = _db.Fuel_Management.ToList();
+            return View(objFuelEntries);
+        }
+
+
     }
 }
