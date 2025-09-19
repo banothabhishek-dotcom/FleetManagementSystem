@@ -2,7 +2,7 @@
 
 namespace FleetManagementSystem.Models
 {
-    public class Users
+    public class User_Details
     {
         [Key]
         public int UserId { get; set; }

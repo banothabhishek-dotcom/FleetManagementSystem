@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FleetManagementSystem.Models
 {
-    public class Performance
+    public class Performance_Analysis
     {
         [Key]
         public int PerformanceId { get; set; }
