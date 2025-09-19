@@ -3,6 +3,7 @@ using FleetManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FleetManagementSystem.Controllers
 {
@@ -21,7 +22,7 @@ namespace FleetManagementSystem.Controllers
         {
             //to list the tables we have to write listing logic here 
             //dbset needs to be added
-            List<Models.Vehicle_Management> objVehicleEntries = _db.Vehicle_Management.ToList();
+            List<Models.Vehicle_Management> objVehicleEntries = _db.Vehicles.ToList();
             return View(objVehicleEntries);
         }
         [HttpPost]
@@ -38,7 +39,7 @@ namespace FleetManagementSystem.Controllers
             {
                 return NotFound();
             }
-            var vehicleFromDb = _db.Vehicle_Management.FindAsync(id);
+            var vehicleFromDb =await  _db.Vehicles.FindAsync(id);
             if (vehicleFromDb == null)
             {
                 return NotFound();
@@ -48,7 +49,7 @@ namespace FleetManagementSystem.Controllers
         [HttpPost]
         public IActionResult EditVehicle(Vehicle_Management obj)
         {
-            _db.Vehicle_Management.Update(obj);
+            _db.Vehicles.Update(obj);
             _db.SaveChangesAsync();
             return RedirectToAction("VehicleEntries");
         }
@@ -59,7 +60,7 @@ namespace FleetManagementSystem.Controllers
             {
                 return NotFound();
             }
-            var vehicleFromDb = await _db.Vehicle_Management.FindAsync(id);
+            var vehicleFromDb = await _db.Vehicles.FindAsync(id);
             if (vehicleFromDb == null)
             {
                 return NotFound();
@@ -67,15 +68,15 @@ namespace FleetManagementSystem.Controllers
             return View(vehicleFromDb);
         }
         [HttpPost, ActionName("DeleteVehicle")]
-        public IActionResult DeleteVehiclePOST(int? id)
+        public async Task<IActionResult> DeleteVehiclePOST(int? id)
         {
-            var obj = _db.Vehicle_Management.Find(id);
+            var obj =await  _db.Vehicles.FindAsync(id);
             if (obj == null)
             {
                 return NotFound();
             }
-            _db.Vehicle_Management.Remove(obj);
-            _db.SaveChangesAsync();
+            _db.Vehicles.Remove(obj);
+            await _db.SaveChangesAsync();
             return RedirectToAction("VehicleEntries");
         }
     }

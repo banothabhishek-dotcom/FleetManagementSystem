@@ -13,7 +13,7 @@ namespace FleetManagementSystem.Controllers
         }
         public IActionResult FuelEntries()
         {
-            List<Models.Fuel_Management> objFuelEntries = _db.Fuel_Management.ToList();
+            List<Models.Fuel_Management> objFuelEntries = _db.FuelRecords.ToList();
             return View(objFuelEntries);
         }
 
