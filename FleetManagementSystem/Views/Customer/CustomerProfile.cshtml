@@ -1,0 +1,62 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+    ViewData["Title"] = "Customer History";
+}
+
+
+<link href="/css/CustomerProfile.css" rel="stylesheet"/>
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar">
+            <h4 class="px-3">⚙️ Settings</h4>
+            <a href="#">Edit Profile</a>
+            <a href="#">Help</a>
+            <a asp-controller="Customer" asp-action="CustomerPage"><i class="fa-solid fa-left-long"></i>Back</a>
+            <a href="#" id="logoutBtn">🚪 Logout</a>
+        </div>
+
+        <!-- Profile Form -->
+        <div class="col-md-9 col-lg-10 p-5">
+            <div class="profile-card">
+                <h3 class="mb-4">Edit Profile</h3>
+                <form id="profileForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" value="john_doe">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" value="John">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" value="Doe">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" value="john2@gmail.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone" value="+91 9876543210">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Change Password</label>
+                            <input type="password" class="form-control" id="changePassword" value="">
+                        </div>
+                    </div>
+                    <div class="mt-4 text-end">
+                        <button type="button" class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="saveBtn">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
