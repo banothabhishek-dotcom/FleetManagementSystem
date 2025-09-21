@@ -1,0 +1,148 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+
+<head>
+    <style>
+        .btn-custom {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+            .btn-custom:hover {
+                background-color: #0b5ed7;
+            }
+
+            .btn-custom:hover {
+                background-color: #0b5ed7;
+            }
+    </style>
+</head>
+
+<div class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage" id="logo">Fleetora</a>
+
+            <!-- Toggler added here -->
+            <a class="navbar-brand" href="/landing/landing.html">Fleetora</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="me-5">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-dark" title="Logout">
+                            <i class="fas fa-user fa-lg"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="text-start mt-3 ms-3">
+        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
+    </div>
+    <!-- Dashboard -->
+    <div class="container" id="dashboard">
+        <h2 class="my-4 text-center">📊 Fleet Performance Dashboard</h2>
+
+        <!-- Static Month/Year Selection -->
+        <!-- <div class="mb-4">
+            <label for="reportMonth" class="form-label">Select Month:</label>
+            <select id="reportMonth" class="form-select w-50">
+                <option selected>August</option>
+                <option>July</option>
+                <option>June</option>
+            </select>
+
+            <label for="reportYear" class="form-label mt-3">Select Year:</label>
+            <select id="reportYear" class="form-select w-50">
+                <option selected>2025</option>
+                <option>2024</option>
+                <option>2023</option>
+            </select>
+        </div> -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="reportMonth" class="form-label">Select Month:</label>
+                <select id="reportMonth" class="form-select">
+                    <option selected>August</option>
+                    <option>July</option>
+                    <option>June</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="reportYear" class="form-label">Select Year:</label>
+                <select id="reportYear" class="form-select">
+                    <option selected>2025</option>
+                    <option>2024</option>
+                    <option>2023</option>
+                </select>
+            </div>
+        </div>
+
+
+        <!-- Dashboard Cards -->
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="card p-3 text-center shadow">
+                    <h5>Total Trips</h5>
+                    <p class="fs-4 text-primary">128</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 text-center shadow">
+                    <h5>Fuel Efficiency</h5>
+                    <p class="fs-4 text-success">14.2 km/l</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 text-center shadow">
+                    <h5>Utilization</h5>
+                    <p class="fs-4 text-warning">76%</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card p-3 text-center shadow">
+                    <h5>Downtime</h5>
+                    <p class="fs-4 text-danger">12 hrs</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Static Chart Image -->
+        <div class="mt-5">
+            <h4>📈 Utilization vs Downtime</h4>
+            <div class="card ">
+                <div class="row">
+                    <div class="small-chart text-center col">
+                        <img src="/assets/image.png" alt="" class="img-fluid" style="width: auto;height: auto;">
+                    </div>
+                    <div class="small-chart text-center col">
+                        <img src="/assets/piechart.png" alt="" class="img-fluid" style="width: 350px;height: 350px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download Button -->
+        <div class="mt-4">
+            <button class="btn btn-primary">⬇ Download Report (PDF)</button>
+        </div>
+    </div>
+
+
+</div>
+

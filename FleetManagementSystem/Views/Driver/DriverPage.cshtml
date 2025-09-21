@@ -1,0 +1,168 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    Layout = "~/Views/Shared/_DriverLayout.cshtml";
+    ViewData["Title"] = "Driver Page";
+}
+<link rel="stylesheet" href="/css/DriverPage.css" />
+
+<div>
+
+   
+
+
+
+    <div class="container" style="margin-top:100px ;">
+        <div class="card shadow-lg rounded p-4 my-5">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <h1 class="fw-bold">Welcome Prathik</h1>
+                    <p class="lead text-muted">Have a great day! Start your rides.</p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="/assets/driver.webp" alt="Driver Logo" class="img-fluid rounded" style="max-height: 200px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container  my-4">
+        <div class="card-custom shadow-lg rounded p-4">
+            <div class="close-btn" id="closeCard">×</div>
+            <h4 class="text-center mb-4 text-primary">PickUp Details</h4>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Name:</strong> Sejal Bisen
+                </div>
+                <div class="col-md-6">
+                    <strong>Phone Number:</strong> 9424379846
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Pickup Address:</strong> SRS Balaghat
+                </div>
+                <div class="col-md-6">
+                    <strong>Drop Address:</strong> Sipcot
+                </div>
+            </div>
+            <hr>
+            <div class="container my-4">
+                <div class="card-custom  p-4">
+                    <h4 class="text-center mb-4 text-primary">Track Details</h4>
+
+                    <div class="d-flex justify-content-between align-items-center position-relative" id="trackRow"
+                         style="height: 100px;">
+                        <button id="startBtn" type="button" class="btn btn-success ms-2">Start</button>
+
+                        <i id="truckIcon" class="fa-solid fa-truck offset-1"
+                           style="position: absolute; top: 40px; left: 0; font-size: 20px; color: #131313;"></i>
+
+                        <button id="stopBtn" type="button" class="btn btn-danger me-2">End</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Fare Calculation Modal -->
+    <div class="modal fade" id="fareModal" tabindex="-1" aria-labelledby="fareModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fareModalLabel">Fare Calculation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="fareForm">
+                        <div class="mb-3">
+                            <label for="kilometers" class="form-label">Number of Kilometers</label>
+                            <input type="number" class="form-control" id="kilometers" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="costPerKm" class="form-label">Cost per Kilometer</label>
+                            <input type="number" class="form-control" id="costPerKm" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="totalFare" class="form-label">Total Fare</label>
+                            <input type="text" class="form-control" id="totalFare" readonly>
+                        </div>
+                        <button type="button" class="btn btn-primary w-100" id="calculateFareBtn">Calculate Fare</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const duration = 10000;
+
+
+        $('#startBtn').click(function () {
+          const track = $('#trackRow');
+          const startBtnWidth = $('#startBtn').outerWidth(true);
+          const stopBtnWidth = $('#stopBtn').outerWidth(true);
+          const truckWidth = $('#truckIcon').outerWidth(true);
+          const trackWidth = track.width();
+
+          const startLeft = startBtnWidth ; // buffer from Start button
+          const endLeft = trackWidth - stopBtnWidth - truckWidth - 10; // buffer before Stop button
+
+          $('#truckIcon').css('left', startLeft).stop().animate({ left: endLeft }, duration);
+        });
+
+        $('#stopBtn').click(function () {
+          const track = $('#trackRow');
+          const stopBtnWidth = $('#stopBtn').outerWidth(true);
+          const truckWidth = $('#truckIcon').outerWidth(true);
+          const trackWidth = track.width();
+
+          const endLeft = trackWidth - stopBtnWidth - truckWidth - 10;
+
+          $('#truckIcon').stop().css('left', endLeft);
+        });
+
+
+        $(document).ready(function () {
+          $("#closeCard").click(function () {
+            $(".card-custom").fadeOut();
+          });
+        });
+    </script>
+    <div id="footer1"></div>
+    <script>
+        $(document).ready(function () {
+              $("#footer1").load("/footer/footer.html");
+            })
+            $('#stopBtn').click(function () {
+          const track = $('#trackRow');
+          const stopBtnWidth = $('#stopBtn').outerWidth(true);
+          const truckWidth = $('#truckIcon').outerWidth(true);
+          const trackWidth = track.width();
+
+          const endLeft = trackWidth - stopBtnWidth - truckWidth - 10;
+
+          $('#truckIcon').stop().css('left', endLeft);
+
+          // Show the fare modal
+          const fareModal = new bootstrap.Modal(document.getElementById('fareModal'));
+          fareModal.show();
+        });
+
+        $('#calculateFareBtn').click(function () {
+          const km = parseFloat($('#kilometers').val());
+          const cost = parseFloat($('#costPerKm').val());
+
+          if (!isNaN(km) && !isNaN(cost)) {
+            const fare = km * cost;
+            $('#totalFare').val(`₹${fare.toFixed(2)}`);
+          } else {
+            alert('Please enter valid numbers for both fields.');
+          }
+        });
+
+    </script>
+    </div>

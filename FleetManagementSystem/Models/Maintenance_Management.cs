@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FleetManagementSystem.Models
 {
-    public class Maintanence_Management
+    public class Maintenance_Management
     {
         [Key]
         public int MaintenanceId { get; set; }

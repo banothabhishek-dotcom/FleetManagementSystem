@@ -1,0 +1,76 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage">Fleetora</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" asp-controller="Admin" asp-action="Trip_Scheduling">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" asp-controller="Admin" asp-action="Trip_History">History</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container py-5">
+        <h2 class="text-center text-primary mb-4">Accepted Bookings</h2>
+
+        <table class="table table-bordered table-striped" id="bookingTable">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Vehicle</th>
+                    <th>Driver</th>
+                    <th>Pickup</th>
+                    <th>Drop</th>
+                    <th>Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Ravi Kumar</td>
+                    <td>—</td>
+                    <td>Sedan</td>
+                    <td>Arun</td>
+                    <td>Tambaram Railway Station</td>
+                    <td>Chennai Airport</td>
+                    <td>2025-08-30 10:00 AM</td>
+                    <td><button class="btn btn-sm btn-info edit-btn">Edit</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Sneha Reddy</td>
+                    <td>—</td>
+                    <td>SUV</td>
+                    <td>Deepa</td>
+                    <td>Velachery</td>
+                    <td>Central Railway Station</td>
+                    <td>2025-08-30 11:30 AM</td>
+                    <td><button class="btn btn-sm btn-info edit-btn">Edit</button></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Mohan Das</td>
+                    <td>—</td>
+                    <td>Auto Rickshaw</td>
+                    <td>Karthik</td>
+                    <td>Guindy Bus Stand</td>
+                    <td>T Nagar</td>
+                    <td>2025-08-30 12:15 PM</td>
+                    <td><button class="btn btn-sm btn-info edit-btn">Edit</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</div>

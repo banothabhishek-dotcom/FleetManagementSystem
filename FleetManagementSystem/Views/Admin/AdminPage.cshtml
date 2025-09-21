@@ -1,0 +1,131 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<head>
+
+    <style>
+        #logo {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 25px;
+        }
+
+        .card {
+            border: none;
+            transform: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+            .card:hover {
+                transform: translateY(-15px);
+            }
+    </style>
+</head>
+
+
+<div>
+
+    <!--navbar-->
+
+    <nav id="navBar" class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage" id="logo">Fleetora</a>
+
+            <!-- Toggler added here -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <!-- Collapsible content wrapper -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div id="Logout" class="me-5">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-dark" data-bs-toggle="popover" data-bs-html="true"
+                                data-bs-placement="top" data-bs-content='Logout <i class="fas fa-sign-out fa-lg"></i>'>
+                            <i class="fas fa-user fa-lg"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="row g-4 mt-5 ms-auto me-auto">
+        <!--CARD-1-->
+
+        <div class="col-md-4 col-lg-3">
+            <a asp-controller="VehicleManagement" asp-action="Vehicle_Management" style="text-decoration: none;">
+                <div class="card shadow h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title mt-1">Vehicle Management</h5>
+                        <i class="fas fa-truck  fa-5x my-4 text-primary"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!--CARD-2-->
+
+        <div class="col-md-4 col-lg-3">
+            <a asp-controller="TripScheduling" asp-action="Trip_Scheduling" style="text-decoration: none;">
+                <div class="card shadow h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title mt-1">Trip Scheduling</h5>
+                        <i class="fas fa-route fa-5x my-4 text-primary"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <!--CARD-3-->
+
+        <div class="col-md-4 col-lg-3">
+            <a asp-controller="FuelManagement" asp-action="Fuel_Management" style="text-decoration: none;">
+                <div class="card shadow h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title mt-1">Fuel Management</h5>
+                        <i class="fas fa-gas-pump fa-5x my-4 text-primary"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+        <!--CARD-4-->
+        <div class="col-md-4 col-lg-3">
+            <a asp-controller="MaintenanceTracking" asp-action="Maintenance_Tracking" style="text-decoration: none;">
+                <div class="card shadow h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title mt-1"> Maintenance Tracking</h5>
+                        <i class="fas fa-tools fa-5x my-4 text-primary"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!--CARD-5-->
+        <div class="col-md-4 col-lg-3">
+            <a asp-controller="PerformanceAnalysis" asp-action="Performance_Analysis" style="text-decoration: none;">
+                <div class="card shadow h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title mt-1"> Performance Analysis</h5>
+                        <i class="fas fa-chart-line fa-5x text-primary my-4"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+
+
+    </div>
+
+</div>
+

@@ -7,21 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Admin\User_Details\**" />
     <Compile Remove="wwwroot\css\NewFolder\**" />
     <Compile Remove="wwwroot\NewFolder1\**" />
     <Compile Remove="wwwroot\NewFolder2\**" />
     <Compile Remove="wwwroot\NewFolder3\**" />
     <Compile Remove="wwwroot\NewFolder\**" />
+    <Content Remove="Views\Admin\User_Details\**" />
     <Content Remove="wwwroot\css\NewFolder\**" />
     <Content Remove="wwwroot\NewFolder1\**" />
     <Content Remove="wwwroot\NewFolder2\**" />
     <Content Remove="wwwroot\NewFolder3\**" />
     <Content Remove="wwwroot\NewFolder\**" />
+    <EmbeddedResource Remove="Views\Admin\User_Details\**" />
     <EmbeddedResource Remove="wwwroot\css\NewFolder\**" />
     <EmbeddedResource Remove="wwwroot\NewFolder1\**" />
     <EmbeddedResource Remove="wwwroot\NewFolder2\**" />
     <EmbeddedResource Remove="wwwroot\NewFolder3\**" />
     <EmbeddedResource Remove="wwwroot\NewFolder\**" />
+    <None Remove="Views\Admin\User_Details\**" />
     <None Remove="wwwroot\css\NewFolder\**" />
     <None Remove="wwwroot\NewFolder1\**" />
     <None Remove="wwwroot\NewFolder2\**" />
@@ -47,16 +51,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Admin\Fuel_Management\" />
-    <Folder Include="Views\Admin\Maintanence_Management\" />
-    <Folder Include="Views\Admin\Trip_Scheduling\" />
-    <Folder Include="Views\Admin\User_Details\" />
-    <Folder Include="Views\Admin\Performance_Analysis\" />
-    <Folder Include="Views\Admin\Vehicle_Management\" />
-    <Folder Include="Views\Driver\" />
   </ItemGroup>
 
 </Project>

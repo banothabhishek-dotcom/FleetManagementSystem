@@ -1,0 +1,214 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<head>
+     <style>
+        .card {
+            margin-bottom: 20px;
+        }
+
+        .details {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .btn-custom {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+            .btn-custom:hover {
+                background-color: #0b5ed7;
+            }
+
+            .btn-custom:hover {
+                background-color: #0b5ed7;
+            }
+    </style>
+</head>
+
+<div>
+
+    <!-- 🌐 Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage">Fleetora</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" asp-controller="Admin" asp-action="Trip_Scheduling">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" asp-controller="Admin" asp-action="Trip_History">History</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="text-start mt-3 ms-3">
+        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
+    </div>
+
+    <!-- 🚗 Ride Bookings -->
+    <div id="booking-view" class="container">
+        <h2 class="mb-4 text-center">Ride Bookings</h2>
+
+        <!-- Booking Cards -->
+        <div id="card-container">
+
+            <!-- Booking Card: Ravi Kumar -->
+            <div class="card border-info shadow-sm booking-card">
+                <div class="card-body">
+                    <h5 class="card-title">Ravi Kumar</h5>
+                    <p><strong>Pickup:</strong> Tambaram Railway Station</p>
+                    <p><strong>Drop:</strong> Chennai Airport</p>
+                    <div class="details">
+                        <p><strong>Date:</strong> 2025-08-30</p>
+                        <p><strong>Time:</strong> 10:00 AM</p>
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Vehicle Type:</strong></label>
+                            <select class="form-select vehicle-select">
+                                <option value="">-- Select Vehicle --</option>
+                                <option value="Sedan">Sedan</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Auto Rickshaw">Auto Rickshaw</option>
+                                <option value="Mini Van">Mini Van</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Assign Driver:</strong></label>
+                            <select class="form-select driver-select">
+                                <option value="">-- Select Driver --</option>
+                                <option value="Arun">Arun</option>
+                                <option value="Deepa">Deepa</option>
+                                <option value="Karthik">Karthik</option>
+                                <option value="Meena">Meena</option>
+                                <option value="Ramesh">Ramesh</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-info mt-3 view-more">View More</button>
+                    <button class="btn btn-success mt-3 accept" disabled>Accept</button>
+                    <button class="btn btn-danger mt-3 decline">Decline</button>
+                </div>
+            </div>
+
+            <!-- Booking Card: Sneha Reddy -->
+            <div class="card border-info shadow-sm booking-card">
+                <div class="card-body">
+                    <h5 class="card-title">Sneha Reddy</h5>
+                    <p><strong>Pickup:</strong> Velachery</p>
+                    <p><strong>Drop:</strong> Central Railway Station</p>
+                    <div class="details">
+                        <p><strong>Date:</strong> 2025-08-30</p>
+                        <p><strong>Time:</strong> 11:30 AM</p>
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Vehicle Type:</strong></label>
+                            <select class="form-select vehicle-select">
+                                <option value="">-- Select Vehicle --</option>
+                                <option value="Sedan">Sedan</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Auto Rickshaw">Auto Rickshaw</option>
+                                <option value="Mini Van">Mini Van</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Assign Driver:</strong></label>
+                            <select class="form-select driver-select">
+                                <option value="">-- Select Driver --</option>
+                                <option value="Arun">Arun</option>
+                                <option value="Deepa">Deepa</option>
+                                <option value="Karthik">Karthik</option>
+                                <option value="Meena">Meena</option>
+                                <option value="Ramesh">Ramesh</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-info mt-3 view-more">View More</button>
+                    <button class="btn btn-success mt-3 accept" disabled>Accept</button>
+                    <button class="btn btn-danger mt-3 decline">Decline</button>
+                </div>
+            </div>
+
+            <!-- Booking Card: Mohan Das -->
+            <div class="card border-info shadow-sm booking-card">
+                <div class="card-body">
+                    <h5 class="card-title">Mohan Das</h5>
+                    <p><strong>Pickup:</strong> Guindy Bus Stand</p>
+                    <p><strong>Drop:</strong> T Nagar</p>
+                    <div class="details">
+                        <p><strong>Date:</strong> 2025-08-30</p>
+                        <p><strong>Time:</strong> 12:15 PM</p>
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Vehicle Type:</strong></label>
+                            <select class="form-select vehicle-select">
+                                <option value="">-- Select Vehicle --</option>
+                                <option value="Sedan">Sedan</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Auto Rickshaw">Auto Rickshaw</option>
+                                <option value="Mini Van">Mini Van</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><strong>Assign Driver:</strong></label>
+                            <select class="form-select driver-select">
+                                <option value="">-- Select Driver --</option>
+                                <option value="Arun">Arun</option>
+                                <option value="Deepa">Deepa</option>
+                                <option value="Karthik">Karthik</option>
+                                <option value="Meena">Meena</option>
+                                <option value="Ramesh">Ramesh</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-info mt-3 view-more">View More</button>
+                    <button class="btn btn-success mt-3 accept" disabled>Accept</button>
+                    <button class="btn btn-danger mt-3 decline">Decline</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- 💡 jQuery Logic -->
+    <script>
+        $('.view-more').on('click', function () {
+          const cardBody = $(this).closest('.card-body');
+          const details = cardBody.find('.details');
+
+          details.slideToggle();
+          $(this).text(function (_, text) {
+            return text === 'View More' ? 'View Less' : 'View More';
+          });
+        });
+
+        $('.vehicle-select, .driver-select').on('change', function () {
+          const card = $(this).closest('.booking-card');
+          const vehicle = card.find('.vehicle-select').val();
+          const driver = card.find('.driver-select').val();
+          const acceptBtn = card.find('.accept');
+          acceptBtn.prop('disabled', !(vehicle && driver));
+        });
+
+        $('.accept').on('click', function () {
+          const card = $(this).closest('.booking-card');
+          const name = card.find('.card-title').text();
+          const vehicle = card.find('.vehicle-select').val();
+          const driver = card.find('.driver-select').val();
+          const acceptedAt = new Date().toLocaleString();
+
+          alert(`Accepted booking for ${name} with ${vehicle} driven by ${driver} at ${acceptedAt}`);
+          card.slideUp(400, function () {
+            $(this).remove();
+          });
+        });
+
+        $('.decline').on('click', function () {
+          const card = $(this).closest('.booking-card');
+          card.slideUp(400, function () {
+            $(this).remove();
+          });
+        });
+    </script>
+</div>
+

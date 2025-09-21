@@ -1,0 +1,65 @@
+﻿@* Views/Shared/_Footer.cshtml *@
+
+
+@if (ViewBag.HideFooter == null || ViewBag.HideFooter == false)
+{
+    <footer class="bg-dark text-light pt-4">
+        <div class="container">
+            <div class="row gy-4">
+                <!-- Company Info -->
+                <div class="col-12 col-md-6">
+                    <div class="footer-section company-info">
+                        <h4><i class="fa-solid fa-truck"></i> Fleetora</h4>
+                        <p>Smart Logistics. Seamless Operations.</p>
+                        <p>123 Logistics Park, Thiruporur, TN, India</p>
+                        <p>Email: support@fleettrack.com | Phone: +91 98765 43210</p>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-6 col-md-2">
+                    <div class="footer-section quick-links">
+                        <h5>Quick Links</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="/dashboard" class="text-light text-decoration-none">Dashboard</a></li>
+                            <li><a href="/fleet" class="text-light text-decoration-none">Fleet Overview</a></li>
+                            <li><a href="/drivers" class="text-light text-decoration-none">Driver Portal</a></li>
+                            <li><a href="/dispatch" class="text-light text-decoration-none">Dispatch Center</a></li>
+                            <li><a href="/reports" class="text-light text-decoration-none">Reports & Analytics</a></li>
+                            <li><a href="/support" class="text-light text-decoration-none">Help Center</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Legal -->
+                <div class="col-6 col-md-2">
+                    <div class="footer-section legal">
+                        <h5>Legal</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="/terms" class="text-light text-decoration-none">Terms of Service</a></li>
+                            <li><a href="/privacy" class="text-light text-decoration-none">Privacy Policy</a></li>
+                            <li><a href="/cookies" class="text-light text-decoration-none">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Connect With Us -->
+                <div class="col-12 col-md-2">
+                    <div class="footer-section connect">
+                        <h5>Connect With Us</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="https://linkedin.com/company/fleettrack" target="_blank" class="text-light text-decoration-none"><i class="fa-brands fa-linkedin"></i> LinkedIn</a></li>
+                            <li><a href="https://facebook.com/fleettrack" target="_blank" class="text-light text-decoration-none"><i class="fa-brands fa-facebook"></i> Facebook</a></li>
+                            <li><a href="https://twitter.com/fleettrack" target="_blank" class="text-light text-decoration-none"><i class="fa-brands fa-twitter"></i> Twitter</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="text-center mt-4 footer-bottom">
+                <p class="mb-0">&copy; 2025 FleetTrack Solutions. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+}

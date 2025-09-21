@@ -1,0 +1,72 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "~/Views/Shared/_DriverLayout.cshtml";
+    ViewData["Title"] ="DriverHistory";
+}
+
+<link href="/css/DriverPage.css" rel="stylesheet"/>
+<div>
+    
+
+    <h1 class="text-center" style="margin-top:100px ;">Ride History</h1>
+    <div class="container mt-3">
+        <div class="card-custom shadow-lg rounded p-4">
+            <div class="close-btn" id="closeCard">×</div>
+            <h4 class="text-center mb-4 text-primary">PickUp Details</h4>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Name:</strong> Sejal Bisen
+                </div>
+                <div class="col-md-6">
+                    <strong>Phone Number:</strong> 9424379846
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Pickup Address:</strong> SRS Balaghat
+                </div>
+                <div class="col-md-6">
+                    <strong>Drop Address:</strong> Sipcot
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-3">
+        <div class="card-custom shadow-lg rounded p-4">
+            <div class="close-btn" id="closeCard">×</div>
+            <h4 class="text-center mb-4 text-primary">PickUp Details</h4>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Name:</strong> Priya
+                </div>
+                <div class="col-md-6">
+                    <strong>Phone Number:</strong> 9423379546
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Pickup Address:</strong> Padur
+                </div>
+                <div class="col-md-6">
+                    <strong>Drop Address:</strong> Navalur
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#closeCard").click(function () {
+                $(".card-custom").fadeOut();
+            });
+        });
+    </script>
+    
+</div>
+
+
