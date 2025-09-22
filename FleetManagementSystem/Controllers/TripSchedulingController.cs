@@ -31,6 +31,30 @@ namespace FleetManagementSystem.Controllers
             await _db.SaveChangesAsync();
             return View();
         }
+        [HttpPost]
+        public IActionResult AssignDriver(int tripId, string driverName)
+        {
+            // Find the driver in Vehicle_Management
+            var driver = _db.Vehicles.FirstOrDefault(v => v.DriverName == driverName && v.Status == "Available");
+
+            if (driver != null)
+            {
+                // Update driver status
+                driver.Status = "Unavailable";
+
+                // Optionally update the trip record with the assigned driver
+                var trip = _db.Trips.FirstOrDefault(t => t.TripId == tripId);
+                if (trip != null)
+                {
+                    trip.AssignedDriver = driverName;
+                }
+
+                _db.SaveChanges();
+            }
+
+            // Redirect back to the trip scheduling view
+            return RedirectToAction("Trip_Scheduling");
+        }
 
         public async Task<IActionResult> EditTrip(int? id)
         {
