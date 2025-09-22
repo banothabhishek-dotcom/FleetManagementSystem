@@ -13,7 +13,16 @@ namespace FleetManagementSystem.Controllers
         }
         public IActionResult Trip_Scheduling()
         {
-            return View("~/Views/Admin/TripScheduling/Trip_Scheduling.cshtml");
+            ViewBag.HideFooter = true;
+            List<Models.Trip_Scheduling> objTripEntries = _db.Trips.ToList();
+
+            var availableDrivers=_db.Vehicles
+                .Where(v=>v.Status=="Available")
+                .Select(v => v.DriverName)
+                 .ToList();
+
+            ViewBag.AvailableDrivers = availableDrivers;
+            return View("~/Views/Admin/TripScheduling/Trip_Scheduling.cshtml",objTripEntries);
         }
 
         public async Task<IActionResult> AddTrip(Trip_Scheduling obj)

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FleetManagementSystem.Models
 {
+    [Table("Trip_Scheduling")]
     public class Trip_Scheduling
     {
         [Key]

@@ -1,11 +1,9 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<FleetManagementSystem.Models.Trip_Scheduling>;
+
 
 <head>
-     <style>
+  
+    <style>
         .card {
             margin-bottom: 20px;
         }
@@ -28,24 +26,25 @@
                 background-color: #0b5ed7;
             }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
-<div>
+<body>
 
     <!-- 🌐 Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage">Fleetora</a>
+            <a class="navbar-brand" href="/landing/landing.html">Fleetora</a>
             <div class="collapse navbar-collapse justify-content-end">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" asp-controller="Admin" asp-action="Trip_Scheduling">Home</a></li>
-                    <li class="nav-item"><a class="nav-link active" asp-controller="Admin" asp-action="Trip_History">History</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="history.html">History</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="text-start mt-3 ms-3">
-        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
+        <a href="./admin.html" type="back" class="btn btn-custom">Back</a>
     </div>
 
     <!-- 🚗 Ride Bookings -->
@@ -56,116 +55,32 @@
         <div id="card-container">
 
             <!-- Booking Card: Ravi Kumar -->
-            <div class="card border-info shadow-sm booking-card">
-                <div class="card-body">
-                    <h5 class="card-title">Ravi Kumar</h5>
-                    <p><strong>Pickup:</strong> Tambaram Railway Station</p>
-                    <p><strong>Drop:</strong> Chennai Airport</p>
-                    <div class="details">
-                        <p><strong>Date:</strong> 2025-08-30</p>
-                        <p><strong>Time:</strong> 10:00 AM</p>
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Vehicle Type:</strong></label>
-                            <select class="form-select vehicle-select">
-                                <option value="">-- Select Vehicle --</option>
-                                <option value="Sedan">Sedan</option>
-                                <option value="SUV">SUV</option>
-                                <option value="Auto Rickshaw">Auto Rickshaw</option>
-                                <option value="Mini Van">Mini Van</option>
-                            </select>
-                        </div>
+            @foreach (var entry in Model)
+            {
+                <div class="card border-info shadow-sm booking-card">
+                    <div class="card-body">
+                        <p class="card-title"><strong>Name:</strong>@(entry.Firstname+" "+@entry.Lastname)</p>
+                        <p><strong>Pickup:</strong> @entry.PickupPoint</p>
+                        <p><strong>Drop:</strong> @entry.DropPoint</p>
+                        <p><strong>Booking Time:</strong>@entry.BookingTime</p>
+                        <p><strong>Vehicle Type:</strong>@entry.VehicleType</p>
                         <div class="mb-3">
                             <label class="form-label"><strong>Assign Driver:</strong></label>
                             <select class="form-select driver-select">
                                 <option value="">-- Select Driver --</option>
-                                <option value="Arun">Arun</option>
-                                <option value="Deepa">Deepa</option>
-                                <option value="Karthik">Karthik</option>
-                                <option value="Meena">Meena</option>
-                                <option value="Ramesh">Ramesh</option>
+                                @foreach (var driver in ViewBag.AvailableDrivers as List<string>)
+                                {
+                                    <option value="@driver">@driver</option>
+                                }
                             </select>
                         </div>
-                    </div>
-                    <button class="btn btn-outline-info mt-3 view-more">View More</button>
-                    <button class="btn btn-success mt-3 accept" disabled>Accept</button>
-                    <button class="btn btn-danger mt-3 decline">Decline</button>
-                </div>
-            </div>
 
-            <!-- Booking Card: Sneha Reddy -->
-            <div class="card border-info shadow-sm booking-card">
-                <div class="card-body">
-                    <h5 class="card-title">Sneha Reddy</h5>
-                    <p><strong>Pickup:</strong> Velachery</p>
-                    <p><strong>Drop:</strong> Central Railway Station</p>
-                    <div class="details">
-                        <p><strong>Date:</strong> 2025-08-30</p>
-                        <p><strong>Time:</strong> 11:30 AM</p>
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Vehicle Type:</strong></label>
-                            <select class="form-select vehicle-select">
-                                <option value="">-- Select Vehicle --</option>
-                                <option value="Sedan">Sedan</option>
-                                <option value="SUV">SUV</option>
-                                <option value="Auto Rickshaw">Auto Rickshaw</option>
-                                <option value="Mini Van">Mini Van</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Assign Driver:</strong></label>
-                            <select class="form-select driver-select">
-                                <option value="">-- Select Driver --</option>
-                                <option value="Arun">Arun</option>
-                                <option value="Deepa">Deepa</option>
-                                <option value="Karthik">Karthik</option>
-                                <option value="Meena">Meena</option>
-                                <option value="Ramesh">Ramesh</option>
-                            </select>
-                        </div>
+                        <button class="btn btn-outline-info mt-3 view-more">View More</button>
+                        <button class="btn btn-success mt-3 accept" disabled>Accept</button>
+                        <button class="btn btn-danger mt-3 decline">Decline</button>
                     </div>
-                    <button class="btn btn-outline-info mt-3 view-more">View More</button>
-                    <button class="btn btn-success mt-3 accept" disabled>Accept</button>
-                    <button class="btn btn-danger mt-3 decline">Decline</button>
                 </div>
-            </div>
-
-            <!-- Booking Card: Mohan Das -->
-            <div class="card border-info shadow-sm booking-card">
-                <div class="card-body">
-                    <h5 class="card-title">Mohan Das</h5>
-                    <p><strong>Pickup:</strong> Guindy Bus Stand</p>
-                    <p><strong>Drop:</strong> T Nagar</p>
-                    <div class="details">
-                        <p><strong>Date:</strong> 2025-08-30</p>
-                        <p><strong>Time:</strong> 12:15 PM</p>
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Vehicle Type:</strong></label>
-                            <select class="form-select vehicle-select">
-                                <option value="">-- Select Vehicle --</option>
-                                <option value="Sedan">Sedan</option>
-                                <option value="SUV">SUV</option>
-                                <option value="Auto Rickshaw">Auto Rickshaw</option>
-                                <option value="Mini Van">Mini Van</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label"><strong>Assign Driver:</strong></label>
-                            <select class="form-select driver-select">
-                                <option value="">-- Select Driver --</option>
-                                <option value="Arun">Arun</option>
-                                <option value="Deepa">Deepa</option>
-                                <option value="Karthik">Karthik</option>
-                                <option value="Meena">Meena</option>
-                                <option value="Ramesh">Ramesh</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="btn btn-outline-info mt-3 view-more">View More</button>
-                    <button class="btn btn-success mt-3 accept" disabled>Accept</button>
-                    <button class="btn btn-danger mt-3 decline">Decline</button>
-                </div>
-            </div>
-
+            }
         </div>
     </div>
 
@@ -182,7 +97,7 @@
           });
         });
 
-        $('.vehicle-select, .driver-select').on('change', function () {
+        $('.driver-select').on('change', function () {
           const card = $(this).closest('.booking-card');
           const vehicle = card.find('.vehicle-select').val();
           const driver = card.find('.driver-select').val();
@@ -210,5 +125,8 @@
           });
         });
     </script>
-</div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
