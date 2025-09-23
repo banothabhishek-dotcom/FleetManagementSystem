@@ -11,6 +11,7 @@ namespace FleetManagementSystem.Controllers
         {
             _db = db;
         }
+        [HttpGet]
         public IActionResult Trip_Scheduling()
         {
             ViewBag.HideFooter = true;
@@ -24,12 +25,12 @@ namespace FleetManagementSystem.Controllers
             ViewBag.AvailableDrivers = availableDrivers;
             return View("~/Views/Admin/TripScheduling/Trip_Scheduling.cshtml",objTripEntries);
         }
-
+        [HttpPost]
         public async Task<IActionResult> AddTrip(Trip_Scheduling obj)
         {
             await _db.AddAsync(obj);
             await _db.SaveChangesAsync();
-            return View();
+            return View("~/Views/Customer/CustomerPage.cshtml");
         }
         [HttpPost]
         public IActionResult AssignDriver(int tripId, string driverName)
