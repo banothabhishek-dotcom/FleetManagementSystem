@@ -1,170 +1,204 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿
 
 @{
+
     ViewData["Title"] = "Fuel Management";
+
 }
 <head>
-    
 
+ 
     <style>
+
         body {
+
             background-color: #f8f9fa;
-        }
 
+        }
+ 
         .card {
+
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        }
 
+        }
+ 
         .header-title {
+
             font-weight: 600;
+
             color: #343a40;
+
             text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-        }
 
+        }
+ 
         .btn-custom {
+
             background-color: #0d6efd;
+
             color: white;
-        }
 
-        .btn-custom:hover {
-            background-color: #0b5ed7;
         }
+ 
+        .btn-custom:hover {
 
-        .btn-custom:hover {
             background-color: #0b5ed7;
+
         }
-    </style>
+ 
+        .btn-custom:hover {
+
+            background-color: #0b5ed7;
+
+        }
+</style>
 </head>
-
+ 
 <div>
-    <nav id="navBar" class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage" id="logo">Fleetora</a>
-
+<nav id="navBar" class="navbar navbar-expand-sm bg-dark navbar-dark">
+<div class="container-fluid">
+<a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage" id="logo">Fleetora</a>
+ 
             <!-- Toggler added here -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+
                 aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav>
-    <div class="text-start mt-3 ms-3">
-        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
-    </div>
-    <div class="container ">
-    
-
-    <h2 class="mb-7 text-center header-title">
-        <medium>Fuel Management
-    </h2>
-    </medium>
-    </h2>
-    <!-- View Fuel Usage -->
-    <div class="card mb-5">
-        <div class="card-header bg-primary text-white">View Fuel Usage</div>
-        <div class="card-body">
-            <div class="input-group mb-3">
-                <input type="number" class="form-control" id="searchVehicleId" placeholder="Enter Vehicle ID">
-                <button class="btn btn-outline-primary" id="searchBtn">Search</button>
-            </div>
-            <div id="fuelUsageResults"></div>
-        </div>
-    </div>
-
-    <!-- Add Fuel Record -->
-    <div class="card mb-5">
-        <div class="card-header bg-primary text-white">Add Fuel Record</div>
-        <div class="card-body">
-            <form id="fuelForm">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="vehicleNumber" class="form-label">Vehicle Number</label>
-                        <span style="color: red;">*</span>
-                        <input type="text" class="form-control" id="vehicleNumber" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="fuelAmount" class="form-label">Fuel (InLitres)</label>
-                        <span style="color: red;">*</span>
-                        <input type="number" class="form-control" id="fuelAmount" required>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="cost" class="form-label">Cost (₹)</label>
-                        <span style="color: red;">*</span>
-                        <input type="number" class="form-control" id="cost" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="date" class="form-label">Date</label>
-                        <span style="color: red;">*</span>
-                        <input type="date" class="form-control" id="date" required>
-                    </div>
-                </div class="text-start mt-4">
-                <button type="submit" class="btn btn-custom">Add Record</button>
-                <div class="text-end mt-4">
-                    <button type="submit" class="btn btn-custom">Submit</button>
-                </div>
-            </form>
-        </div>
-        </div>
-    </div>
-
-
-    <!-- jQuery Script -->
-    <script>
-        // Add Fuel Record
-        $('#fuelForm').submit(function (e) {
-            e.preventDefault();
-            const data = {
-                vehicleId: $('#vehicleId').val(),
-                fuelAmount: $('#fuelAmount').val(),
-                cost: $('#cost').val(),
-                date: $('#date').val()
-            };
-
-            $.ajax({
-                url: '/fuel/add',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                success: function (response) {
-                    alert('✅ Fuel record added successfully!');
-                    $('#fuelForm')[0].reset();
-                },
-                error: function () {
-                    alert('❌ Error adding fuel record.');
-                }
-            });
-        });
-
-        // View Fuel Usage
-        $('#searchBtn').click(function () {
-            const vehicleId = $('#searchVehicleId').val();
-            $.ajax({
-                url: `/fuel/usage/${vehicleId}`,
-                type: 'GET',
-                success: function (data) {
-                    let html = '<ul class="list-group">';
-                    data.forEach(record => {
-                        html += `<li class="list-group-item">
-                            <strong>Date:</strong> ${record.date} |
-                            <strong>Fuel:</strong> ${record.fuelAmount}L |
-                            <strong>Cost:</strong> ₹${record.cost}
-                        </li>`;
-                    });
-                    html += '</ul>';
-                    $('#fuelUsageResults').html(html);
-                },
-                error: function () {
-                    $('#fuelUsageResults').html('<p class="text-danger">Error fetching fuel usage data.</p>');
-                }
-            });
-        });
-    </script>
-
-
+<span class="navbar-toggler-icon"></span>
+</button>
 </div>
+</nav>
+<div class="text-start mt-3 ms-3">
+<a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
+</div>
+<div class="container ">
+
+ 
+    <h2 class="mb-7 text-center header-title">
+<medium>Fuel Management
+</h2>
+</medium>
+</h2>
+<!-- View Fuel Usage -->
+<div class="card mb-5">
+<div class="card-header bg-primary text-white">View Fuel Usage</div>
+<div class="card-body">
+<div class="input-group mb-3">
+<input type="number" class="form-control" id="searchVehicleId" placeholder="Enter Vehicle ID">
+<button class="btn btn-outline-primary" id="searchBtn">Search</button>
+</div>
+<div id="fuelUsageResults"></div>
+</div>
+</div>
+ 
+    <!-- Add Fuel Record -->
+<div class="card mb-5">
+<div class="card-header bg-primary text-white">Add Fuel Record</div>
+<div class="card-body">
+<form id="fuelForm">
+<div class="row mb-3">
+<div class="col-md-6">
+<label for="vehicleId" class="form-label">Vehicle ID</label>
+<span style="color: red;">*</span>
+<input type="text" class="form-control" id="vehicleId" required>
+</div>
+<div class="col-md-6">
+<label for="fuelAmount" class="form-label">Fuel (InLitres)</label>
+<span style="color: red;">*</span>
+<input type="number" class="form-control" id="fuelAmount" required>
+</div>
+</div>
+<div class="row mb-3">
+<div class="col-md-6">
+<label for="cost" class="form-label">Cost (₹)</label>
+<span style="color: red;">*</span>
+<input type="number" class="form-control" id="cost" required>
+</div>
+<div class="col-md-6">
+<label for="date" class="form-label">Date</label>
+<span style="color: red;">*</span>
+<input type="date" class="form-control" id="date" required>
+</div>
+<div class="text-end mt-4">
+<button type="submit" class="btn btn-custom">Submit</button>
+</div>
+</form>
+</div>
+</div>
+</div>
+ 
+ 
+    <!-- jQuery Script -->
+<script>
+
+       $('#fuelForm').submit(function (e) {
+    e.preventDefault();
+
+    const data = {
+        vehicleId: $('#vehicleId').val(),
+        fuelQuantity: $('#fuelAmount').val(), // ✅ match model property
+        cost: $('#cost').val(),
+        date: $('#date').val()
+    };
+
+    $.ajax({
+        url: '/fuel/add',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function () {
+            alert('✅ Fuel record added successfully!');
+            $('#fuelForm')[0].reset();
+        },
+        error: function () {
+            alert('❌ Error adding fuel record.');
+        }
+    });
+});
+
+ 
+        // View Fuel Usage
+
+        $('#searchBtn').click(function () {
+
+            const vehicleId = $('#searchVehicleId').val();
+
+            $.ajax({
+
+                url: `/fuel/usage/${vehicleId}`,
+
+                type: 'GET',
+
+                success: function (data) {
+
+                    let html = '<ul class="list-group">';
+
+                    data.forEach(record => {
+
+                        html += `<li class="list-group-item">
+<strong>Date:</strong> ${record.date} |
+<strong>Fuel:</strong> ${record.fuelAmount}L |
+<strong>Cost:</strong> ₹${record.cost}
+</li>`;
+
+                    });
+
+                    html += '</ul>';
+
+                    $('#fuelUsageResults').html(html);
+
+                },
+
+                error: function () {
+
+                    $('#fuelUsageResults').html('<p class="text-danger">Error fetching fuel usage data.</p>');
+
+                }
+
+            });
+
+        });
+</script>
+ 
+ 
+</div>
+ 

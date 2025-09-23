@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FleetManagementSystem.Models
 {
+    [Table("Fuel_Management")]
     public class Fuel_Management
     {
         [Key]
