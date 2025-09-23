@@ -1,9 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model FleetManagementSystem.Models.Trip_Scheduling
 @{
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
-    ViewData["Title"] = "Customer Page";
+    ViewData["Title"] = "Fleet Booking";
 }
 
 @* Carasouel Part of customer page*@
@@ -68,49 +66,57 @@
                  id="fleetbooking">
 
                 <h2 class="mb-4 text-center">Fleet Booking</h2>
-                <form id="myForm">
+                <form asp-controller="TripScheduling" asp-action="AddTrip" asp-validation-summary="ModelOnly" id="myForm">
                     <div class="row">
                         <div class="col-6 mb-3">
-                            <label for="firstname" class="form-label">First Name</label>
-                            <input type="text" id="firstname" class="form-control" placeholder="Enter your first name">
+                            <label asp-for="Firstname" class="form-label">First Name</label>
+                            <input asp-for="Firstname" type="text" id="firstname" class="form-control" placeholder="Enter your first name">
+                            <span asp-validation-for="Firstname" class="text-danger"></span>
                         </div>
                         <div class="col-6 mb-3">
-                            <label for="lastname" class="form-label">Last Name</label>
-                            <input type="text" id="lastname" class="form-control" placeholder="Enter your lastname">
+                            <label asp-for="Lastname" class="form-label">Last Name</label>
+                            <input asp-for="Lastname" type="text" id="lastname" class="form-control" placeholder="Enter your lastname">
+                            <span asp-validation-for="Lastname" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="phno" class="form-label">Phone Number</label>
-                        <input type="tel" id="phno" class="form-control" placeholder="Enter your mobile number">
+                        <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                        <input asp-for="PhoneNumber" type="tel" id="phno" class="form-control" placeholder="Enter your mobile number">
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
                     </div>
                     <div class="row">
                         <div class="col-6 mb-3">
-                            <label for="source" class="form-label">Pick Up Address</label>
-                            <input type="text" id="source" class="form-control" placeholder="Enter your pickup address">
+                            <label asp-for="PickupPoint" class="form-label">Pick Up Address</label>
+                            <input asp-for="PickupPoint" type="text" id="source" class="form-control" placeholder="Enter your pickup address">
+                            <span asp-validation-for="PickupPoint" class="text-danger"></span>
+
                         </div>
                         <div class="col-6 mb-3">
-                            <label for="destination" class="form-label">Drop Point</label>
-                            <input type="text" id="destination" class="form-control" placeholder="Enter your Drop Address">
+                            <label asp-for="DropPoint" class="form-label">Drop Point</label>
+                            <input asp-for="DropPoint" type="text" id="destination" class="form-control" placeholder="Enter your Drop Address">
+                            <span asp-validation-for="DropPoint" class="text-danger"></span>
+
                         </div>
                         <div class="row">
-                            <div class="col-md-3 mb-3">
+                            <div class="col-6 mb-3">
                                 <div class="mb-3">
-                                    <label for="roleSelect" class="form-label">Vehicle Type</label>
-                                    <select id="roleSelect" class="form-select" required>
+                                    <label asp-for="VehicleType" class="form-label">Vehicle Type</label>
+                                    <select asp-for="VehicleType" id="roleSelect" class="form-select" required>
                                         <option value="">Select Vehicle</option>
-                                        <option value="user">Mini Truck</option>
-                                        <option value="driver">6 Wheeler</option>
-                                        <option value="admin">10 Wheeler</option>
+                                        <option value="MiniTruck">Mini Truck</option>
+                                        <option value="6Wheeler">6 Wheeler</option>
+                                        <option value="10Wheeler">10 Wheeler</option>
                                     </select>
+                                    <span asp-validation-for="VehicleType" class="text-danger"></span>
+
                                 </div>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="No.of vehciles" class="form-label">No.of Vehciles</label>
-                                <input type="number" class="form-control" id="noofvehicle">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="time" class="form-label">Booking Time</label>
-                                <input type="datetime-local" id="time" class="form-control">
+                            <div class="col-6 mb-3">
+                                <label asp-for="BookingTime" class="form-label">Booking Time</label>
+                                <input asp-for="BookingTime" type="datetime-local" id="time" class="form-control"
+                                       min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
+                                <span asp-validation-for="BookingTime" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -120,7 +126,7 @@
         </div>
     </div>
 </div>
-<script>
+@* <script>
     // Get all radio buttons
     const radios = document.querySelectorAll('input[name="vehicleType"]');
     const dropdownBtn = document.getElementById('vehicleDropdownBtn');
@@ -132,4 +138,4 @@
         }
       });
     });
-</script>
+</script> *@
