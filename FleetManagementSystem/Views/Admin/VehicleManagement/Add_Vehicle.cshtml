@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <h3 class="card-title mb-4 text-center text-primary">Vehicle Details</h3>
 
-                    <form asp-action="Add_Vehicle"  asp-validation-summary="ModelOnly" class="text-danger">
+                    <form asp-action="Add_Vehicle"  asp-validation-summary="ModelOnly" >
 
                         <!-- Registration Number -->
                         <div class="mb-3">
@@ -32,13 +32,6 @@
                             <label asp-for="Status" class="form-label"></label>
                             <input asp-for="Status" class="form-control" maxlength="50" required />
                             <span asp-validation-for="Status" class="text-danger"></span>
-                        </div>
-
-                        <!-- Last Serviced Date -->
-                        <div class="mb-3">
-                            <label asp-for="LastServicedDate" class="form-label"></label>
-                            <input asp-for="LastServicedDate" class="form-control" type="date" required />
-                            <span asp-validation-for="LastServicedDate" class="text-danger"></span>
                         </div>
 
                         <!-- Driver Name -->
