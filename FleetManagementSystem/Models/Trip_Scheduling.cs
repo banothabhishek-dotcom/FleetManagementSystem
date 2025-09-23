@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FleetManagementSystem.Models
 {
+    [Table("Trip_Scheduling")]
     public class Trip_Scheduling
     {
         [Key]
@@ -38,15 +39,13 @@ namespace FleetManagementSystem.Models
         [DataType(DataType.DateTime)]
         public DateTime BookingTime { get; set; }
 
-        [Required(ErrorMessage = "Vehicle ID is required.")]
         [ForeignKey("Vehicle")]
-        public int VehicleId { get; set; }
+        public int? VehicleId { get; set; }
 
-        [Required(ErrorMessage = "Assigned driver is required.")]
         [MaxLength(50, ErrorMessage = "Driver name cannot exceed 50 characters.")]
-        public string AssignedDriver { get; set; } = string.Empty;
+        public string? AssignedDriver { get; set; } = string.Empty;
 
         // Navigation Property
-        public Vehicle_Management Vehicle { get; set; }
+        public Vehicle_Management? Vehicle { get; set; }
     }
 }

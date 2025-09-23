@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FleetManagementSystem.Models
 {
+    [Table("Vehicle_Management")]
     public class Vehicle_Management
     {
         [Key]
@@ -31,7 +33,7 @@ namespace FleetManagementSystem.Models
 
         [Required(ErrorMessage = "Driver phone number is required.")]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Driver phone must be a 10-digit number.")]
-        public int DriverPhone { get; set; }
+        public string DriverPhone { get; set; } = string.Empty;
 
         // Navigation Properties
         public ICollection<Trip_Scheduling> Trips { get; set; } = new List<Trip_Scheduling>();

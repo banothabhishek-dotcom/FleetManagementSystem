@@ -1,0 +1,71 @@
+﻿@model FleetManagementSystem.Models.Vehicle_Management
+
+@{
+    ViewData["Title"] = "Add_Vehicle";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card p-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-4 text-center text-primary">Vehicle Details</h3>
+
+                    <form asp-action="Add_Vehicle"  asp-validation-summary="ModelOnly" >
+
+                        <!-- Registration Number -->
+                        <div class="mb-3">
+                            <label asp-for="RegistrationNumber" class="form-label"></label>
+                            <input asp-for="RegistrationNumber" class="form-control" maxlength="50" required />
+                            <span asp-validation-for="RegistrationNumber" class="text-danger"></span>
+                        </div>
+
+                        <!-- Capacity -->
+                        <div class="mb-3">
+                            <label asp-for="Capacity" class="form-label"></label>
+                            <input asp-for="Capacity" class="form-control" min="1" required />
+                            <span asp-validation-for="Capacity" class="text-danger"></span>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mb-3">
+                            <label asp-for="Status" class="form-label"></label>
+                            <input asp-for="Status" class="form-control" maxlength="50" required />
+                            <span asp-validation-for="Status" class="text-danger"></span>
+                        </div>
+
+                        <!-- Last Serviced Date -->
+                        <div class="mb-3">
+                            <label asp-for="LastServicedDate" class="form-label"></label>
+                            <input asp-for="LastServicedDate" class="form-control" type="date" required />
+                            <span asp-validation-for="LastServicedDate" class="text-danger"></span>
+                        </div>
+
+                        <!-- Driver Name -->
+                        <div class="mb-3">
+                            <label asp-for="DriverName" class="form-label"></label>
+                            <input asp-for="DriverName" class="form-control" maxlength="50" required />
+                            <span asp-validation-for="DriverName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Driver Phone Number -->
+                        <div class="mb-4">
+                            <label asp-for="DriverPhone" class="form-label"></label>
+                            <input asp-for="DriverPhone" class="form-control" pattern="^\d{10}$" required />
+                            <span asp-validation-for="DriverPhone" class="text-danger"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
