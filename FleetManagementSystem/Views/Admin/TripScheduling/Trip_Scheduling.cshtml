@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<FleetManagementSystem.Models.Trip_Scheduling>;
 
-
+@{
+    ViewData["Title"] = "TripScheduling";
+}
 <head>
   
     <style>
@@ -34,17 +36,17 @@
     <!-- 🌐 Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/landing/landing.html">Fleetora</a>
+            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage">Fleetora</a>
             <div class="collapse navbar-collapse justify-content-end">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="history.html">History</a></li>
+                    <li class="nav-item"><a class="nav-link active" asp-controller="Admin" asp-action="AdminPage" >Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" asp-controller="TripScheduling" asp-action="TripHistory" >History</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="text-start mt-3 ms-3">
-        <a href="./admin.html" type="back" class="btn btn-custom">Back</a>
+        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
     </div>
 
     <!-- 🚗 Ride Bookings -->
@@ -73,9 +75,9 @@
                                 @{
                                     int requiredCapacity = entry.VehicleType switch
                                     {
-                                        "4-Wheeler" => 5,
-                                        "6-Wheeler" => 7,
-                                        "10-Wheeler" => 9,
+                                        "4Wheeler" => 5,
+                                        "6Wheeler" => 7,
+                                        "10Wheeler" => 9,
                                         _ => 0
                                     };
 
@@ -94,7 +96,8 @@
 
 
                         <button type="submit" class="btn btn-success mt-3 accept" disabled>Accept</button>
-                        <button type="button" class="btn btn-danger mt-3 decline">Decline</button>
+                        <button type="button" class="btn btn-danger mt-3 decline" data-trip-id="@entry.TripId">Decline</button>
+
                     </div>
                 </div>
             </form>
@@ -138,11 +141,16 @@
 
 
         $('.decline').on('click', function () {
-          const card = $(this).closest('.booking-card');
-          card.slideUp(400, function () {
-            $(this).remove();
-          });
+            const card = $(this).closest('.booking-card');
+            const tripId = $(this).data('trip-id');
+
+            $.post('/TripScheduling/DeclineTrip', { tripId: tripId }, function () {
+                card.slideUp(400, function () {
+                    $(this).remove();
+                });
+            });
         });
+
     </script>
 
     <!-- Bootstrap JS Bundle -->
