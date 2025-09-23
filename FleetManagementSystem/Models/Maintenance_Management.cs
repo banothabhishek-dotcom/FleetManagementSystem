@@ -4,14 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FleetManagementSystem.Models
 {
+
+    [Table("MaintenanceRecords")]
+
     public class Maintenance_Management
     {
         [Key]
         public int MaintenanceId { get; set; }
 
-        [Required(ErrorMessage = "Vehicle ID is required.")]
         [ForeignKey("Vehicle")]
-        public int VehicleId { get; set; }
+        public int? VehicleId { get; set; }
 
         [Required(ErrorMessage = "Description is required.")]
         [MaxLength(100, ErrorMessage = "Description cannot exceed 100 characters.")]
@@ -26,6 +28,6 @@ namespace FleetManagementSystem.Models
         public string Status { get; set; } = string.Empty;
 
         // Navigation property
-        public Vehicle_Management Vehicle { get; set; }
+        public Vehicle_Management? Vehicle { get; set; }
     }
 }
