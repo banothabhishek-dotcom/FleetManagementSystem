@@ -64,23 +64,41 @@
                         <p><strong>Vehicle Type:</strong> @entry.VehicleType</p>
 
                         <input type="hidden" name="tripId" value="@entry.TripId" />
+                        <input type="hidden" name="vehicleType" value="@entry.VehicleType" />
 
                         <div class="mb-3">
                             <label class="form-label"><strong>Assign Driver:</strong></label>
                             <select class="form-select driver-select" name="driverName" required>
                                 <option value="">-- Select Driver --</option>
-                                @foreach (var driver in ViewBag.AvailableDrivers as List<string>)
-                                {
-                                    <option value="@driver">@driver</option>
+                                @{
+                                    int requiredCapacity = entry.VehicleType switch
+                                    {
+                                        "4-Wheeler" => 5,
+                                        "6-Wheeler" => 7,
+                                        "10-Wheeler" => 9,
+                                        _ => 0
+                                    };
+
+                                    var filteredDrivers = (ViewBag.AvailableVehicles as List<FleetManagementSystem.Models.Vehicle_Management>)
+                                    .Where(v => v.Capacity == requiredCapacity)
+                                    .Select(v => v.DriverName)
+                                    .ToList();
+
+                                    foreach (var driver in filteredDrivers)
+                                    {
+                                        <option value="@driver">@driver</option>
+                                    }
                                 }
                             </select>
                         </div>
+
 
                         <button type="submit" class="btn btn-success mt-3 accept" disabled>Accept</button>
                         <button type="button" class="btn btn-danger mt-3 decline">Decline</button>
                     </div>
                 </div>
             </form>
+
         }
 
     </div>
