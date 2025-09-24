@@ -4,70 +4,47 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetManagementSystem.Controllers
 {
-    public class MaintenanceTrackingController(ApplicationDbContext db) : Controller
-    {
-        private readonly ApplicationDbContext _db=db;
-        //public MaintenanceController(ApplicationDbContext db)   
-        //{
-        //    _db = db;
-        //}
+	public class MaintenanceTrackingController(ApplicationDbContext db) : Controller
+	{
+		private readonly ApplicationDbContext _db = db;
 
-        public IActionResult Maintenance_Tracking()
-        {
-            return View("~/Views/Admin/MaintenanceTracking/Maintenance_Tracking.cshtml");
-        }
+		public IActionResult Maintenance_Tracking()
+		{
+			var records = _db.MaintenanceRecords.ToList();
+			return View("~/Views/Admin/MaintenanceTracking/Maintenance_Tracking.cshtml", records);
+		}
 
-        public IActionResult MaintenanceEntries()
-        {
-            List<Models.Maintenance_Management> objMaintenanceEntries = _db.MaintenanceRecords.ToList();
-            return View();
-        }
-        public async Task<IActionResult> AddMaintenanceRecord(Maintenance_Management obj )
-        {
-            await _db.AddAsync(obj);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("MaintenanceEntries");
-        }
+		[HttpPost]
+		public async Task<IActionResult> AddMaintenanceRecord(Maintenance_Management obj)
+		{
+			obj.Status = "Scheduled";
+			await _db.MaintenanceRecords.AddAsync(obj);
+			await _db.SaveChangesAsync();
+			return RedirectToAction("Maintenance_Tracking");
+		}
 
-        public async Task<IActionResult> EditMaintenanceRecord(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            var maintenacefromdb = await _db.MaintenanceRecords.FindAsync(id);
-            if (maintenacefromdb == null)
-            {
-                return NotFound();
-            }
-            return View(maintenacefromdb);
-        }
-        [HttpPost]
-        public async Task<IActionResult> EditMaintenanceRecord(Maintenance_Management obj)
-        {
-            _db.Update(obj);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("MaintenanceEntries");
-        }
-        public async Task<IActionResult> DeleteMaintenanceRecord(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            var TripFromDb = await _db.Trips.FindAsync(id);
-            if (TripFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(TripFromDb);
-        }
-        [HttpPost]
-        public async Task<IActionResult> DeleteMaintenanceRecord(Maintenance_Management obj)
-        {
-            _db.Remove(obj);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("MaintenanceEntries");
-        }
-    }
+		public async Task<IActionResult> DeleteMaintenanceRecord(int id)
+		{
+			var record = await _db.MaintenanceRecords.FindAsync(id);
+			if (record == null)
+			{
+				return NotFound();
+			}
+
+			_db.MaintenanceRecords.Remove(record);
+			await _db.SaveChangesAsync();
+			return RedirectToAction("Maintenance_Tracking");
+		}
+
+		public async Task<IActionResult> MarkAsComplete(int id)
+		{
+			var record = await _db.MaintenanceRecords.FindAsync(id);
+			if (record != null)
+			{
+				record.Status = "Completed";
+				await _db.SaveChangesAsync();
+			}
+			return RedirectToAction("Maintenance_Tracking");
+		}
+	}
 }

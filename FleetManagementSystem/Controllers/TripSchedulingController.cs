@@ -138,10 +138,18 @@ namespace FleetManagementSystem.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        public int GetAcceptedTripCountForMonth(int month)
+        {
+            var currentYear = DateTime.Now.Year;
 
-      
+            int count = _db.Trips
+                .Where(t => t.AssignedDriver != "Declined" &&
+                            t.BookingTime.Month == month &&
+                            t.BookingTime.Year == currentYear)
+                .Count();
 
+            return count;
+        }
 
-        
     }
 }

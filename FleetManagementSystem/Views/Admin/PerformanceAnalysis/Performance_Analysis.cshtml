@@ -9,23 +9,17 @@
 }
 @model FleetManagementSystem.Models.Performance_Analysis
 
-
-
 <div class="bg-light">
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage" id="logo">Fleetora</a>
-
-            <!-- Toggler added here -->
             <a class="navbar-brand" href="/landing/landing.html">Fleetora</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
                     aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
-
         <div class="collapse navbar-collapse" id="navbarContent">
             <div class="me-5">
                 <ul class="navbar-nav">
@@ -42,26 +36,10 @@
     <div class="text-start mt-3 ms-3">
         <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
     </div>
-    <!-- Dashboard -->
+
     <div class="container" id="dashboard">
         <h2 class="my-4 text-center">📊 Fleet Performance Dashboard</h2>
 
-        <!-- Static Month/Year Selection -->
-        <!-- <div class="mb-4">
-            <label for="reportMonth" class="form-label">Select Month:</label>
-            <select id="reportMonth" class="form-select w-50">
-                <option selected>September</option>
-                <option>october</option>
-                <option>november</option>
-            </select>
-
-            <label for="reportYear" class="form-label mt-3">Select Year:</label>
-            <select id="reportYear" class="form-select w-50">
-                <option selected>2025</option>
-                <option>2024</option>
-                <option>2023</option>
-            </select>
-        </div> -->
         <div class="row mb-4">
             <div class="col-md-6">
                 <label for="reportMonth" class="form-label">Select Month:</label>
@@ -81,91 +59,22 @@
             </div>
         </div>
 
-
-        <!-- Dashboard Cards -->
-        @* <div class="row g-3">
+        <div class="row g-3">
             <div class="col-md-3">
                 <div class="card p-3 text-center shadow">
-                    <h5>Total Trips</h5>
-                    <p class="fs-4 text-primary">128</p>
-                </div> *@
-                @* <div class="card mt-4">
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">September Accepted Trips</h5>
-                                    <p class="card-text">@ViewBag.SeptemberTrips</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">October Accepted Trips</h5>
-                                    <p class="card-text">@ViewBag.OctoberTrips</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div> *@
-
-        @*     </div>
-            <div class="col-md-3">
-                <div class="card p-3 text-center shadow">
-                    <h5>Fuel Efficiency</h5>
-                    <p class="fs-4 text-success">14.2 km/l</p>
+                    <h5>Total Trips This Year</h5>
+                    <p class="fs-4 text-primary">@Model.TotalTrips</p>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card p-3 text-center shadow">
-                    <h5>Utilization</h5>
-                    <p class="fs-4 text-warning">76%</p>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card p-3 text-center shadow">
-                    <h5>Downtime</h5>
-                    <p class="fs-4 text-danger">12 hrs</p>
-                </div>
-            </div>
-        </div> *@
-        <div class="text-start mt-4">
-            
-            <img src="data:image/png;base64,@ViewBag.ChartImage" alt="Accepted Trips Chart" class="img
         </div>
 
-        @section Scripts {
-            https://cdn.jsdelivr.net/npm/chart.js</script>
-            <script>
-                var ctx = document.getElementById('tripsChart').getContext('2d');
-                var tripsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['September', 'October'],
-                        datasets: [{
-                            label: 'Accepted Trips',
-                            data: [@ViewBag.SeptemberTrips, @ViewBag.OctoberTrips],
-                            backgroundColor: ['skyblue', 'orange']
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                precision: 0
-                            }
-                        }
-                    }
-                });
-            </script>
-        }
+        <div class="text-start mt-4">
+            <img src="data:image/png;base64,@ViewBag.ChartImage" alt="Accepted Trips Chart" class="img-fluid" />
+        </div>
 
-        <!-- Static Chart Image -->
         <div class="mt-5">
             <h4>📈 Utilization vs Downtime</h4>
-            <div class="card ">
+            <div class="card">
                 <div class="row">
                     <div class="small-chart text-center col">
                         <img src="/assets/image.png" alt="" class="img-fluid" style="width: auto;height: auto;">
@@ -177,12 +86,8 @@
             </div>
         </div>
 
-        <!-- Download Button -->
         <div class="mt-4">
             <button class="btn btn-primary">⬇ Download Report (PDF)</button>
         </div>
     </div>
-
-
 </div>
-
