@@ -89,7 +89,14 @@
                                 <td>@vehicle.RegistrationNumber</td>
                                 <td>@vehicle.Capacity</td>
                                 <td>@vehicle.Status</td>
-                                <td>@vehicle.LastServicedDate</td>
+
+                                <td>
+                                    @(vehicle.LastServicedDate.HasValue
+                                                                ? vehicle.LastServicedDate.Value.ToString("dd-MM-yyyy")
+                                                                : "Not Serviced Yet")
+                        </td>
+
+
                                 <td>@vehicle.DriverName</td>
                                 <td>@vehicle.DriverPhone</td>
                                 <td>
@@ -99,7 +106,7 @@
                                     <a class="btn btn-sm btn-danger delete-btn me-2" asp-action="Delete_Vehicle" asp-route-id="@vehicle.VehicleId"><i class="fas fa-trash"></i>Delete</a>
                                 </td>
                             </tr>
-                        }
+                                        }
                     }
                     else
                     {

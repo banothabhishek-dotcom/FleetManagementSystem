@@ -1,8 +1,8 @@
-﻿
+﻿@model FleetManagementSystem.Models.Fuel_Management
 
 @{
 
-    ViewData["Title"] = "Fuel Management";
+    ViewData["Title"] = "Fuel_Management";
 
 }
 <head>
@@ -92,113 +92,47 @@
  
     <!-- Add Fuel Record -->
 <div class="card mb-5">
-<div class="card-header bg-primary text-white">Add Fuel Record</div>
-<div class="card-body">
-<form id="fuelForm">
-<div class="row mb-3">
-<div class="col-md-6">
-<label for="vehicleId" class="form-label">Vehicle ID</label>
-<span style="color: red;">*</span>
-<input type="text" class="form-control" id="vehicleId" required>
+   <div class="card-header bg-primary text-white">Add Fuel Record</div>
+      <div class="card-body">
+        <form asp-action="Add_Fuel"  asp-validation-summary="ModelOnly">
+            <div class="row mb-3">
+
+                <div class="col-md-6">
+                    <label asp-for="VehicleId" class="form-label"></label>
+                    <input asp-for="VehicleId" class="form-control" required />
+                    <span asp-validation-for="VehicleId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="FuelQuantity" class="form-label">Fuel (InLitres)</label>
+                    <input  asp-for="FuelQuantity" type="number" class="form-control" required>
+                    <span asp-validation-for="FuelQuantity" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+
+                <div class="col-md-6">
+                    <label asp-for="Cost" class="form-label">Cost (₹)</label>                
+                    <input asp-for="Cost" type="number" class="form-control"  required>
+                    <span asp-validation-for="Cost" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Date" class="form-label">Date</label>                 
+                    <input  asp-for="Date" type="date" class="form-control"  required>
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="text-end mt-4">
+               <button type="submit" class="btn btn-custom">Submit</button>
+            </div>
+        </form>
+    </div>
+ </div>
 </div>
-<div class="col-md-6">
-<label for="fuelAmount" class="form-label">Fuel (InLitres)</label>
-<span style="color: red;">*</span>
-<input type="number" class="form-control" id="fuelAmount" required>
-</div>
-</div>
-<div class="row mb-3">
-<div class="col-md-6">
-<label for="cost" class="form-label">Cost (₹)</label>
-<span style="color: red;">*</span>
-<input type="number" class="form-control" id="cost" required>
-</div>
-<div class="col-md-6">
-<label for="date" class="form-label">Date</label>
-<span style="color: red;">*</span>
-<input type="date" class="form-control" id="date" required>
-</div>
-<div class="text-end mt-4">
-<button type="submit" class="btn btn-custom">Submit</button>
-</div>
-</form>
-</div>
-</div>
-</div>
- 
- 
-    <!-- jQuery Script -->
-<script>
-
-       $('#fuelForm').submit(function (e) {
-    e.preventDefault();
-
-    const data = {
-        vehicleId: $('#vehicleId').val(),
-        fuelQuantity: $('#fuelAmount').val(), // ✅ match model property
-        cost: $('#cost').val(),
-        date: $('#date').val()
-    };
-
-    $.ajax({
-        url: '/fuel/add',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function () {
-            alert('✅ Fuel record added successfully!');
-            $('#fuelForm')[0].reset();
-        },
-        error: function () {
-            alert('❌ Error adding fuel record.');
-        }
-    });
-});
-
- 
-        // View Fuel Usage
-
-        $('#searchBtn').click(function () {
-
-            const vehicleId = $('#searchVehicleId').val();
-
-            $.ajax({
-
-                url: `/fuel/usage/${vehicleId}`,
-
-                type: 'GET',
-
-                success: function (data) {
-
-                    let html = '<ul class="list-group">';
-
-                    data.forEach(record => {
-
-                        html += `<li class="list-group-item">
-<strong>Date:</strong> ${record.date} |
-<strong>Fuel:</strong> ${record.fuelAmount}L |
-<strong>Cost:</strong> ₹${record.cost}
-</li>`;
-
-                    });
-
-                    html += '</ul>';
-
-                    $('#fuelUsageResults').html(html);
-
-                },
-
-                error: function () {
-
-                    $('#fuelUsageResults').html('<p class="text-danger">Error fetching fuel usage data.</p>');
-
-                }
-
-            });
-
-        });
-</script>
- 
  
 </div>
  

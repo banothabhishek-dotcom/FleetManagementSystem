@@ -36,7 +36,7 @@ namespace FleetManagementSystem.Controllers
 
             List<Models.Fuel_Management> objFuelEntries = _db.FuelRecords.ToList();
 
-            return View(objFuelEntries);
+            return View();
 
         }
 
@@ -44,16 +44,15 @@ namespace FleetManagementSystem.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddFuelEntries([FromBody] Fuel_Management obj)
+        public async Task<IActionResult> AddFuelEntries(Fuel_Management obj)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Invalid data.");
+             // Return the view with validation errors
 
             await _db.AddAsync(obj);
             await _db.SaveChangesAsync();
-
-            return Ok(new { message = "Fuel record added successfully." });
+            return RedirectToAction("Fuel_Management"); // Redirect to a page showing entries
         }
+
 
 
 

@@ -1,10 +1,12 @@
 ﻿using FleetManagementSystem.Data;
 using FleetManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetManagementSystem.Controllers
 {
@@ -16,15 +18,53 @@ namespace FleetManagementSystem.Controllers
             _db = db;
         }
 
+        //public IActionResult Vehicle_Management()
+        //{
+        //    //to list the tables we have to write listing logic here 
+        //    //dbset needs to be added
+        //    ViewBag.HideFooter = true;
+
+        //    var vehicles = _db.Vehicles
+        //            .Include(v => v.MaintenanceRecords)
+        //            .ToList();
+
+        //    // Compute LastServicedDate from related MaintenanceRecords
+        //    foreach (var vehicle in vehicles)
+        //    {
+        //        var latestService = vehicle.MaintenanceRecords
+        //            .OrderByDescending(m => m.ScheduledDate)
+        //            .FirstOrDefault();
+
+        //        vehicle.LastServicedDate = latestService?.ScheduledDate;
+        //    }
+
+        //    List<Models.Vehicle_Management> objVehicleEntries = _db.Vehicles.ToList();
+        //    return View("~/Views/Admin/VehicleManagement/Vehicle_Management.cshtml", objVehicleEntries);
+
+        //}
+
         public IActionResult Vehicle_Management()
         {
-            //to list the tables we have to write listing logic here 
-            //dbset needs to be added
             ViewBag.HideFooter = true;
-            List<Models.Vehicle_Management> objVehicleEntries = _db.Vehicles.ToList();
-            return View("~/Views/Admin/VehicleManagement/Vehicle_Management.cshtml", objVehicleEntries);
 
+            var vehicles = _db.Vehicles
+                .Where(v => !v.IsDeleted)
+                .Include(v => v.MaintenanceRecords)
+                .ToList();
+
+            foreach (var vehicle in vehicles)
+            {
+                var latestService = vehicle.MaintenanceRecords
+                    .OrderByDescending(m => m.ScheduledDate)
+                    .FirstOrDefault();
+
+                vehicle.LastServicedDate = latestService?.ScheduledDate;
+            }
+
+            return View("~/Views/Admin/VehicleManagement/Vehicle_Management.cshtml", vehicles);
         }
+
+
         public IActionResult Add_Vehicle()
         {
             return View("~/Views/Admin/VehicleManagement/Add_Vehicle.cshtml");
@@ -80,6 +120,40 @@ namespace FleetManagementSystem.Controllers
             }
             return View("~/Views/Admin/VehicleManagement/Delete_Vehicle.cshtml",vehicleFromDb);
         }
+        //[HttpPost]
+        //public async Task<IActionResult> Delete_Vehicle(int? id, Vehicle_Management obj)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Step 1: Unmap vehicleId in Maintenance table
+        //    var maintenanceRecords = _db.MaintenanceRecords
+        //        .Where(m => m.VehicleId == id)
+        //        .ToList();
+
+        //    foreach (var record in maintenanceRecords)
+        //    {
+        //        record.VehicleId = null;
+        //    }
+        //    _db.MaintenanceRecords.UpdateRange(maintenanceRecords);
+
+        //    // Step 2: Unmap vehicleId in other related tables (if any)
+        //    // Repeat similar logic for Fuel_Management, Trip_Scheduling, etc., if needed
+
+        //    // Step 3: Delete the vehicle
+        //    var vehicle = await _db.Vehicles.FindAsync(id);
+        //    if (vehicle == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _db.Vehicles.Remove(vehicle);
+        //    await _db.SaveChangesAsync();
+
+        //    return RedirectToAction("Vehicle_Management");
+        //}
         [HttpPost]
         public async Task<IActionResult> Delete_Vehicle(int? id, Vehicle_Management obj)
         {
@@ -87,9 +161,21 @@ namespace FleetManagementSystem.Controllers
             {
                 return NotFound();
             }
-            _db.Vehicles.Remove(obj);
+
+            var vehicle = await _db.Vehicles.FindAsync(id);
+            if (vehicle == null)
+            {
+                return NotFound();
+            }
+
+            // Soft delete
+            vehicle.IsDeleted = true;
+            _db.Vehicles.Update(vehicle);
             await _db.SaveChangesAsync();
+
             return RedirectToAction("Vehicle_Management");
         }
+
+
     }
 }
