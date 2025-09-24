@@ -7,23 +7,9 @@
 @{
     ViewData["Title"] = "Performance Analysis";
 }
+@model FleetManagementSystem.Models.Performance_Analysis
 
-<head>
-    <style>
-        .btn-custom {
-            background-color: #0d6efd;
-            color: white;
-        }
 
-            .btn-custom:hover {
-                background-color: #0b5ed7;
-            }
-
-            .btn-custom:hover {
-                background-color: #0b5ed7;
-            }
-    </style>
-</head>
 
 <div class="bg-light">
 
@@ -64,9 +50,9 @@
         <!-- <div class="mb-4">
             <label for="reportMonth" class="form-label">Select Month:</label>
             <select id="reportMonth" class="form-select w-50">
-                <option selected>August</option>
-                <option>July</option>
-                <option>June</option>
+                <option selected>September</option>
+                <option>october</option>
+                <option>november</option>
             </select>
 
             <label for="reportYear" class="form-label mt-3">Select Year:</label>
@@ -80,9 +66,9 @@
             <div class="col-md-6">
                 <label for="reportMonth" class="form-label">Select Month:</label>
                 <select id="reportMonth" class="form-select">
-                    <option selected>August</option>
-                    <option>July</option>
-                    <option>June</option>
+                    <option selected>september</option>
+                    <option>october</option>
+                    <option>november</option>
                 </select>
             </div>
             <div class="col-md-6">
@@ -97,13 +83,35 @@
 
 
         <!-- Dashboard Cards -->
-        <div class="row g-3">
+        @* <div class="row g-3">
             <div class="col-md-3">
                 <div class="card p-3 text-center shadow">
                     <h5>Total Trips</h5>
                     <p class="fs-4 text-primary">128</p>
-                </div>
-            </div>
+                </div> *@
+                @* <div class="card mt-4">
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">September Accepted Trips</h5>
+                                    <p class="card-text">@ViewBag.SeptemberTrips</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">October Accepted Trips</h5>
+                                    <p class="card-text">@ViewBag.OctoberTrips</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div> *@
+
+        @*     </div>
             <div class="col-md-3">
                 <div class="card p-3 text-center shadow">
                     <h5>Fuel Efficiency</h5>
@@ -122,7 +130,37 @@
                     <p class="fs-4 text-danger">12 hrs</p>
                 </div>
             </div>
+        </div> *@
+        <div class="text-start mt-4">
+            
+            <img src="data:image/png;base64,@ViewBag.ChartImage" alt="Accepted Trips Chart" class="img
         </div>
+
+        @section Scripts {
+            https://cdn.jsdelivr.net/npm/chart.js</script>
+            <script>
+                var ctx = document.getElementById('tripsChart').getContext('2d');
+                var tripsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['September', 'October'],
+                        datasets: [{
+                            label: 'Accepted Trips',
+                            data: [@ViewBag.SeptemberTrips, @ViewBag.OctoberTrips],
+                            backgroundColor: ['skyblue', 'orange']
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                precision: 0
+                            }
+                        }
+                    }
+                });
+            </script>
+        }
 
         <!-- Static Chart Image -->
         <div class="mt-5">

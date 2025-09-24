@@ -17,5 +17,7 @@ namespace FleetManagementSystem.Models
 
         // Automatically set when the report is created
         public DateTime GeneratedOn { get; set; } = DateTime.UtcNow;
+
+        public int TotalTrips { get; set; }
     }
 }
