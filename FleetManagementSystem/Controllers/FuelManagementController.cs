@@ -1,8 +1,9 @@
 ﻿using FleetManagementSystem.Data;
-
 using FleetManagementSystem.Models;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetManagementSystem.Controllers
 
@@ -25,121 +26,46 @@ namespace FleetManagementSystem.Controllers
         public IActionResult Fuel_Management()
 
         {
-
-            return View("~/Views/Admin/FuelManagement/Fuel_Management.cshtml");
+            var records = _db.FuelRecords.ToList();
+            ViewBag.SearchPerformed = false;
+            return View("~/Views/Admin/FuelManagement/Fuel_Management.cshtml", records);
 
         }
 
-        public IActionResult FuelEntries()
-
+        public IActionResult AddFuelEntries()
         {
-
-            List<Models.Fuel_Management> objFuelEntries = _db.FuelRecords.ToList();
-
-            return View();
-
+            return View("~/Views/Admin/FuelManagement/AddFuelEntries.cshtml");
         }
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> AddFuelEntries(Fuel_Management obj)
         {
-             // Return the view with validation errors
 
-            await _db.AddAsync(obj);
+            var vehicleExists = await _db.Vehicles.AnyAsync(v => v.VehicleId == obj.VehicleId);
+
+            if (!vehicleExists)
+            {
+                return NotFound($"Vehicle ID {obj.VehicleId} not found.");
+            }
+            await _db.FuelRecords.AddAsync(obj);
             await _db.SaveChangesAsync();
             return RedirectToAction("Fuel_Management"); // Redirect to a page showing entries
         }
 
-
-
-
-
-        [HttpGet]
-
-        public async Task<IActionResult> EditFuelEntries(int? id)
-
-        {
-
-            if (id == null || id == 0)
-
-            {
-
-                return NotFound();
-
-            }
-
-            var fuelFromDb = await _db.FuelRecords.FindAsync(id);
-
-            if (fuelFromDb == null)
-
-            {
-
-                return NotFound();
-
-            }
-
-            return View(fuelFromDb);
-
-        }
-
         [HttpPost]
-
-        public async Task<IActionResult> EditFuelEntries(Fuel_Management obj)
-
+        public async Task<IActionResult> Fuelsearch(string vehicleId)
         {
+            var records = await _db.FuelRecords
+                                   .Where(f => f.VehicleId.ToString() == vehicleId)
+                                   .ToListAsync();
 
-            _db.FuelRecords.Update(obj);
+            ViewBag.HasRecords = records.Any();
+            ViewBag.SearchPerformed = true;
 
-            await _db.SaveChangesAsync();
-
-            return RedirectToAction("FuelEntries");
-
+            return View("~/Views/Admin/FuelManagement/Fuel_Management.cshtml", records);
         }
 
-        public async Task<IActionResult> DeleteFuelEntries(int? id)
 
-        {
-
-            if (id == null || id == 0)
-
-            {
-
-                return NotFound();
-
-            }
-
-            var fuelFromDb = await _db.FuelRecords.FindAsync(id);
-
-            if (fuelFromDb == null)
-
-            {
-
-                return NotFound();
-
-            }
-
-            return View(fuelFromDb);
-
-        }
-
-        [HttpPost]
-
-        public async Task<IActionResult> DeleteFuelEntries(Fuel_Management obj)
-
-        {
-
-            _db.FuelRecords.Remove(obj);
-
-            await _db.SaveChangesAsync();
-
-            return RedirectToAction("FuelEntries");
-
-        }
 
     }
-
 }
-

@@ -27,6 +27,6 @@ namespace FleetManagementSystem.Models
         public decimal Cost { get; set; }
 
         // Navigation Property
-        public Vehicle_Management Vehicle { get; set; } = new Vehicle_Management();
+        public Vehicle_Management? Vehicle { get; set; }
     }
 }
