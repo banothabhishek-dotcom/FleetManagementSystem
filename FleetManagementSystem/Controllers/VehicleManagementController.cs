@@ -13,43 +13,30 @@ namespace FleetManagementSystem.Controllers
     public class VehicleManagementController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private string phoneNumber;
+
         public VehicleManagementController(ApplicationDbContext db)
         {
             _db = db;
         }
 
-        //public IActionResult Vehicle_Management()
-        //{
-        //    //to list the tables we have to write listing logic here 
-        //    //dbset needs to be added
-        //    ViewBag.HideFooter = true;
-
-        //    var vehicles = _db.Vehicles
-        //            .Include(v => v.MaintenanceRecords)
-        //            .ToList();
-
-        //    // Compute LastServicedDate from related MaintenanceRecords
-        //    foreach (var vehicle in vehicles)
-        //    {
-        //        var latestService = vehicle.MaintenanceRecords
-        //            .OrderByDescending(m => m.ScheduledDate)
-        //            .FirstOrDefault();
-
-        //        vehicle.LastServicedDate = latestService?.ScheduledDate;
-        //    }
-
-        //    List<Models.Vehicle_Management> objVehicleEntries = _db.Vehicles.ToList();
-        //    return View("~/Views/Admin/VehicleManagement/Vehicle_Management.cshtml", objVehicleEntries);
-
-        //}
-
-        public IActionResult Vehicle_Management()
+       
+        public IActionResult Vehicle_Management(int page = 1)
         {
             ViewBag.HideFooter = true;
+            int pageSize = 10;
 
-            var vehicles = _db.Vehicles
+            var vehiclesQuery = _db.Vehicles
                 .Where(v => !v.IsDeleted)
-                .Include(v => v.MaintenanceRecords)
+                .Include(v => v.MaintenanceRecords);
+
+            int totalVehicles = vehiclesQuery.Count();
+            int totalPages = (int)Math.Ceiling(totalVehicles / (double)pageSize);
+
+            var vehicles = vehiclesQuery
+                .OrderBy(v => v.VehicleId) // Ensure consistent ordering
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
 
             foreach (var vehicle in vehicles)
@@ -61,8 +48,12 @@ namespace FleetManagementSystem.Controllers
                 vehicle.LastServicedDate = latestService?.ScheduledDate;
             }
 
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
             return View("~/Views/Admin/VehicleManagement/Vehicle_Management.cshtml", vehicles);
         }
+
 
 
         public IActionResult Add_Vehicle()
@@ -72,9 +63,38 @@ namespace FleetManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Add_Vehicle(Vehicle_Management obj)
         {
-            await _db.AddAsync(obj);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Vehicle_Management");
+            if (ModelState.IsValid)
+            {
+                // Save vehicle details
+                await _db.Vehicles.AddAsync(obj);
+
+                // Extract first name and phone number from DriverName
+                var nameParts = obj.DriverName.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+                string firstName = nameParts.Length > 0 ? nameParts[0] : obj.DriverName;
+                string lastName = nameParts.Length > 1 ? nameParts[1] : string.Empty;
+                
+
+                // Create user details
+                var user = new User_Details
+                {
+                    FirstName = firstName,
+                    LastName=lastName,
+                    PhoneNumber = obj.DriverPhone,
+                    Email = $"{obj.DriverPhone}@fleet.com",
+                    Password = "Driver@123", // ⚠️ Hash this in production!
+                    Role = "Driver"
+                };
+
+                // Save user details
+                await _db.UserDetails.AddAsync(user);
+
+                // Commit both changes
+                await _db.SaveChangesAsync();
+
+                return RedirectToAction("Vehicle_Management");
+            }
+
+            return View(obj);
         }
         [HttpGet]
         public async Task<IActionResult> Edit_Vehicle(int? id)

@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FleetManagementSystem.Models
 {
+    [Table("Users")]
     public class User_Details
     {
         [Key]
