@@ -13,7 +13,7 @@
     <div class="container card login-card p-4 shadow-sm justify-content-center align-items-center">
         <h2 class="mb-4 text-center">Registration Page</h2>
 
-        <form asp-action="RegistrationDetails" asp-controller="Customer" method="post">
+        <form asp-action="Registration" asp-controller="Customer" method="post">
             <div class="row">
                 <div class="col-6 mb-3">
                     <label asp-for="FirstName" class="form-label">First Name</label>
@@ -21,27 +21,27 @@
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
                 <div class="col-6 mb-3">
-                    <label asp-for="LastName" class="form-label"></label>
+                    <label asp-for="LastName" class="form-label">Last Name</label>
                     <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
+                <label asp-for="Email" class="form-label">Email</label>
                 <input asp-for="Email" class="form-control" placeholder="Enter your email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="PhoneNumber" class="form-label"></label>
+                <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
                 <input asp-for="PhoneNumber" class="form-control" placeholder="Enter your mobile number" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
             <div class="row">
                 <div class="col-6 mb-3">
-                    <label asp-for="Password" class="form-label"></label>
+                    <label asp-for="Password" class="form-label">Password</label>
                     <input asp-for="Password" class="form-control" placeholder="Enter your password" />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>

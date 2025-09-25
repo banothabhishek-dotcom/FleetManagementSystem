@@ -1,6 +1,10 @@
-﻿@{
+﻿@model FleetManagementSystem.Models.LoginDto
+
+@{
     ViewData["Title"] = "Login";
 }
+
+
 
 @* Custom CSS *@
 <link href="/css/Login.css" rel="stylesheet" />
@@ -10,63 +14,41 @@
 
                 <div class="card login-card p-4 shadow-sm">
                     <h2 class="mb-4 text-center">Login Page</h2>
-                    <form id="loginForm">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" id="email" class="form-control" placeholder="Enter your email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" id="password" class="form-control" placeholder="Enter your password"
-                                   required>
-                        </div>
-                        @* <div class="mb-3">
-                            <label for="roleSelect" class="form-label">State</label>
-                            <select id="roleSelect" class="form-select" required>
-                                <option value="">Select Role</option>
-                                <option value="user">User</option>
-                                <option value="driver">Driver</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div> *@
-                        <button type="submit" class="btn btn-primary w-100">Submit</button>
-                        <div class="row text-center">
-                            <div class="col-6 ">
-                                <h6 class="mt-3 ">
-                                    New User?
-                                    <a asp-controller="Customer" asp-action="Registration" class="text-decoration-none">
-                                        Register
-                                    </a>
-                                </h6>
-                            </div>
-                            <div class="col-6">
-                                <h6 class="mt-3">
-                                    <a href="#" class="text-decoration-none text-dark">Forgot Password</a>
-                                </h6>
-                            </div>
-                        </div>
+                   
 
-                    </form>
+<form asp-action="Login" asp-controller="Customer" method="post" id="loginForm">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Password</label>
+        <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Submit</button>
+
+    <div class="row text-center">
+        <div class="col-6">
+            <h6 class="mt-3">
+                New User?
+                <a asp-controller="Customer" asp-action="Registration" class="text-decoration-none">Register</a>
+            </h6>
+        </div>
+        <div class="col-6">
+            <h6 class="mt-3">
+                <a href="#" class="text-decoration-none text-dark">Forgot Password</a>
+            </h6>
+        </div>
+    </div>
+</form>
+
                 </div>
-          
-    @* <script>
-        $(document).ready(function () {
-            $("#loginForm").on("submit", function (e) {
-                e.preventDefault();
-                let role = $("#roleSelect").val();
-
-                // Show section based on role
-                if (role === "user") {
-                    window.location.href = "/user/userRegistration.html";
-                } else if (role === "driver") {
-                    window.location.href = "/driver/driver.html";
-                } else if (role === "admin") {
-                    window.location.href = "/admin/admin.html";
-                }
-            });
-        });
-    </script> *@
-
 </div>
 
 
