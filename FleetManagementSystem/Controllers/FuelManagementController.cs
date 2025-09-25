@@ -43,10 +43,13 @@ namespace FleetManagementSystem.Controllers
 
             var vehicleExists = await _db.Vehicles.AnyAsync(v => v.VehicleId == obj.VehicleId);
 
+
             if (!vehicleExists)
             {
-                return NotFound($"Vehicle ID {obj.VehicleId} not found.");
+                ModelState.AddModelError("VehicleId", $"Vehicle ID {obj.VehicleId} not found.");
+                return View("~/Views/Admin/FuelManagement/AddFuelEntries.cshtml",obj); // Return to the same view with error
             }
+
             await _db.FuelRecords.AddAsync(obj);
             await _db.SaveChangesAsync();
             return RedirectToAction("Fuel_Management"); // Redirect to a page showing entries
