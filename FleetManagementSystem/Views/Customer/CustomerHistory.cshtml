@@ -6,31 +6,34 @@
     ViewData["Title"] = "Fleet History";
 }
 
-@* <body style="background-color: rgba(35, 35, 35, 0.632);"> *@
     
-
-
-@foreach (var trip in Model)
+@if (Model != null && Model.Any())
+{
+    @foreach (var trip in Model)
     {
         <div class="card mb-3">
             <div class="card-header d-flex justify-content-between bg-success">
-                @trip.BookingTime.ToString("dd MMMM yyyy")
+                @trip.BookingTime.ToString("dd MMMM yyyy") 
                 <span><i class="fa-solid fa-circle-check"></i> Completed</span>
             </div>
 
             <div class="card-body py-3">
                 <div class="pickup my-3">
                     <h5 class="card-title"><i class="fa-solid fa-circle"></i> Pickup Point</h5>
-                    <p class="card-text">@trip.PickupPoint</p>
+                    <p class="card-text">@trip.PickupPoint </p>
                 </div>
 
                 <div class="drop my-4">
                     <h5 class="card-title"><i class="fa-solid fa-location-dot"></i> Drop Point</h5>
-                    <p class="card-text">@trip.DropPoint</p>
+                    <p class="card-text">@trip.DropPoint </p>
                 </div>
             </div>
         </div>
     }
+} else
+{
+    <p>No fleet history available.</p>
+}
 
 
 

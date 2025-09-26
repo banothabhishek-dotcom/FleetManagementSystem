@@ -97,34 +97,8 @@ namespace FleetManagementSystem.Controllers
             return View("~/Views/Customer/CustomerPage.cshtml", model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> FleetHistory()
-        {
-            var email = HttpContext.Session.GetString("UserEmail");
-            if (string.IsNullOrEmpty(email))
-            {
-                return RedirectToAction("Login", "Customer");
-            }
+       
 
-            var user = await _db.UserDetails.FirstOrDefaultAsync(u => u.Email == email);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Customer");
-            }
-
-            var history = await _db.Trips
-                .Where(t => t.PhoneNumber == user.PhoneNumber && t.VehicleId != null)
-                .OrderByDescending(t => t.BookingTime)
-                .Select(t => new Trip_Scheduling
-                {
-                    BookingTime = t.BookingTime,
-                    PickupPoint = t.PickupPoint,
-                    DropPoint = t.DropPoint
-                })
-                .ToListAsync();
-
-            return View("~/Views/Customer/CustomerHistory.cshtml", history);
-        }
 
 
 
@@ -204,10 +178,18 @@ namespace FleetManagementSystem.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        public int GetAcceptedTripCountForMonth(int month)
+        {
+            var currentYear = DateTime.Now.Year;
 
-      
+            int count = _db.Trips
+                .Where(t => t.AssignedDriver != "Declined" &&
+                            t.BookingTime.Month == month &&
+                            t.BookingTime.Year == currentYear)
+                .Count();
 
+            return count;
+        }
 
-        
     }
 }
