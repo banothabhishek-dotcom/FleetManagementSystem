@@ -1,0 +1,125 @@
+﻿@model FleetManagementSystem.Models.Fuel_Management
+
+@{
+
+ViewData["Title"] = "Fuel_Management";
+
+}
+
+<head>
+
+
+    <style>
+        body {
+
+            background-color: #f8f9fa;
+
+        }
+
+        .card {
+
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+
+        }
+
+        .header-title {
+
+            font-weight: 600;
+
+            color: #343a40;
+
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+
+        }
+
+        .btn-custom {
+
+            background-color: #0d6efd;
+
+            color: white;
+
+        }
+
+        .btn-custom:hover {
+
+            background-color: #0b5ed7;
+
+        }
+
+        .btn-custom:hover {
+
+            background-color: #0b5ed7;
+
+        }
+    </style>
+</head>
+
+<div>
+    <nav id="navBar" class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage" id="logo">Fleetora</a>
+
+            <!-- Toggler added here -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="text-start mt-3 ms-3">
+        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
+    </div>
+    
+
+    <div class="container ">
+        <h2 class="mb-7 text-center header-title">
+            <medium>Fuel Management</medium>
+        </h2>
+        <div class="text-start mt-3 mb-3">
+                   <a  asp-action="Fuel_Management" asp-controller="FuelManagement" class="btn btn-custom">Back to All Records</a>
+                </div>
+        <!-- Add Fuel Record -->
+        <div class="card mb-5">
+            <div class="card-header bg-primary text-white">Add Fuel Record</div>
+            <div class="card-body">
+                <form asp-action="AddFuelEntries" asp-validation-summary="ModelOnly">
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <label asp-for="VehicleId" class="form-label"></label>
+                            <input asp-for="VehicleId" class="form-control" required />
+                            <span asp-validation-for="VehicleId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="FuelQuantity" class="form-label">Fuel (InLitres)</label>
+                            <input asp-for="FuelQuantity" type="number" class="form-control" required>
+                            <span asp-validation-for="FuelQuantity" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <label asp-for="Cost" class="form-label">Cost (₹)</label>
+                            <input asp-for="Cost" type="number" class="form-control" required>
+                            <span asp-validation-for="Cost" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Date" class="form-label">Date</label>
+                            <input asp-for="Date" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-custom">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+

@@ -19,5 +19,6 @@ namespace FleetManagementSystem.Models
         public DateTime GeneratedOn { get; set; } = DateTime.UtcNow;
 
         public int TotalTrips { get; set; }
+        
     }
 }

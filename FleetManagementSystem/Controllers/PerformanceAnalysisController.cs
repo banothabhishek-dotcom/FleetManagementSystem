@@ -2,6 +2,7 @@
 using FleetManagementSystem.Helpers;
 using FleetManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetManagementSystem.Controllers
 {
@@ -14,8 +15,9 @@ namespace FleetManagementSystem.Controllers
             _db = db;
         }
 
-        public IActionResult Performance_Analysis()
+        public IActionResult Performance_Analysis( )
         {
+           
             var tripController = new TripSchedulingController(_db);
 
             // 1. Create a dictionary to hold the monthly data
@@ -45,8 +47,47 @@ namespace FleetManagementSystem.Controllers
             // 5. You can also pass the dictionary to the view if you need to display a table of data
             ViewBag.MonthlyData = monthlyAcceptedTrips;
 
+
+
+            var availableCount = _db.Vehicles
+     .Where(v => v.Status.ToLower() == "available")
+     .Count();
+
+            var unavailableCount = _db.Vehicles
+                .Where(v => v.Status.ToLower() == "unavailable")
+                .Count();
+
+
+
+            ViewBag.AvailableVehicles = availableCount;
+            ViewBag.UnavailableVehicles = unavailableCount;
+
+            var scheduledCount = _db.MaintenanceRecords
+                   .Where(v => v.Status.ToLower() == "scheduled")
+                   .Count();
+
+            var completeedCount = _db.MaintenanceRecords
+                  .Where(v => v.Status == "completed")
+                  .Count();
+
+            var unavailableCount1 = _db.MaintenanceRecords
+                .Where(v => v.Status == "unavailable")
+                .Count();
+
+            ViewBag.Scheduled = scheduledCount;
+            ViewBag.Completed = completeedCount;
+            ViewBag.UnavailableVehicles1 = unavailableCount1;
+
+
+
+
+
             return View("~/Views/Admin/PerformanceAnalysis/Performance_Analysis.cshtml", model);
         }
 
     }
+
+
+
 }
+

@@ -16,6 +16,5 @@ namespace FleetManagementSystem.Data
         public DbSet<Trip_Scheduling> Trips { get; set; }
         public DbSet<Performance_Analysis> PerformanceReports { get; set; }
         public DbSet<User_Details> UserDetails { get; set; }
-        public object Fuel_Management { get; internal set; }
     }
 }
