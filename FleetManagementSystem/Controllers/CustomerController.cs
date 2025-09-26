@@ -71,6 +71,7 @@ public class CustomerController : Controller
             return View(dto);
         }
 
+        //stroing role on server
         HttpContext.Session.SetString("UserRole", user.Role);
 
         // 🔀 Redirect based on role
@@ -98,7 +99,9 @@ public class CustomerController : Controller
     }
 
    public IActionResult CustomerHistory()
+
     {
+        ViewBag.HideFooter = true;
         return View("~/Views/Customer/CustomerHistory.cshtml");
     }
     public async Task<IActionResult> CustomerProfile()
