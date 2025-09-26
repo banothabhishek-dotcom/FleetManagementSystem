@@ -43,13 +43,42 @@ namespace FleetManagementSystem.Controllers
 
         //}
 
-        public IActionResult Vehicle_Management()
+        //public IActionResult Vehicle_Management()
+        //{
+        //    ViewBag.HideFooter = true;
+
+        //    var vehicles = _db.Vehicles
+        //        .Where(v => !v.IsDeleted)
+        //        .Include(v => v.MaintenanceRecords)
+        //        .ToList();
+
+        //    foreach (var vehicle in vehicles)
+        //    {
+        //        var latestService = vehicle.MaintenanceRecords
+        //            .OrderByDescending(m => m.ScheduledDate)
+        //            .FirstOrDefault();
+
+        //        vehicle.LastServicedDate = latestService?.ScheduledDate;
+        //    }
+
+        //    return View("~/Views/Admin/VehicleManagement/Vehicle_Management.cshtml", vehicles);
+        //}
+        public IActionResult Vehicle_Management(int page = 1)
         {
             ViewBag.HideFooter = true;
+            int pageSize = 10;
 
-            var vehicles = _db.Vehicles
+            var vehiclesQuery = _db.Vehicles
                 .Where(v => !v.IsDeleted)
-                .Include(v => v.MaintenanceRecords)
+                .Include(v => v.MaintenanceRecords);
+
+            int totalVehicles = vehiclesQuery.Count();
+            int totalPages = (int)Math.Ceiling(totalVehicles / (double)pageSize);
+
+            var vehicles = vehiclesQuery
+                .OrderBy(v => v.VehicleId) // Ensure consistent ordering
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
 
             foreach (var vehicle in vehicles)
@@ -61,8 +90,12 @@ namespace FleetManagementSystem.Controllers
                 vehicle.LastServicedDate = latestService?.ScheduledDate;
             }
 
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
             return View("~/Views/Admin/VehicleManagement/Vehicle_Management.cshtml", vehicles);
         }
+
 
 
         public IActionResult Add_Vehicle()

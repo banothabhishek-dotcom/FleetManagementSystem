@@ -8,9 +8,19 @@ namespace FleetManagementSystem.Controllers
 	{
 		private readonly ApplicationDbContext _db = db;
 
-		public IActionResult Maintenance_Tracking()
+		public IActionResult Maintenance_Tracking(int page = 1)
 		{
-			var records = _db.MaintenanceRecords.ToList();
+			int pageSize = 5;
+			var records = _db.MaintenanceRecords
+							 .OrderByDescending(m => m.ScheduledDate)
+							 .Skip((page - 1) * pageSize)
+							 .Take(pageSize)
+							 .ToList();
+
+			int totalRecords = _db.MaintenanceRecords.Count();
+			ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+			ViewBag.CurrentPage = page;
+
 			return View("~/Views/Admin/MaintenanceTracking/Maintenance_Tracking.cshtml", records);
 		}
 
