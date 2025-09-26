@@ -72,6 +72,7 @@ public class CustomerController : Controller
         }
 
         HttpContext.Session.SetString("UserRole", user.Role);
+        HttpContext.Session.SetString("DriverName", user.FirstName + " " + user.LastName);
 
         // 🔀 Redirect based on role
         if (user.Role == "Customer")
