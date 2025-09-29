@@ -47,7 +47,7 @@ namespace FleetManagementSystem.Controllers
             if (!vehicleExists)
             {
                 ModelState.AddModelError("VehicleId", $"Vehicle ID {obj.VehicleId} not found.");
-                return View("~/Views/Admin/FuelManagement/AddFuelEntries.cshtml",obj); // Return to the same view with error
+                return View("~/Views/Admin/FuelManagement/AddFuelEntries.cshtml", obj); // Return to the same view with error
             }
 
             await _db.FuelRecords.AddAsync(obj);
@@ -67,8 +67,5 @@ namespace FleetManagementSystem.Controllers
 
             return View("~/Views/Admin/FuelManagement/Fuel_Management.cshtml", records);
         }
-
-
-
     }
 }

@@ -49,8 +49,7 @@ namespace FleetManagementSystem.Helpers
                 g.DrawLine(Pens.Black, margin, height - margin, width - margin, height - margin); // X-axis
                 g.DrawLine(Pens.Black, margin, margin, margin, height - margin);                 // Y-axis
 
-                // Draw title
-                g.DrawString("Accepted Trips by Month", titleFont, Brushes.Black, new PointF(width / 2 - 120, 20));
+                
 
                 int xPosition = margin + spacing;
                 int i = 0;
