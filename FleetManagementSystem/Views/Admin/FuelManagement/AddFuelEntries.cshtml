@@ -86,11 +86,14 @@ ViewData["Title"] = "Fuel_Management";
                 <form asp-action="AddFuelEntries" asp-validation-summary="ModelOnly">
                     <div class="row mb-3">
 
+                        
                         <div class="col-md-6">
-                            <label asp-for="VehicleId" class="form-label"></label>
-                            <input asp-for="VehicleId" class="form-control" required />
-                            <span asp-validation-for="VehicleId" class="text-danger"></span>
+                            <label class="form-label">Vehicle Registration Number</label>
+                            <input type="text" name="RegistrationNumber" class="form-control" placeholder="Enter Registration Number" required />
+                             <span class="text-danger">@ViewData.ModelState["RegistrationNumber"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
                         </div>
+
+
 
                         <div class="col-md-6">
                             <label asp-for="FuelQuantity" class="form-label">Fuel (InLitres)</label>
