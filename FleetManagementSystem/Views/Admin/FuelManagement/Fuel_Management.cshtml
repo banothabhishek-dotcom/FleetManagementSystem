@@ -97,7 +97,7 @@ ViewData["Title"] = "Fuel_Management";
 
             <form method="post" asp-action="Fuelsearch" asp-controller="FuelManagement">
                 <div class="input-group mb-3">
-                    <input type="number" class="form-control" id="searchVehicleId" name="vehicleId" placeholder="Enter Vehicle ID" required />
+                   <input type="text" class="form-control" id="searchRegistration" name="registrationNumber" placeholder="Enter Vehicle Registration Number"  />
                     <button type="submit" class="btn btn-outline-primary" id="searchBtn">Search</button>
                 </div>
             </form>
@@ -111,7 +111,7 @@ ViewData["Title"] = "Fuel_Management";
                         <table class="table table-bordered table-striped mt-3">
                             <thead>
                                 <tr>
-                                    <th>Vehicle ID</th>
+                                    <th>Vehicle Number</th>
                                     <th>Fuel Quantity</th>
                                     <th>Cost</th>
                                     <th>Date</th>
@@ -121,7 +121,7 @@ ViewData["Title"] = "Fuel_Management";
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.VehicleId</td>
+                                        <td>@item.Vehicle?.RegistrationNumber</td>
                                         <td>@item.FuelQuantity</td>
                                         <td>@item.Cost</td>
                                         <td>@item.Date.ToString("dd-MM-yyyy")</td>
@@ -133,7 +133,7 @@ ViewData["Title"] = "Fuel_Management";
                     else
                     {
                         <div class="alert alert-danger mt-3">
-                            No records found for the given Vehicle ID.
+                            No records found for the given Vehicle Registration Number.
                         </div>
                     }
                 }
@@ -150,8 +150,8 @@ ViewData["Title"] = "Fuel_Management";
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Fuel Id</th>
-                        <th>Vehicle ID</th>
+                        
+                        <th>Vehicle Number</th>
                         <th>Fuel Quantity(Liters)</th>
                         <th>Cost</th>
                         <th>Date</th>
@@ -162,8 +162,8 @@ ViewData["Title"] = "Fuel_Management";
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.FuelId</td>
-                            <td>@item.VehicleId</td>
+                            
+                            <td>@item.Vehicle?.RegistrationNumber</td>
                             <td>@item.FuelQuantity</td>
                             <td>@item.Cost</td>
                             <td>@item.Date.ToString("dd-MM-yyyy")</td>
