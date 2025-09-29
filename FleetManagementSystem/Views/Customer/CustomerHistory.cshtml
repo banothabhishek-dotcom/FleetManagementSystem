@@ -1,36 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
+@model List<FleetManagementSystem.Models.Trip_Scheduling>
+
 @{
     Layout = "~/Views/Shared/_CustomerLayout.cshtml";
     ViewData["Title"] = "Fleet History";
 }
 
-@* <body style="background-color: rgba(35, 35, 35, 0.632);"> *@
-    <div id="nav2"></div>
-
-    <div class="card ">
-        <div class="card-header d-flex justify-content-between bg-success ">
-            16 August 2025<span class="justify-content-end "><i class="fa-solid fa-circle-check"></i>Completed</span>
-        </div>
-
-        <div class="card-body py-3">
-            <div class="pickup my-3">
-                <h5 class="card-title"><i class="fa-solid fa-circle"></i>Pickup Point</h5>
-                <p class="card-text">Sipcot,Chennai</p>
+    
+@if (Model != null && Model.Any())
+{
+    @foreach (var trip in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between bg-success">
+                @trip.BookingTime.ToString("dd MMMM yyyy") 
+                <span><i class="fa-solid fa-circle-check"></i> Completed</span>
             </div>
 
-            <div class="drop my-4">
-                <h5 class="card-title "><i class="fa-solid fa-location-dot"></i>Drop Point</h5>
-                <p class="card-text">Navalur,Chennai</p>
+            <div class="card-body py-3">
+                <div class="pickup my-3">
+                    <h5 class="card-title"><i class="fa-solid fa-circle"></i> Pickup Point</h5>
+                    <p class="card-text">@trip.PickupPoint </p>
+                </div>
+
+                <div class="drop my-4">
+                    <h5 class="card-title"><i class="fa-solid fa-location-dot"></i> Drop Point</h5>
+                    <p class="card-text">@trip.DropPoint </p>
+                </div>
             </div>
         </div>
+    }
+} else
+{
+    <p>No fleet history available.</p>
+}
 
-    </div>
 
-    <script>
-        $(function(){
-            $("#nav2").load("/user/userNavbar.html");
-        })
-    </script>
-    @* </body> *@
+
+
+   

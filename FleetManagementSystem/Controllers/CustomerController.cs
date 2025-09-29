@@ -71,7 +71,9 @@ public class CustomerController : Controller
             return View(dto);
         }
 
+        //stroing role on server
         HttpContext.Session.SetString("UserRole", user.Role);
+        HttpContext.Session.SetString("DriverName", user.FirstName + " " + user.LastName);
 
         // 🔀 Redirect based on role
         if (user.Role == "Customer")
@@ -97,10 +99,32 @@ public class CustomerController : Controller
         return View();
     }
 
-   public IActionResult CustomerHistory()
+    [HttpGet]
+    public async Task<IActionResult> CustomerHistory()
     {
-        return View("~/Views/Customer/CustomerHistory.cshtml");
+        var email = HttpContext.Session.GetString("UserEmail");
+        if (string.IsNullOrEmpty(email))
+        {
+            return RedirectToAction("Login", "Customer");
+        }
+
+        var user = await _db.UserDetails.FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Customer");
+        }
+
+        var phone = user.PhoneNumber?.Trim().ToLower();
+        var history = _db.Trips
+            .Where(t => t.PhoneNumber != null && t.PhoneNumber.Trim().ToLower() == phone)
+            .OrderByDescending(t => t.BookingTime)
+            .ToList();
+
+        ViewBag.HideFooter = true; // ✅ You can still set this here
+
+        return View("~/Views/Customer/CustomerHistory.cshtml", history);
     }
+
     public async Task<IActionResult> CustomerProfile()
     {
         var email = HttpContext.Session.GetString("UserEmail");
