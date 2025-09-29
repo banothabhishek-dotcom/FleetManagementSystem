@@ -1,6 +1,8 @@
 ﻿using FleetManagementSystem.Data;
 using FleetManagementSystem.Helpers;
 using FleetManagementSystem.Models;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,38 +17,86 @@ namespace FleetManagementSystem.Controllers
             _db = db;
         }
 
-        public IActionResult Performance_Analysis( )
+        public IActionResult Performance_Analysis()
         {
-           
-            var tripController = new TripSchedulingController(_db);
+            var monthlyAcceptedTrips = GetMonthlyAcceptedTrips();
+            var monthlyFuelData = GetMonthlyFuelData();
+            var acceptedTripsChartBytes = ChartGenerator.GenerateAcceptedTripsChart(monthlyAcceptedTrips);
+            var fuelChartBytes = FuelChartGenerator.GenerateFuelBarChart(monthlyFuelData);
+            var stats = GetFleetStats(monthlyAcceptedTrips);
 
-            // 1. Create a dictionary to hold the monthly data
+            var model = new Performance_Analysis
+            {
+                TotalTrips = stats.TotalTrips
+            };
+
+            ViewBag.ChartImage = Convert.ToBase64String(acceptedTripsChartBytes);
+            ViewBag.FuelChartImage = Convert.ToBase64String(fuelChartBytes);
+            ViewBag.MonthlyData = monthlyAcceptedTrips;
+            ViewBag.AvailableVehicles = stats.AvailableVehicles;
+            ViewBag.UnavailableVehicles = stats.UnavailableVehicles;
+            ViewBag.Scheduled = stats.ScheduledMaintenance;
+            ViewBag.Completed = stats.CompletedMaintenance;
+
+            return View("~/Views/Admin/PerformanceAnalysis/Performance_Analysis.cshtml", model);
+        }
+
+        [HttpGet]
+        public IActionResult DownloadPerformancePdf()
+        {
+            var monthlyAcceptedTrips = GetMonthlyAcceptedTrips();
+            var monthlyFuelData = GetMonthlyFuelData();
+            var acceptedTripsChartBytes = ChartGenerator.GenerateAcceptedTripsChart(monthlyAcceptedTrips);
+            var fuelChartBytes = FuelChartGenerator.GenerateFuelBarChart(monthlyFuelData);
+            var stats = GetFleetStats(monthlyAcceptedTrips);
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Document doc = new Document(PageSize.A4);
+                PdfWriter.GetInstance(doc, ms);
+                doc.Open();
+
+                doc.Add(new Paragraph("Fleet Performance Summary"));
+                doc.Add(new Paragraph($"Total Trips This Year: {stats.TotalTrips}"));
+                doc.Add(new Paragraph($"Maintenance Records - Scheduled: {stats.ScheduledMaintenance}, Completed: {stats.CompletedMaintenance}"));
+                doc.Add(new Paragraph($"Vehicle Status - Available: {stats.AvailableVehicles}, Unavailable: {stats.UnavailableVehicles}"));
+                doc.Add(new Paragraph(" "));
+
+                iTextSharp.text.Image img1 = iTextSharp.text.Image.GetInstance(acceptedTripsChartBytes);
+                iTextSharp.text.Image img2 = iTextSharp.text.Image.GetInstance(fuelChartBytes);
+
+                img1.ScaleToFit(500f, 300f);
+                img2.ScaleToFit(500f, 300f);
+
+                doc.Add(new Paragraph("Accepted Trips Overview"));
+                doc.Add(img1);
+                doc.Add(new Paragraph("Fuel Consumption Overview"));
+                doc.Add(img2);
+
+                doc.Close();
+                return File(ms.ToArray(), "application/pdf", "PerformanceGraphs.pdf");
+            }
+        }
+
+        // 🔧 Helper Methods
+
+        private Dictionary<string, int> GetMonthlyAcceptedTrips()
+        {
+            var tripController = new TripSchedulingController(_db);
             var monthlyAcceptedTrips = new Dictionary<string, int>();
 
-            // 2. Loop through all 12 months of the year (1 to 12)
             for (int month = 1; month <= 12; month++)
             {
-                // Get the count using the new consolidated method
                 int acceptedCount = tripController.GetAcceptedTripCountForMonth(month);
-
-                // Add the data to the dictionary
-                string monthName = new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM"); // Convert month number to month name
+                string monthName = new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM");
                 monthlyAcceptedTrips.Add(monthName, acceptedCount);
             }
 
-            // 3. Create the model for the view (optional, you can just use ViewBag)
-            var model = new Performance_Analysis
-            {
-                TotalTrips = monthlyAcceptedTrips.Sum(x => x.Value) // Calculate total trips from the dictionary
-            };
+            return monthlyAcceptedTrips;
+        }
 
-            // 4. Pass the entire dictionary to the ChartGenerator
-            var imgBytes = ChartGenerator.GenerateAcceptedTripsChart(monthlyAcceptedTrips);
-            ViewBag.ChartImage = Convert.ToBase64String(imgBytes);
-
-            // 5. You can also pass the dictionary to the view if you need to display a table of data
-            ViewBag.MonthlyData = monthlyAcceptedTrips;
-
+        private Dictionary<string, (decimal Quantity, decimal Cost)> GetMonthlyFuelData()
+        {
             var monthlyFuelData = new Dictionary<string, (decimal Quantity, decimal Cost)>();
 
             for (int month = 1; month <= 12; month++)
@@ -60,44 +110,20 @@ namespace FleetManagementSystem.Controllers
 
                 string monthName = new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM");
                 monthlyFuelData.Add(monthName, (averageQuantity, averageCost));
-
-                var fuelChartBytes = FuelChartGenerator.GenerateFuelBarChart(monthlyFuelData);
-                ViewBag.FuelChartImage = Convert.ToBase64String(fuelChartBytes);
-
             }
 
-
-            var availableCount = _db.Vehicles
-     .Where(v => v.Status.ToLower() == "available")
-     .Count();
-
-            var unavailableCount = _db.Vehicles
-                .Where(v => v.Status.ToLower() == "unavailable")
-                .Count();
-
-
-
-            ViewBag.AvailableVehicles = availableCount;
-            ViewBag.UnavailableVehicles = unavailableCount;
-
-            var scheduledCount = _db.MaintenanceRecords
-                   .Where(v => v.Status.ToLower() == "scheduled")
-                   .Count();
-
-            var completeedCount = _db.MaintenanceRecords
-                  .Where(v => v.Status == "completed")
-                  .Count();
-
-            ViewBag.Scheduled = scheduledCount;
-            ViewBag.Completed = completeedCount;
-            
-
-            return View("~/Views/Admin/PerformanceAnalysis/Performance_Analysis.cshtml", model);
+            return monthlyFuelData;
         }
 
+        private (int TotalTrips, int AvailableVehicles, int UnavailableVehicles, int ScheduledMaintenance, int CompletedMaintenance) GetFleetStats(Dictionary<string, int> monthlyAcceptedTrips)
+        {
+            int availableCount = _db.Vehicles.Count(v => v.Status.ToLower() == "available");
+            int unavailableCount = _db.Vehicles.Count(v => v.Status.ToLower() == "unavailable");
+            int scheduledCount = _db.MaintenanceRecords.Count(m => m.Status.ToLower() == "scheduled");
+            int completedCount = _db.MaintenanceRecords.Count(m => m.Status.ToLower() == "completed");
+            int totalTrips = monthlyAcceptedTrips.Sum(x => x.Value);
+
+            return (totalTrips, availableCount, unavailableCount, scheduledCount, completedCount);
+        }
     }
-
-
-
 }
-
