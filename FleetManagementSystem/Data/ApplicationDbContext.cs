@@ -16,5 +16,10 @@ namespace FleetManagementSystem.Data
         public DbSet<Trip_Scheduling> Trips { get; set; }
         public DbSet<Performance_Analysis> PerformanceReports { get; set; }
         public DbSet<User_Details> UserDetails { get; set; }
+
+        internal async Task<string> FindAsync(string? userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

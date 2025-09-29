@@ -1,8 +1,5 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model List<FleetManagementSystem.Models.Trip_Scheduling>
+
 @{
     Layout = "~/Views/Shared/_DriverLayout.cshtml";
     ViewData["Title"] = "Home";
@@ -15,103 +12,131 @@
 
 
 
-    <div class="container" style="margin-top:100px ;">
-        <div class="card shadow-lg rounded p-4 my-5">
+    <div class="container mt-5">
+        <div class="card shadow-lg rounded p-4 mb-4 bg-light">
             <div class="row align-items-center">
                 <div class="col-md-6 text-center text-md-start">
-                    <h1 class="fw-bold">Welcome Prathik</h1>
+                    <h1 class="fw-bold text-primary">Welcome @Context.Session.GetString("DriverName")</h1>
                     <p class="lead text-muted">Have a great day! Start your rides.</p>
                 </div>
                 <div class="col-md-6 text-center">
-                    <img src="/assets/driver.webp" alt="Driver Logo" class="img-fluid rounded" style="max-height: 200px;">
+                    <img src="/assets/driver.webp" alt="Driver Logo" class="img-fluid rounded" style="max-height: 180px;">
                 </div>
             </div>
         </div>
     </div>
 
 
-    <div class="container  my-4">
-        <div class="card-custom shadow-lg rounded p-4">
-            <div class="close-btn" id="closeCard">×</div>
-            <h4 class="text-center mb-4 text-primary">PickUp Details</h4>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <strong>Name:</strong> Sejal Bisen
-                </div>
-                <div class="col-md-6">
-                    <strong>Phone Number:</strong> 9424379846
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <strong>Pickup Address:</strong> SRS Balaghat
-                </div>
-                <div class="col-md-6">
-                    <strong>Drop Address:</strong> Sipcot
-                </div>
-            </div>
-            <hr>
-            <div class="container my-4">
-                <div class="card-custom  p-4">
-                    <h4 class="text-center mb-4 text-primary">Track Details</h4>
 
-                    <div class="d-flex justify-content-between align-items-center position-relative" id="trackRow"
-                         style="height: 100px;">
-                        <button id="startBtn" type="button" class="btn btn-success ms-2">Start</button>
+    <div class="container mb-5">
+        <div class="card shadow-lg rounded p-4">
+            <h4 class="text-center mb-4 text-primary">Assigned Trips</h4>
 
-                        <i id="truckIcon" class="fa-solid fa-truck offset-1"
-                           style="position: absolute; top: 40px; left: 0; font-size: 20px; color: #131313;"></i>
-
-                        <button id="stopBtn" type="button" class="btn btn-danger me-2">End</button>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var trip in Model)
+                {
+                    <div class="card mb-4 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-success">Pickup Details</h5>
+                            <div class="row mb-2">
+                                <div class="col-md-6"><strong>Name:</strong> @(trip.Firstname + " " + trip.Lastname)</div>
+                                <div class="col-md-6"><strong>Phone:</strong> @trip.PhoneNumber</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"><strong>Pickup:</strong> @trip.PickupPoint</div>
+                                <div class="col-md-6"><strong>Drop:</strong> @trip.DropPoint</div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                }
+            }
+            else
+            {
+                <div class="alert alert-info text-center">No trips assigned yet.</div>
+            }
+            @* <div class="container my-4">
+                <div class="card shadow-lg rounded p-4"> *@
+                    <h4 class="text-center mb-4 text-primary">Track Details</h4>
+                    <div class="d-flex align-items-center justify-content-between" id="trackRow" style="position: relative; height: 60px;">
+                        <button id="startBtn" class="btn btn-success">Start</button>
+
+                <div id="trackArea" style="flex-grow: 1; position: relative; height: 40px;margin: 0 20px;">
+                            <i id="truckIcon" class="fa-solid fa-truck" style="position: absolute; top: 8px; left: 0; font-size: 24px; color: #131313;"></i>
+                        </div>
+
+                        <button id="stopBtn" class="btn btn-danger">End</button>
+                    </div>
+            @*     </div>
+            </div> *@
+
 
         </div>
+
     </div>
+    @* <div class="container mb-5">
+        <div class="card shadow-lg rounded p-4">
+            <h4 class="text-center mb-4 text-primary">Track Details</h4>
+            <div class="d-flex justify-content-between align-items-center position-relative" id="trackRow" style="height: 100px;">
+                <button id="startBtn" class="btn btn-success">Start</button>
+                <i id="truckIcon" class="fa-solid fa-truck" style="position: absolute; top: 40px; left: 0; font-size: 24px; color: #131313;"></i>
+                <button id="stopBtn" class="btn btn-danger">End</button>
+            </div>
+        </div>
+    </div> *@
+
+
     <!-- Fare Calculation Modal -->
     <div class="modal fade" id="fareModal" tabindex="-1" aria-labelledby="fareModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
+            <div class="modal-content shadow">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="fareModalLabel">Fare Calculation</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="fareForm">
                         <div class="mb-3">
-                            <label for="kilometers" class="form-label">Number of Kilometers</label>
+                            <label for="kilometers" class="form-label">Kilometers</label>
                             <input type="number" class="form-control" id="kilometers" required>
                         </div>
                         <div class="mb-3">
-                            <label for="costPerKm" class="form-label">Cost per Kilometer</label>
+                            <label for="costPerKm" class="form-label">Cost per Km</label>
                             <input type="number" class="form-control" id="costPerKm" required>
                         </div>
                         <div class="mb-3">
                             <label for="totalFare" class="form-label">Total Fare</label>
                             <input type="text" class="form-control" id="totalFare" readonly>
                         </div>
-                        <button type="button" class="btn btn-primary w-100" id="calculateFareBtn">Calculate Fare</button>
+                        <button type="button" class="btn btn-primary w-100" id="calculateFareBtn">Calculate</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        const duration = 10000;
 
+    <script>
+                const duration = 15000; // 15 seconds
+        let animationInProgress = false;
 
         $('#startBtn').click(function () {
-          const track = $('#trackRow');
-          const startBtnWidth = $('#startBtn').outerWidth(true);
-          const stopBtnWidth = $('#stopBtn').outerWidth(true);
-          const truckWidth = $('#truckIcon').outerWidth(true);
-          const trackWidth = track.width();
+            const trackWidth = $('#trackArea').width();
+            const truckWidth = $('#truckIcon').outerWidth(true);
+            const endLeft = trackWidth - truckWidth;
 
-          const startLeft = startBtnWidth ; // buffer from Start button
-          const endLeft = trackWidth - stopBtnWidth - truckWidth - 10; // buffer before Stop button
+            $('#truckIcon').css('left', 0).stop().animate({ left: endLeft }, duration);
+            animationInProgress = true;
+        });
 
-          $('#truckIcon').css('left', startLeft).stop().animate({ left: endLeft }, duration);
+        $('#stopBtn').click(function () {
+            if (!animationInProgress) return;
+
+            const trackWidth = $('#trackArea').width();
+            const truckWidth = $('#truckIcon').outerWidth(true);
+            const endLeft = trackWidth - truckWidth;
+
+            $('#truckIcon').stop().css('left', endLeft);
+            animationInProgress = false;
         });
 
         $('#stopBtn').click(function () {
@@ -134,35 +159,36 @@
     </script>
     <div id="footer1"></div>
     <script>
-        $(document).ready(function () {
-              $("#footer1").load("/footer/footer.html");
-            })
-            $('#stopBtn').click(function () {
-          const track = $('#trackRow');
-          const stopBtnWidth = $('#stopBtn').outerWidth(true);
-          const truckWidth = $('#truckIcon').outerWidth(true);
-          const trackWidth = track.width();
+                $(document).ready(function () {
+            $("#closeCard").click(() => $(".card-custom").fadeOut());
 
-          const endLeft = trackWidth - stopBtnWidth - truckWidth - 10;
+            $("#startBtn").click(function () {
+                const track = $("#trackRow");
+                const startLeft = $("#startBtn").outerWidth(true);
+                const endLeft = track.width() - $("#stopBtn").outerWidth(true) - $("#truckIcon").outerWidth(true) - 10;
+                $("#truckIcon").css("left", startLeft).stop().animate({ left: endLeft }, 10000);
+            });
 
-          $('#truckIcon').stop().css('left', endLeft);
+            $("#stopBtn").click(function () {
+                const track = $("#trackRow");
+                const endLeft = track.width() - $("#stopBtn").outerWidth(true) - $("#truckIcon").outerWidth(true) - 10;
+                $("#truckIcon").stop().css("left", endLeft);
+                new bootstrap.Modal(document.getElementById("fareModal")).show();
+            });
 
-          // Show the fare modal
-          const fareModal = new bootstrap.Modal(document.getElementById('fareModal'));
-          fareModal.show();
+            $("#calculateFareBtn").click(function () {
+                const km = parseFloat($("#kilometers").val());
+                const cost = parseFloat($("#costPerKm").val());
+                if (!isNaN(km) && !isNaN(cost)) {
+                    $("#totalFare").val(`₹${(km * cost).toFixed(2)}`);
+                } else {
+                    alert("Please enter valid numbers.");
+                }
+            });
+
+            $("#footer1").load("/footer/footer.html");
         });
 
-        $('#calculateFareBtn').click(function () {
-          const km = parseFloat($('#kilometers').val());
-          const cost = parseFloat($('#costPerKm').val());
-
-          if (!isNaN(km) && !isNaN(cost)) {
-            const fare = km * cost;
-            $('#totalFare').val(`₹${fare.toFixed(2)}`);
-          } else {
-            alert('Please enter valid numbers for both fields.');
-          }
-        });
 
     </script>
     </div>

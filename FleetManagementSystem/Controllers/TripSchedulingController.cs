@@ -1,6 +1,8 @@
-﻿using FleetManagementSystem.Data;
+﻿using System.Security.Claims;
+using FleetManagementSystem.Data;
 using FleetManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetManagementSystem.Controllers
 {
@@ -58,10 +60,48 @@ namespace FleetManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTrip(Trip_Scheduling obj)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(obj); // Return form with validation errors
+            }
+
             await _db.AddAsync(obj);
             await _db.SaveChangesAsync();
-            return View("~/Views/Customer/CustomerPage.cshtml");
+
+            return RedirectToAction("CustomerPage", "Customer"); // Or use View if needed
         }
+        
+     
+        [HttpGet]
+        public async Task<IActionResult> AddTrip()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _db.UserDetails.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var model = new Trip_Scheduling
+            {
+                Firstname = user.FirstName,
+                Lastname = user.LastName,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            return View("~/Views/Customer/CustomerPage.cshtml", model);
+        }
+
+       
+
+
+
+
         [HttpPost]
         public IActionResult AssignDriver(int tripId, string driverName, string vehicleType)
         {

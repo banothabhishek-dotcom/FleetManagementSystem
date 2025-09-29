@@ -47,6 +47,24 @@ namespace FleetManagementSystem.Controllers
             // 5. You can also pass the dictionary to the view if you need to display a table of data
             ViewBag.MonthlyData = monthlyAcceptedTrips;
 
+            var monthlyFuelData = new Dictionary<string, (decimal Quantity, decimal Cost)>();
+
+            for (int month = 1; month <= 12; month++)
+            {
+                var monthFuelRecords = _db.FuelRecords
+                    .Where(f => f.Date.Month == month && f.Date.Year == DateTime.Now.Year)
+                    .ToList();
+
+                decimal averageQuantity = monthFuelRecords.Any() ? monthFuelRecords.Average(f => f.FuelQuantity) : 0;
+                decimal averageCost = monthFuelRecords.Any() ? monthFuelRecords.Average(f => f.Cost) : 0;
+
+                string monthName = new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM");
+                monthlyFuelData.Add(monthName, (averageQuantity, averageCost));
+
+                var fuelChartBytes = FuelChartGenerator.GenerateFuelBarChart(monthlyFuelData);
+                ViewBag.FuelChartImage = Convert.ToBase64String(fuelChartBytes);
+
+            }
 
 
             var availableCount = _db.Vehicles
@@ -70,17 +88,9 @@ namespace FleetManagementSystem.Controllers
                   .Where(v => v.Status == "completed")
                   .Count();
 
-            var unavailableCount1 = _db.MaintenanceRecords
-                .Where(v => v.Status == "unavailable")
-                .Count();
-
             ViewBag.Scheduled = scheduledCount;
             ViewBag.Completed = completeedCount;
-            ViewBag.UnavailableVehicles1 = unavailableCount1;
-
-
-
-
+            
 
             return View("~/Views/Admin/PerformanceAnalysis/Performance_Analysis.cshtml", model);
         }
