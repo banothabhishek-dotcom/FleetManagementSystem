@@ -28,40 +28,16 @@
         </div>
     </nav>
 
-    <div class="text-start mt-3 ms-3">
-        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
+    <div class="text-start mt-3 ms-5">
+        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-primary">Back</a>
     </div>
 
     <div class="container" id="dashboard">
         <h2 class="my-4 text-center">📊 Fleet Performance Dashboard</h2>
 
-        <div class="row mb-4">
-            <form asp-action="Performance_Analysis" method="get">
-            @* <div class="col-md-6">
-                <label for="reportMonth" class="form-label">Select Month:</label>
-                <select id="reportMonth" class="form-select">
-                    <option selected>september</option>
-                    <option>october</option>
-                    <option>november</option>
-                </select>
-            </div> *@
-            <div class="col-md-6">
-                <label for="reportYear" class="form-label">Select Year:</label>
-                <select id="reportYear" name="selectedYear" class="form-select">
-                    <option value="2025" selected>2025</option>
-                    @* <option value="2024">2024</option>
-                    <option value="2023">2023</option> *@
-                </select>
-            </div>
+        
 
-           
-            
-           
-            </form>
-
-        </div>
-
-        <div class="row g-3">
+        <div class="row g-3 " style=" display: flex; justify-content: center;">
             <div class="col-md-3 ">
                 <div class="card p-4 text-center shadow">
                     <h5>Total Trips This Year</h5>
@@ -79,10 +55,6 @@
                         <div>
                             <p class="mb-1 text-danger">Completed</p>
                             <p class="fs-4 text-danger">@ViewBag.Completed</p>
-                        </div>
-                        <div>
-                            <p class="mb-1 text-danger">Unavaialable</p>
-                            <p class="fs-4 text-danger">@ViewBag.UnavailableVehicles1</p>
                         </div>
                     </div>
                 </div>
@@ -104,28 +76,18 @@
             </div>
 
         </div>
-
-        <div class="text-start mt-4">
+        <h3 class=" text-center mt-3">Accepted Trips Overview</h3>
+        <div style=" display: flex; justify-content: center;" class="mt-4">
             <img src="data:image/png;base64,@ViewBag.ChartImage" alt="Accepted Trips Chart" class="img-fluid" />
         </div>
+        <h3 class=" text-center mt-3">Fuel Consumption Overview</h3>
+        <div class="text-start mt-4" style=" display: flex; justify-content: center;">
 
-@*         <div class="mt-5">
-            <h4>📈 Utilization vs Downtime</h4>
-            <div class="card">
-                <div class="row">
-                    <div class="small-chart text-center col">
-                        <img src="/assets/image.png" alt="" class="img-fluid" style="width: auto;height: auto;">
-                    </div>
-                    <div class="small-chart text-center col">
-                        <img src="/assets/piechart.png" alt="" class="img-fluid" style="width: 350px;height: 350px;">
-                    </div>
-                </div>
-            </div>
+            <img src=" data:image/png;base64,@ViewBag.FuelChartImage" alt="Fuel chart" class="img-fluid"  style="max-width:100%;height:auto;"/>
+            
         </div>
 
-        <div class="mt-4">
-            <button class="btn btn-primary">⬇ Download Report (PDF)</button>
-        </div>
     </div>
-</div> *@
+
+</div> 
         
