@@ -82,7 +82,7 @@ public class CustomerController : Controller
         }
         else if (user.Role == "Driver")
         {
-            return RedirectToAction("DriverPage");
+            return RedirectToAction("DriverPage","Driver");
         }
         else if (user.Role == "Admin")
         {
