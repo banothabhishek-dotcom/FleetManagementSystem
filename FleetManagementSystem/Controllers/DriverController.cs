@@ -103,7 +103,15 @@ namespace FleetManagementSystem.Controllers
             return RedirectToAction("DriverPage");
         }
 
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear all session data
+            HttpContext.Session.Clear();
 
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login");
+        }
 
     }
 }

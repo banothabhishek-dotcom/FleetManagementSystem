@@ -65,6 +65,23 @@ ViewData["Title"] = "Fuel_Management";
                 <span class="navbar-toggler-icon"></span>
             </button>
         </div>
+
+         
+        <div class="dropdown">
+<a class="nav-link mx-2 text-white" asp-controller="Customer" asp-action="CustomerProfile" style="cursor: pointer;">
+<i class="fa-solid fa-user"></i>
+</a>
+<ul class="dropdown-menu dropdown-menu-end">
+<li>
+<form asp-controller="Customer" asp-action="Logout" method="post" class="dropdown-item p-0">
+<button type="submit" class="btn text-danger w-100 text-start">
+<i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+</button>
+</form>
+</li>
+</ul>
+</div>
+
     </nav>
 
     <div class="text-start mt-3 ms-3">

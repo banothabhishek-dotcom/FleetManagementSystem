@@ -23,17 +23,27 @@ namespace FleetManagementSystem.Controllers
 
         }
 
-        public IActionResult Fuel_Management()
-
+        public IActionResult Fuel_Management(int page = 1)
         {
+            int pageSize = 10;
 
-            var records = _db.FuelRecords
-                             .Include(f => f.Vehicle)
-                             .ToList();
+            var fuelQuery = _db.FuelRecords
+                               .Include(f => f.Vehicle);
 
+            int totalRecords = fuelQuery.Count();
+            int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+            var records = fuelQuery
+                          .OrderByDescending(f => f.Date)
+                          .Skip((page - 1) * pageSize)
+                          .Take(pageSize)
+                          .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
             ViewBag.SearchPerformed = false;
-            return View("~/Views/Admin/FuelManagement/Fuel_Management.cshtml", records);
 
+            return View("~/Views/Admin/FuelManagement/Fuel_Management.cshtml", records);
         }
 
         public IActionResult AddFuelEntries()
@@ -59,34 +69,45 @@ namespace FleetManagementSystem.Controllers
             await _db.FuelRecords.AddAsync(obj);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("Fuel_Management");
+            return RedirectToAction("Fuel_Management", new { page = 1 });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Fuelsearch(string registrationNumber)
+        public async Task<IActionResult> Fuelsearch(string registrationNumber, int page = 1)
         {
-            List<Fuel_Management> records;
+            int pageSize = 10;
+            IQueryable<Fuel_Management> query = _db.FuelRecords.Include(f => f.Vehicle);
 
-            if (string.IsNullOrWhiteSpace(registrationNumber))
+            if (!string.IsNullOrWhiteSpace(registrationNumber))
             {
-                // If no registration number is provided, fetch all records
-                records = await _db.FuelRecords
-                                   .Include(f => f.Vehicle)
-                                   .ToListAsync();
+                query = query.Where(f => f.Vehicle.RegistrationNumber == registrationNumber);
             }
-            else
-            {
-                // If a registration number is provided, filter the records
-                records = await _db.FuelRecords
-                                   .Include(f => f.Vehicle)
-                                   .Where(f => f.Vehicle.RegistrationNumber == registrationNumber)
-                                   .ToListAsync();
-            }
+
+            int totalRecords = await query.CountAsync();
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            var records = await query
+                .OrderByDescending(f => f.Date)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             ViewBag.HasRecords = records.Any();
             ViewBag.SearchPerformed = true;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.SearchQuery = registrationNumber;
 
             return View("~/Views/Admin/FuelManagement/Fuel_Management.cshtml", records);
+        }
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear all session data
+            HttpContext.Session.Clear();
+
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login");
         }
 
 
