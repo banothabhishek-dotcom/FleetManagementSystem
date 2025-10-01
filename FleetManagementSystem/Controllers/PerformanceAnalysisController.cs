@@ -50,6 +50,8 @@ namespace FleetManagementSystem.Controllers
             var fuelChartBytes = FuelChartGenerator.GenerateFuelBarChart(monthlyFuelData);
             var stats = GetFleetStats(monthlyAcceptedTrips);
 
+
+
             using (MemoryStream ms = new MemoryStream())
             {
                 Document doc = new Document(PageSize.A4);
