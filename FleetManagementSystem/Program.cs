@@ -51,4 +51,4 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 
-app.Run();
+app.Run(poo);
