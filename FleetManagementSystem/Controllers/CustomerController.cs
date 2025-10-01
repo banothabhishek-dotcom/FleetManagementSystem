@@ -57,6 +57,7 @@ public class CustomerController : Controller
         if (!response.IsSuccessStatusCode)
         {
             ModelState.AddModelError("", "Invalid credentials");
+            ViewBag.HideFooter = true;
             return View(dto);
         }
 
@@ -69,6 +70,7 @@ public class CustomerController : Controller
         if (user == null)
         {
             ModelState.AddModelError("", "User not found");
+            ViewBag.HideFooter = true;
             return View(dto);
         }
 
@@ -79,7 +81,7 @@ public class CustomerController : Controller
         // 🔀 Redirect based on role
         if (user.Role == "Customer")
         {
-            return RedirectToAction("CustomerPage");
+            return RedirectToAction("CustomerPage","Customer");
         }
         else if (user.Role == "Driver")
         {
@@ -87,7 +89,7 @@ public class CustomerController : Controller
         }
         else if (user.Role == "Admin")
         {
-            return RedirectToAction("AdminPage");
+            return RedirectToAction("AdminPage","Admin");
         }
 
         // Default fallback
