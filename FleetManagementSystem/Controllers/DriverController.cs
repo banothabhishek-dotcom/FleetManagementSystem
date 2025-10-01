@@ -36,14 +36,13 @@ namespace FleetManagementSystem.Controllers
 
             var normalizedDriverName = driverName.Trim().ToLower();
 
-            var assignedTrips = (from trip in _db.Trips
-                                 join vehicle in _db.Vehicles
-                                 on trip.VehicleId equals vehicle.VehicleId
-                                 where trip.AssignedDriver != null &&
-                                       trip.AssignedDriver.Trim().ToLower() == normalizedDriverName &&
-                                       vehicle.Status == "Unavailable"
-                                 orderby trip.BookingTime descending
-                                 select trip).ToList();
+            var assignedTrips = _db.Trips
+        .Where(t => t.AssignedDriver != null &&
+                    t.AssignedDriver.Trim().ToLower() == normalizedDriverName &&
+                    t.Status == "Pending") // ✅ Only show pending trips
+        .OrderByDescending(t => t.BookingTime)
+        .ToList();
+
 
 
 
@@ -88,7 +87,7 @@ namespace FleetManagementSystem.Controllers
             var trip = await _db.Trips.FirstOrDefaultAsync(t => t.TripId == tripId);
             if (trip != null)
             {
-
+                trip.Status = "Completed";
                 // Make the vehicle available again
                 var vehicle = await _db.Vehicles.FirstOrDefaultAsync(v => v.VehicleId == trip.VehicleId);
                 if (vehicle != null)
