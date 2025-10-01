@@ -139,7 +139,11 @@
     setTimeout(() => {
         const alert = document.querySelector('.alert');
         if (alert) {
-            alert.classList.remove('show');
+            alert.classList.remove('show'); // fade out
+            setTimeout(() => {
+                alert.remove(); // remove from DOM after fade
+            }, 500); // wait for fade-out animation to finish
         }
-    }, 4000); 
+    }, 4000);
 </script>
+
