@@ -4,14 +4,11 @@
     Layout = "~/Views/Shared/_DriverLayout.cshtml";
     ViewData["Title"] = "Home";
 }
+
 <link rel="stylesheet" href="/css/DriverPage.css" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <div>
-
-   
-
-
-
     <div class="container mt-5">
         <div class="card shadow-lg rounded p-4 mb-4 bg-light">
             <div class="row align-items-center">
@@ -25,8 +22,6 @@
             </div>
         </div>
     </div>
-
-
 
     <div class="container mb-5">
         <div class="card shadow-lg rounded p-4">
@@ -47,6 +42,13 @@
                                 <div class="col-md-6"><strong>Pickup:</strong> @trip.PickupPoint</div>
                                 <div class="col-md-6"><strong>Drop:</strong> @trip.DropPoint</div>
                             </div>
+                            <div class="mt-3 d-flex align-items-center justify-content-between trackRow" style="position: relative; height: 60px;">
+                                <button class="btn btn-success startBtn" data-vehicle="@trip.VehicleType">Start</button>
+                                <div class="trackArea" style="flex-grow: 1; position: relative; height: 40px; margin: 0 20px;">
+                                    <i class="fa-solid fa-truck truckIcon" style="position: absolute; top: 8px; left: 0; font-size: 24px; color: #131313;"></i>
+                                </div>
+                                <button class="btn btn-danger stopBtn" data-vehicle="@trip.VehicleType">End</button>
+                            </div>
                         </div>
                     </div>
                 }
@@ -55,36 +57,8 @@
             {
                 <div class="alert alert-info text-center">No trips assigned yet.</div>
             }
-            @* <div class="container my-4">
-                <div class="card shadow-lg rounded p-4"> *@
-                    <h4 class="text-center mb-4 text-primary">Track Details</h4>
-                    <div class="d-flex align-items-center justify-content-between" id="trackRow" style="position: relative; height: 60px;">
-                        <button id="startBtn" class="btn btn-success">Start</button>
-
-                <div id="trackArea" style="flex-grow: 1; position: relative; height: 40px;margin: 0 20px;">
-                            <i id="truckIcon" class="fa-solid fa-truck" style="position: absolute; top: 8px; left: 0; font-size: 24px; color: #131313;"></i>
-                        </div>
-
-                        <button id="stopBtn" class="btn btn-danger">End</button>
-                    </div>
-            @*     </div>
-            </div> *@
-
-
         </div>
-
     </div>
-    @* <div class="container mb-5">
-        <div class="card shadow-lg rounded p-4">
-            <h4 class="text-center mb-4 text-primary">Track Details</h4>
-            <div class="d-flex justify-content-between align-items-center position-relative" id="trackRow" style="height: 100px;">
-                <button id="startBtn" class="btn btn-success">Start</button>
-                <i id="truckIcon" class="fa-solid fa-truck" style="position: absolute; top: 40px; left: 0; font-size: 24px; color: #131313;"></i>
-                <button id="stopBtn" class="btn btn-danger">End</button>
-            </div>
-        </div>
-    </div> *@
-
 
     <!-- Fare Calculation Modal -->
     <div class="modal fade" id="fareModal" tabindex="-1" aria-labelledby="fareModalLabel" aria-hidden="true">
@@ -98,15 +72,15 @@
                     <form id="fareForm">
                         <div class="mb-3">
                             <label for="kilometers" class="form-label">Kilometers</label>
-                            <input type="number" class="form-control" id="kilometers" required>
+                            <input type="number" class="form-control" id="kilometers" required />
                         </div>
                         <div class="mb-3">
                             <label for="costPerKm" class="form-label">Cost per Km</label>
-                            <input type="number" class="form-control" id="costPerKm" required>
+                            <input type="number" class="form-control" id="costPerKm" readonly />
                         </div>
                         <div class="mb-3">
                             <label for="totalFare" class="form-label">Total Fare</label>
-                            <input type="text" class="form-control" id="totalFare" readonly>
+                            <input type="text" class="form-control" id="totalFare" readonly />
                         </div>
                         <button type="button" class="btn btn-primary w-100" id="calculateFareBtn">Calculate</button>
                     </form>
@@ -114,81 +88,56 @@
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-                const duration = 15000; // 15 seconds
-        let animationInProgress = false;
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        let costPerKm = 0;
 
-        $('#startBtn').click(function () {
-            const trackWidth = $('#trackArea').width();
-            const truckWidth = $('#truckIcon').outerWidth(true);
-            const endLeft = trackWidth - truckWidth;
+        $(".startBtn").click(function () {
+            const vehicleType = $(this).data("vehicle")?.toString().trim().toLowerCase();
 
-            $('#truckIcon').css('left', 0).stop().animate({ left: endLeft }, duration);
-            animationInProgress = true;
+            if (vehicleType === "4wheeler") {
+                costPerKm = 15;
+            } else if (vehicleType === "6wheeler") {
+                costPerKm = 30;
+            } else if (vehicleType === "10wheeler") {
+                costPerKm = 50;
+            }
+
+            $("#costPerKm").val(costPerKm).prop("readonly", true);
+
+            const track = $(this).closest(".trackRow");
+            const truck = track.find(".truckIcon");
+            const stopBtn = track.find(".stopBtn");
+
+            const startLeft = $(this).outerWidth(true);
+            const endLeft = track.width() - stopBtn.outerWidth(true) - truck.outerWidth(true) - 90;
+
+            truck.css("left", startLeft).stop().animate({ left: endLeft }, 10000);
         });
 
-        $('#stopBtn').click(function () {
-            if (!animationInProgress) return;
+        $(".stopBtn").click(function () {
+            const track = $(this).closest(".trackRow");
+            const truck = track.find(".truckIcon");
+            const stopBtn = $(this);
 
-            const trackWidth = $('#trackArea').width();
-            const truckWidth = $('#truckIcon').outerWidth(true);
-            const endLeft = trackWidth - truckWidth;
+            const endLeft = track.width() - stopBtn.outerWidth(true) - truck.outerWidth(true) - 90;
+            truck.stop().css("left", endLeft);
 
-            $('#truckIcon').stop().css('left', endLeft);
-            animationInProgress = false;
+            new bootstrap.Modal(document.getElementById("fareModal")).show();
         });
 
-        $('#stopBtn').click(function () {
-          const track = $('#trackRow');
-          const stopBtnWidth = $('#stopBtn').outerWidth(true);
-          const truckWidth = $('#truckIcon').outerWidth(true);
-          const trackWidth = track.width();
-
-          const endLeft = trackWidth - stopBtnWidth - truckWidth - 10;
-
-          $('#truckIcon').stop().css('left', endLeft);
+        $("#calculateFareBtn").click(function () {
+            const km = parseFloat($("#kilometers").val());
+            const cost = parseFloat($("#costPerKm").val());
+            if (!isNaN(km) && !isNaN(cost)) {
+                $("#totalFare").val(`₹${(km * cost).toFixed(2)}`);
+            } else {
+                alert("Please enter valid numbers.");
+            }
         });
-
-
-        $(document).ready(function () {
-          $("#closeCard").click(function () {
-            $(".card-custom").fadeOut();
-          });
-        });
-    </script>
-    <div id="footer1"></div>
-    <script>
-                $(document).ready(function () {
-            $("#closeCard").click(() => $(".card-custom").fadeOut());
-
-            $("#startBtn").click(function () {
-                const track = $("#trackRow");
-                const startLeft = $("#startBtn").outerWidth(true);
-                const endLeft = track.width() - $("#stopBtn").outerWidth(true) - $("#truckIcon").outerWidth(true) - 10;
-                $("#truckIcon").css("left", startLeft).stop().animate({ left: endLeft }, 10000);
-            });
-
-            $("#stopBtn").click(function () {
-                const track = $("#trackRow");
-                const endLeft = track.width() - $("#stopBtn").outerWidth(true) - $("#truckIcon").outerWidth(true) - 10;
-                $("#truckIcon").stop().css("left", endLeft);
-                new bootstrap.Modal(document.getElementById("fareModal")).show();
-            });
-
-            $("#calculateFareBtn").click(function () {
-                const km = parseFloat($("#kilometers").val());
-                const cost = parseFloat($("#costPerKm").val());
-                if (!isNaN(km) && !isNaN(cost)) {
-                    $("#totalFare").val(`₹${(km * cost).toFixed(2)}`);
-                } else {
-                    alert("Please enter valid numbers.");
-                }
-            });
-
-            $("#footer1").load("/footer/footer.html");
-        });
-
-
-    </script>
-    </div>
+    });
+</script>
+}
