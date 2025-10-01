@@ -4,6 +4,7 @@ using FleetManagementSystem.Data;
 
 //using FleetManagementSystem.Models;
 using FleetManagementSystem.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,6 +57,7 @@ public class CustomerController : Controller
         if (!response.IsSuccessStatusCode)
         {
             ModelState.AddModelError("", "Invalid credentials");
+            ViewBag.HideFooter = true;
             return View(dto);
         }
 
@@ -68,6 +70,7 @@ public class CustomerController : Controller
         if (user == null)
         {
             ModelState.AddModelError("", "User not found");
+            ViewBag.HideFooter = true;
             return View(dto);
         }
 
@@ -78,15 +81,15 @@ public class CustomerController : Controller
         // 🔀 Redirect based on role
         if (user.Role == "Customer")
         {
-            return RedirectToAction("CustomerPage");
+            return RedirectToAction("CustomerPage","Customer");
         }
         else if (user.Role == "Driver")
         {
-            return RedirectToAction("DriverPage");
+            return RedirectToAction("DriverPage","Driver");
         }
         else if (user.Role == "Admin")
         {
-            return RedirectToAction("AdminPage");
+            return RedirectToAction("AdminPage","Admin");
         }
 
         // Default fallback
@@ -97,6 +100,15 @@ public class CustomerController : Controller
     {
         ViewBag.HideFooter = true;
         return View();
+    }
+    [HttpPost]
+    public IActionResult Logout()
+    {
+        // Clear all session data
+        HttpContext.Session.Clear();
+
+        // Optionally, redirect to login or home page
+        return RedirectToAction("Login");
     }
 
     [HttpGet]
@@ -115,8 +127,9 @@ public class CustomerController : Controller
         }
 
         var phone = user.PhoneNumber?.Trim().ToLower();
+       
         var history = _db.Trips
-            .Where(t => t.PhoneNumber != null && t.PhoneNumber.Trim().ToLower() == phone)
+            .Where(t => t.VehicleId != null && t.PhoneNumber.Trim().ToLower() == phone)
             .OrderByDescending(t => t.BookingTime)
             .ToList();
 
@@ -143,20 +156,49 @@ public class CustomerController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpdateProfile(User_Details model)
+    public async Task<IActionResult> UpdateProfile(User_Details updatedUser)
     {
         var email = HttpContext.Session.GetString("UserEmail");
+        if (string.IsNullOrEmpty(email)) return RedirectToAction("Login");
+
         var user = await _db.UserDetails.FirstOrDefaultAsync(u => u.Email == email);
         if (user == null) return RedirectToAction("Login");
 
-        user.FirstName = model.FirstName;
-        user.LastName = model.LastName;
-        user.PhoneNumber = model.PhoneNumber;
-        user.Password = model.Password;
+        user.FirstName = updatedUser.FirstName;
+        user.LastName = updatedUser.LastName;
+        user.PhoneNumber = updatedUser.PhoneNumber;
 
+        _db.UserDetails.Update(user);
         await _db.SaveChangesAsync();
+
+        TempData["SuccessMessage"] = "Profile details updated!";
         return RedirectToAction("CustomerProfile");
     }
+    [HttpPost]
+    public async Task<IActionResult> ChangePassword(string NewPassword, string ConfirmPassword)
+    {
+        if (NewPassword != ConfirmPassword)
+        {
+            TempData["ErrorMessage"] = "Passwords do not match.";
+            return RedirectToAction("CustomerProfile");
+        }
+
+        var email = HttpContext.Session.GetString("UserEmail");
+        if (string.IsNullOrEmpty(email)) return RedirectToAction("Login");
+
+        var user = await _db.UserDetails.FirstOrDefaultAsync(u => u.Email == email);
+        if (user == null) return RedirectToAction("Login");
+
+        var passwordHasher = new PasswordHasher<User_Details>();
+        user.Password = passwordHasher.HashPassword(user, NewPassword);
+
+        _db.UserDetails.Update(user);
+        await _db.SaveChangesAsync();
+
+        TempData["SuccessMessage"] = "Password changed successfully!";
+        return RedirectToAction("CustomerProfile");
+    }
+
 
     public IActionResult AdminPage()
     {
