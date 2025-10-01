@@ -1,76 +1,81 @@
-﻿@model IEnumerable<FleetManagementSystem.Models.Trip_Scheduling>;
+﻿@model IEnumerable<FleetManagementSystem.Models.Trip_Scheduling>
 
 @{
-	ViewData["Title"] = "Trip History";
+    ViewData["Title"] = "Trip History";
 }
 
 <div>
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container-fluid">
-			<a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage">Fleetora</a>
-			<div class="collapse navbar-collapse justify-content-end">
-				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link active" asp-controller="Admin" asp-action="AdminPage">Home</a></li>
-					<li class="nav-item"><a class="nav-link active" asp-controller="TripScheduling" asp-action="Trip_History">History</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<div class="container py-5">
-		<h2 class="text-center text-primary mb-4">Accepted Bookings</h2>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage">Fleetora</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" asp-controller="Admin" asp-action="AdminPage">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" asp-controller="TripScheduling" asp-action="Trip_History">History</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-		<table class="table table-bordered table-striped" id="bookingTable">
-			<thead class="table-dark">
-				<tr>
-					<th>S.No</th>
-					<th>Name</th>
-					<th>Phone</th>
-					<th>Vehicle</th>
-					<th>Driver</th>
-					<th>Pickup</th>
-					<th>Drop</th>
-					<th>Time</th>
-					<th>Status</th>
-					
-				</tr>
-			</thead>
-			<tbody>
-				@{
-					int serialNumber = 1;
-				}
+    <div class="container py-5">
+        <h2 class="text-center text-primary mb-4">Accepted Bookings</h2>
 
-				@foreach (var entry in Model)
-				{
-					<tr>
-						<td>@serialNumber</td>
-						<td>@(entry.Firstname + " " + entry.Lastname)</td>
-						<td>@entry.PhoneNumber</td>
-						<td>@entry.VehicleType</td>
-						<td>@entry.AssignedDriver</td>
-						<td>@entry.PickupPoint</td>
-						<td>@entry.DropPoint</td>
-						<td>@entry.BookingTime.ToString("yyyy-MM-dd hh:mm tt")</td>
-						@{
-							string stat = "Accepted";
-							if (!string.IsNullOrEmpty(entry.AssignedDriver) && entry.AssignedDriver == "Declined")
+        @if (Model != null && Model.Any())
+        {
+            <table class="table table-bordered table-striped" id="bookingTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Vehicle</th>
+                        <th>Driver</th>
+                        <th>Pickup</th>
+                        <th>Drop</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int serialNumber = 1;
+                    }
 
-							{
-								stat = "Declined";
-							}
-							else
-							{
-								stat = "Accepted";
-							}
-						}
-						<td>@stat</td>
-						
-					</tr>
-					serialNumber++;
-				}
-			</tbody>
+                    @foreach (var entry in Model)
+                    {
+                        string stat = !string.IsNullOrEmpty(entry.AssignedDriver) && entry.AssignedDriver == "Declined"
+                        ? "Declined"
+                        : "Accepted";
 
-		</table>
-	</div>
-
-
+                        <tr>
+                            <td>@serialNumber</td>
+                            <td>@(entry.Firstname + " " + entry.Lastname)</td>
+                            <td>@entry.PhoneNumber</td>
+                            <td>@entry.VehicleType</td>
+                            <td>@entry.AssignedDriver</td>
+                            <td>@entry.PickupPoint</td>
+                            <td>@entry.DropPoint</td>
+                            <td>@entry.BookingTime.ToString("yyyy-MM-dd hh:mm tt")</td>
+                            <td>@stat</td>
+                        </tr>
+                        serialNumber++;
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="card shadow border-0">
+                <div class="card-body text-center py-5">
+                    <h4 class="text-muted">
+                        <i class="fa-solid fa-road-circle-xmark me-2"></i> No trip history available
+                    </h4>
+                    <p class="text-secondary">You haven't completed any trips yet. Once you do, your history will appear here.</p>
+                    <a asp-action="CustomerPage" asp-controller="Customer" class="btn btn-outline-primary mt-3" >
+                        Book a Trip
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
 </div>
