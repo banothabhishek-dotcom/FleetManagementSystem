@@ -31,8 +31,44 @@
     </style>
 </head>
 
-<div class="container">
-    <h2 class="text-center mb-4">Maintenance Tracking</h2>
+<div>
+
+    <!--navbar-->
+
+    <nav id="navBar" class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage" id="logo">Fleetora</a>
+
+            <!-- Toggler added here -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+
+        <!-- Collapsible content wrapper -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div id="Logout" class="me-5">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-dark" data-bs-toggle="popover" data-bs-html="true"
+                                data-bs-placement="top" data-bs-content='Logout <i class="fas fa-sign-out fa-lg"></i>'>
+                            <i class="fas fa-user fa-lg"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="text-start mt-3 ms-3">
+        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
+    </div>
+    <div class="container ">
+        <h2 class="mb-7 text-center header-title">
+            <medium>Maintenance Tracking</medium>
+        </h2>
+    </div>
     @if (ViewBag.SearchPerformed == true)
     {
         <div class="text-start mt-3 mb-3">
@@ -46,17 +82,15 @@
         <div class="card-body">
             <form asp-action="AddMaintenanceRecord" method="post">
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="vehicleId" class="form-label">Vehicle ID</label>
-                        <input type="text" class="form-control" id="vehicleId" name="VehicleID" required /> 
+                   <div class="col-md-6">
+                        <label for="registrationNumber" class="form-label">Registration Number</label>
+                        <input type="text" class="form-control" id="registrationNumber" name="RegistrationNumber" required />
 
-                        @if (ViewData.ModelState["VehicleID"]?.Errors.Count > 0)
+                        @if (ViewData.ModelState["RegistrationNumber"]?.Errors.Count > 0)
                         {
-                            <span class="text-danger">@ViewData.ModelState["VehicleID"].Errors[0].ErrorMessage</span>
+                            <span class="text-danger">@ViewData.ModelState["RegistrationNumber"].Errors[0].ErrorMessage</span>
                         }
-
-
-                    </div>
+                   </div>
                     <div class="col-md-6">
                         <label for="scheduledDate" class="form-label">Scheduled Date</label>
                         <input type="date" class="form-control" id="scheduledDate" name="ScheduledDate" required />
@@ -77,12 +111,12 @@
 
         <div class="card-body">
             <!-- Form for search -->
-            <form method="post" asp-action="Maintenancesearch" asp-controller="MaintenanceTracking">
-                <div class="input-group ">
-                    <input type="number" class="form-control" id="searchVehicleId" name="vehicleId" placeholder="Enter Vehicle ID" required />
-                    <button type="submit" class="btn btn-outline-primary" id="searchBtn">Search</button>
-                </div>
-            </form>
+           <form method="post" asp-action="Maintenancesearch" asp-controller="MaintenanceTracking">
+           <div class="input-group">
+            <input type="text" class="form-control" id="searchRegistrationNumber" name="registrationNumber" placeholder="Enter Registration Number" required />
+            <button type="submit" class="btn btn-outline-primary" id="searchBtn">Search</button>
+           </div>
+          </form>
 
             <!-- Results area -->
             <div id="fuelUsageResults">
@@ -103,7 +137,7 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@item.VehicleId</td>
+                                        <td>@item.Vehicle.RegistrationNumber</td>
                                         <td>@item.Description</td>
                                         <td>@item.ScheduledDate</td>
                                         <td>@item.Status</td>
@@ -144,7 +178,7 @@
                     {
                         <tr>
                             <td>@item.MaintenanceId</td>
-                            <td>@item.VehicleId</td>
+                           <td>@item.Vehicle.RegistrationNumber</td>
                             <td>@item.Description</td>
                             <td>@item.ScheduledDate.ToString("dd-MM-yyyy")</td>
                             <td>@item.Status</td>
@@ -168,7 +202,7 @@
                         <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
                             <a class="page-link" asp-action="Maintenance_Tracking" asp-route-page="@i">@i</a>
                         </li>
-                    }
+                    }s
                 </ul>
             </nav>
         </div>
