@@ -1,6 +1,7 @@
 ﻿using FleetManagementSystem.Data;
 using FleetManagementSystem.Helpers;
 using FleetManagementSystem.Models;
+using iText.Commons.Actions.Contexts;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ namespace FleetManagementSystem.Controllers
         }
 
         [HttpGet]
-        public IActionResult DownloadPerformancePdf()
+        public async Task<IActionResult> DownloadPerformancePdf()
         {
             var monthlyAcceptedTrips = GetMonthlyAcceptedTrips();
             var monthlyFuelData = GetMonthlyFuelData();
@@ -50,8 +51,22 @@ namespace FleetManagementSystem.Controllers
             var fuelChartBytes = FuelChartGenerator.GenerateFuelBarChart(monthlyFuelData);
             var stats = GetFleetStats(monthlyAcceptedTrips);
 
+            // ✅ Insert into Performance table
+            var report = new Performance_Analysis
+            {
+                ReportType = "pdf",
+                Data = $"Total trips: {stats.TotalTrips}\n" +
+                $" Scheduled maintenance: {stats.ScheduledMaintenance}\n" +
+                $" Completed maintenance: {stats.CompletedMaintenance}\n" +
+                $" Available vehicles: {stats.AvailableVehicles}\n " +
+                $"Unavailable vehicles: {stats.UnavailableVehicles}",
+                GeneratedOn = DateTime.UtcNow
+            };
 
+            _db.PerformanceReports.Add(report);
+            await _db.SaveChangesAsync();
 
+            // ✅ Generate PDF
             using (MemoryStream ms = new MemoryStream())
             {
                 Document doc = new Document(PageSize.A4);
@@ -78,6 +93,22 @@ namespace FleetManagementSystem.Controllers
                 doc.Close();
                 return File(ms.ToArray(), "application/pdf", "PerformanceGraphs.pdf");
             }
+        }
+        [HttpPost]
+        private async Task<IActionResult> DownloadReport()
+        {
+            var report = new Performance_Analysis
+            {
+                ReportType = "pdf",
+                Data = "some info", // Replace with actual report summary or JSON
+                GeneratedOn = DateTime.UtcNow
+            };
+
+            _db.PerformanceReports.Add(report);
+            await _db.SaveChangesAsync();
+
+            // Proceed with file download logic here
+            return Ok("Report saved and download initiated.");
         }
 
         // 🔧 Helper Methods

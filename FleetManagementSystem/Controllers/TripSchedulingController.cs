@@ -67,11 +67,13 @@ namespace FleetManagementSystem.Controllers
 
             await _db.AddAsync(obj);
             await _db.SaveChangesAsync();
+            TempData["FleetBooked"] = true;
+            TempData["SuccessMessage"] = "Fleet booked successfully!";
 
             return RedirectToAction("CustomerPage", "Customer"); // Or use View if needed
         }
-        
-     
+
+
         [HttpGet]
         public async Task<IActionResult> AddTrip()
         {
@@ -97,7 +99,7 @@ namespace FleetManagementSystem.Controllers
             return View("~/Views/Customer/CustomerPage.cshtml", model);
         }
 
-       
+
 
 
 
@@ -144,23 +146,25 @@ namespace FleetManagementSystem.Controllers
             var trip = _db.Trips.FirstOrDefault(t => t.TripId == tripId);
             if (trip != null)
             {
-               
+
                 trip.AssignedDriver = "Declined";
                 _db.SaveChanges();
             }
 
-            return Ok(); 
+            return Ok();
         }
 
         public IActionResult TripHistory()
         {
-            var trips = _db.Trips.ToList(); // Or apply filters if needed
+            var trips = _db.Trips
+        .Where(t => !string.IsNullOrEmpty(t.AssignedDriver) || t.AssignedDriver=="Declined")
+        .ToList();
             return View("~/Views/Admin/TripScheduling/Trip_History.cshtml", trips);
         }
 
         public async Task<IActionResult> EditTrip(int? id)
         {
-            if(id==null || id == 0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
