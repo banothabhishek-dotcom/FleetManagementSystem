@@ -124,5 +124,16 @@ namespace FleetManagementSystem.Controllers
 
 			return View("~/Views/Admin/MaintenanceTracking/Maintenance_Tracking.cshtml", records);
 		}
+
+		[HttpPost]
+		public IActionResult Logout()
+		{
+			// Clear session
+			HttpContext.Session.Clear();
+
+			// Redirect to login page
+			return RedirectToAction("Login", "Admin"); // or "Account" depending on your setup
+		}
+
 	}
 }

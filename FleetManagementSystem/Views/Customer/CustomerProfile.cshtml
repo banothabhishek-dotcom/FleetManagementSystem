@@ -14,50 +14,58 @@
 
         <!-- Sidebar -->
         <div class="col-md-3 col-lg-2 sidebar">
-            <h4 class="px-3">⚙️ Settings</h4>
+           
             <a href="#">Edit Profile</a>
-            <a href="#">Help</a>
-            <a asp-controller="Customer" asp-action="CustomerPage"><i class="fa-solid fa-left-long"></i>Back</a>
-            <a href="#" id="logoutBtn">🚪 Logout</a>
+            <a asp-controller="Customer" asp-action="CustomerPage" ><i class="fa-solid fa-left-long"></i>Back</a>
+            <form method="post" asp-action="Logout">
+                <button type="submit" class="btn btn-dark">🚪 Logout</button>
+                
+            </form>
         </div>
 
         <!-- Profile Form -->
         <div class="col-md-9 col-lg-10 p-5">
             <div class="profile-card">
                 <h3 class="mb-4">Edit Profile</h3>
-                <form asp-action="UpdateProfile" asp-controller="Customer" method="post" id="profileForm">
+                <form asp-action="UpdateProfile" asp-controller="Customer" method="post">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label asp-for="FirstName" class="form-label">First Name</label>
                             <input asp-for="FirstName" class="form-control" />
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
                             <label asp-for="LastName" class="form-label">Last Name</label>
                             <input asp-for="LastName" class="form-control" />
-                            <span asp-validation-for="LastName" class="text-danger"></span>
                         </div>
                         <div class="col-md-6">
                             <label asp-for="Email" class="form-label">Email</label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <input asp-for="Email" class="form-control" readonly />
                         </div>
                         <div class="col-md-6">
                             <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
                             <input asp-for="PhoneNumber" class="form-control" />
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-6">
-                            <label asp-for="Password" class="form-label">Change Password</label>
-                            <input asp-for="Password" type="password" class="form-control" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="mt-4 text-end">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="reset" class="btn btn-secondary me-2">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Details</button>
                     </div>
                 </form>
+                <form asp-action="ChangePassword" asp-controller="Customer" method="post">
+                    <div class="row g-3 mt-5">
+                        <div class="col-md-6">
+                            <label for="NewPassword" class="form-label">New Password</label>
+                            <input name="NewPassword" type="password" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ConfirmPassword" class="form-label">Confirm Password</label>
+                            <input name="ConfirmPassword" type="password" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-warning">Change Password</button>
+                    </div>
+                </form>
+
 
             </div>
         </div>

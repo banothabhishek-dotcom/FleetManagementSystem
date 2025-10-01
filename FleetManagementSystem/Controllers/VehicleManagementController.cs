@@ -1,10 +1,11 @@
-﻿using FleetManagementSystem.Data;
-using FleetManagementSystem.Models;
-using Microsoft.AspNetCore.Mvc;
-
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using FleetManagementSystem.Data;
+using FleetManagementSystem.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,10 +15,14 @@ namespace FleetManagementSystem.Controllers
     {
         private readonly ApplicationDbContext _db;
         private string phoneNumber;
+        private readonly IPasswordHasher<User_Details> _passwordHasher;
 
-        public VehicleManagementController(ApplicationDbContext db)
+        
+
+        public VehicleManagementController(ApplicationDbContext db, IPasswordHasher<User_Details> passwordHasher)
         {
             _db = db;
+            _passwordHasher = passwordHasher;
         }
 
        
@@ -63,6 +68,7 @@ namespace FleetManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Add_Vehicle(Vehicle_Management obj)
         {
+
             if (ModelState.IsValid)
             {
                 // Save vehicle details
@@ -85,6 +91,7 @@ namespace FleetManagementSystem.Controllers
                     Role = "Driver"
                 };
 
+                user.Password = _passwordHasher.HashPassword(user, "Driver@123");
                 // Save user details
                 await _db.UserDetails.AddAsync(user);
 
@@ -140,40 +147,7 @@ namespace FleetManagementSystem.Controllers
             }
             return View("~/Views/Admin/VehicleManagement/Delete_Vehicle.cshtml",vehicleFromDb);
         }
-        //[HttpPost]
-        //public async Task<IActionResult> Delete_Vehicle(int? id, Vehicle_Management obj)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    // Step 1: Unmap vehicleId in Maintenance table
-        //    var maintenanceRecords = _db.MaintenanceRecords
-        //        .Where(m => m.VehicleId == id)
-        //        .ToList();
-
-        //    foreach (var record in maintenanceRecords)
-        //    {
-        //        record.VehicleId = null;
-        //    }
-        //    _db.MaintenanceRecords.UpdateRange(maintenanceRecords);
-
-        //    // Step 2: Unmap vehicleId in other related tables (if any)
-        //    // Repeat similar logic for Fuel_Management, Trip_Scheduling, etc., if needed
-
-        //    // Step 3: Delete the vehicle
-        //    var vehicle = await _db.Vehicles.FindAsync(id);
-        //    if (vehicle == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _db.Vehicles.Remove(vehicle);
-        //    await _db.SaveChangesAsync();
-
-        //    return RedirectToAction("Vehicle_Management");
-        //}
         [HttpPost]
         public async Task<IActionResult> Delete_Vehicle(int? id, Vehicle_Management obj)
         {

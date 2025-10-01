@@ -69,7 +69,7 @@
             <table class="table table-striped table-bordered table-hover">
                 <thead class="table-dark text-center">
                     <tr>
-                        <th scope="col">VehicleId</th>
+                        @* <th scope="col">VehicleId</th> *@
                         <th scope="col">RegistrationNumber</th>
                         <th scope="col">Capacity</th>
                         <th scope="col">Status</th>
@@ -85,7 +85,7 @@
                         @foreach (var vehicle in Model)
                         {
                             <tr>
-                                <td>@vehicle.VehicleId</td>
+                                @* <td>@vehicle.VehicleId</td> *@
                                 <td>@vehicle.RegistrationNumber</td>
                                 <td>@vehicle.Capacity</td>
                                 <td>@vehicle.Status</td>
