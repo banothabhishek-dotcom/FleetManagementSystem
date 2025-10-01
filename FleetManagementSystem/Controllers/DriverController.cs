@@ -36,10 +36,18 @@ namespace FleetManagementSystem.Controllers
 
             var normalizedDriverName = driverName.Trim().ToLower();
 
-            var assignedTrips = _db.Trips
-                .Where(t => t.AssignedDriver != null && t.AssignedDriver.Trim().ToLower() == normalizedDriverName)
-                .OrderByDescending(t => t.BookingTime)
-                .ToList();
+            var assignedTrips = (from trip in _db.Trips
+                                 join vehicle in _db.Vehicles
+                                 on trip.VehicleId equals vehicle.VehicleId
+                                 where trip.AssignedDriver != null &&
+                                       trip.AssignedDriver.Trim().ToLower() == normalizedDriverName &&
+                                       vehicle.Status == "Unavailable"
+                                 orderby trip.BookingTime descending
+                                 select trip).ToList();
+
+
+
+            ViewBag.HideFooter = true;
 
             return View("~/Views/Driver/DriverPage.cshtml", assignedTrips);
         }
@@ -73,6 +81,29 @@ namespace FleetManagementSystem.Controllers
 
             return View("~/Views/Driver/DriverHistory.cshtml", history);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CompleteTrip(int tripId)
+        {
+            var trip = await _db.Trips.FirstOrDefaultAsync(t => t.TripId == tripId);
+            if (trip != null)
+            {
+
+                // Make the vehicle available again
+                var vehicle = await _db.Vehicles.FirstOrDefaultAsync(v => v.VehicleId == trip.VehicleId);
+                if (vehicle != null)
+                {
+                    vehicle.Status = "Available";
+                }
+
+                await _db.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Payment successful. Trip completed.";
+            }
+
+            return RedirectToAction("DriverPage");
+        }
+
+
 
     }
 }
