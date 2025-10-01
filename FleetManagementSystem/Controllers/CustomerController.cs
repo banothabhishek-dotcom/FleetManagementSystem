@@ -127,8 +127,9 @@ public class CustomerController : Controller
         }
 
         var phone = user.PhoneNumber?.Trim().ToLower();
+       
         var history = _db.Trips
-            .Where(t => t.PhoneNumber != null && t.PhoneNumber.Trim().ToLower() == phone)
+            .Where(t => t.VehicleId != null && t.PhoneNumber.Trim().ToLower() == phone)
             .OrderByDescending(t => t.BookingTime)
             .ToList();
 

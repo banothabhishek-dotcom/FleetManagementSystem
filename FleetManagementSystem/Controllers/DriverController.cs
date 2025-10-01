@@ -37,9 +37,16 @@ namespace FleetManagementSystem.Controllers
             var normalizedDriverName = driverName.Trim().ToLower();
 
             var assignedTrips = _db.Trips
-                .Where(t => t.AssignedDriver != null && t.AssignedDriver.Trim().ToLower() == normalizedDriverName)
-                .OrderByDescending(t => t.BookingTime)
-                .ToList();
+        .Where(t => t.AssignedDriver != null &&
+                    t.AssignedDriver.Trim().ToLower() == normalizedDriverName &&
+                    t.Status == "Pending") // ✅ Only show pending trips
+        .OrderByDescending(t => t.BookingTime)
+        .ToList();
+
+
+
+
+            ViewBag.HideFooter = true;
 
             return View("~/Views/Driver/DriverPage.cshtml", assignedTrips);
         }
@@ -72,6 +79,37 @@ namespace FleetManagementSystem.Controllers
             ViewBag.HideFooter = true;
 
             return View("~/Views/Driver/DriverHistory.cshtml", history);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CompleteTrip(int tripId)
+        {
+            var trip = await _db.Trips.FirstOrDefaultAsync(t => t.TripId == tripId);
+            if (trip != null)
+            {
+                trip.Status = "Completed";
+                // Make the vehicle available again
+                var vehicle = await _db.Vehicles.FirstOrDefaultAsync(v => v.VehicleId == trip.VehicleId);
+                if (vehicle != null)
+                {
+                    vehicle.Status = "Available";
+                }
+
+                await _db.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Payment successful. Trip completed.";
+            }
+
+            return RedirectToAction("DriverPage");
+        }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear all session data
+            HttpContext.Session.Clear();
+
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login");
         }
 
     }

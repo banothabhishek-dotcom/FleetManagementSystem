@@ -45,6 +45,9 @@ namespace FleetManagementSystem.Models
         [MaxLength(50, ErrorMessage = "Driver name cannot exceed 50 characters.")]
         public string? AssignedDriver { get; set; } = string.Empty;
 
+        [MaxLength(20, ErrorMessage = "Status cannot exceed 20 characters.")]
+        public string Status { get; set; } = "Pending";
+
         // Navigation Property
         public Vehicle_Management? Vehicle { get; set; }
     }

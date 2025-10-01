@@ -8,7 +8,13 @@
 <link rel="stylesheet" href="/css/DriverPage.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<div>
+<div style="margin-top:100px">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success text-center">
+            @TempData["SuccessMessage"]
+        </div>
+    }
     <div class="container mt-5">
         <div class="card shadow-lg rounded p-4 mb-4 bg-light">
             <div class="row align-items-center">
@@ -51,6 +57,47 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal fade mt-5" id="fareModal" tabindex="-1" aria-labelledby="fareModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content shadow">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title" id="fareModalLabel">Fare Calculation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" asp-controller="Driver" asp-action="CompleteTrip">
+                                        <input type="hidden" name="tripId" value="@trip.TripId" />
+                                        <div class="mb-3">
+                                            <label for="kilometers" class="form-label">Kilometers</label>
+                                            <input type="number" class="form-control" id="kilometers" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="costPerKm" class="form-label">Cost per Km</label>
+                                            <input type="number" class="form-control" id="costPerKm" readonly />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="totalFare" class="form-label">Total Fare</label>
+                                            <input type="text" class="form-control" id="totalFare" readonly />
+                                        </div>
+                                        <button type="button" class="btn btn-primary w-100" id="calculateFareBtn">Calculate</button>
+                                        <div id="paymentSection" class="mt-4" style="display: none;">
+                                            <h6>Choose Payment Method</h6>
+                                            <div class="mb-3">
+                                                <select class="form-select" id="paymentMethod">
+                                                    <option value="" disabled selected>Select a method</option>
+                                                    <option value="credit">Credit Card</option>
+                                                    <option value="debit">Debit Card</option>
+                                                    <option value="upi">UPI</option>
+                                                    <option value="cash">Cash</option>
+                                                </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-success w-100" id="confirmPaymentBtn" asp-controller="Driver" asp-action="CompleteTrip" >Confirm Payment</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
             }
             else
@@ -61,7 +108,7 @@
     </div>
 
     <!-- Fare Calculation Modal -->
-    <div class="modal fade" id="fareModal" tabindex="-1" aria-labelledby="fareModalLabel" aria-hidden="true">
+    @* <div class="modal fade mt-5" id="fareModal" tabindex="-1" aria-labelledby="fareModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content shadow">
                 <div class="modal-header bg-primary text-white">
@@ -69,7 +116,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="fareForm">
+                    <form method="post" asp-controller="Driver" asp-action="CompleteTrip">
+                        <input type="hidden" name="tripId" value="@trip.TripId" />
                         <div class="mb-3">
                             <label for="kilometers" class="form-label">Kilometers</label>
                             <input type="number" class="form-control" id="kilometers" required />
@@ -83,18 +131,34 @@
                             <input type="text" class="form-control" id="totalFare" readonly />
                         </div>
                         <button type="button" class="btn btn-primary w-100" id="calculateFareBtn">Calculate</button>
+                        <div id="paymentSection" class="mt-4" style="display: none;">
+                            <h6>Choose Payment Method</h6>
+                            <div class="mb-3">
+                                <select class="form-select" id="paymentMethod">
+                                    <option value="" disabled selected>Select a method</option>
+                                    <option value="credit">Credit Card</option>
+                                    <option value="debit">Debit Card</option>
+                                    <option value="upi">UPI</option>
+                                    <option value="cash">Cash</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-success w-100" id="confirmPaymentBtn">Confirm Payment</button>
+                        </div>
+
                     </form>
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
+    
+
 </div>
 
 @section Scripts {
 <script>
     $(document).ready(function () {
         let costPerKm = 0;
-
+       
         $(".startBtn").click(function () {
             const vehicleType = $(this).data("vehicle")?.toString().trim().toLowerCase();
 
@@ -134,9 +198,12 @@
             const cost = parseFloat($("#costPerKm").val());
             if (!isNaN(km) && !isNaN(cost)) {
                 $("#totalFare").val(`₹${(km * cost).toFixed(2)}`);
+                    $("#paymentSection").slideDown();
+
             } else {
                 alert("Please enter valid numbers.");
             }
+
         });
     });
 </script>
