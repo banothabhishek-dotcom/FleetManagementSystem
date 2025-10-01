@@ -5,7 +5,14 @@
     ViewData["Title"] = "Fleet Booking";
 }
 
-@* Carasouel Part of customer page*@
+@if (TempData["FleetBooked"] != null && (bool)TempData["FleetBooked"])
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        <strong>✅ Thank you for booking!</strong> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
@@ -67,6 +74,8 @@
                  id="fleetbooking">
 
                 <h2 class="mb-4 text-center">Fleet Booking</h2>
+               
+
                 <form asp-controller="TripScheduling" asp-action="AddTrip" asp-validation-summary="ModelOnly" id="myForm">
                     <div class="row">
                         <div class="col-6 mb-3">
@@ -128,3 +137,11 @@
     </div>
 </div>
 
+<script>
+    setTimeout(() => {
+        const alert = document.querySelector('.alert');
+        if (alert) {
+            alert.classList.remove('show');
+        }
+    }, 4000); 
+</script>

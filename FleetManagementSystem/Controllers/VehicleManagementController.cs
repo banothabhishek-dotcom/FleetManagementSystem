@@ -1,10 +1,11 @@
-﻿using FleetManagementSystem.Data;
-using FleetManagementSystem.Models;
-using Microsoft.AspNetCore.Mvc;
-
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using FleetManagementSystem.Data;
+using FleetManagementSystem.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,10 +15,14 @@ namespace FleetManagementSystem.Controllers
     {
         private readonly ApplicationDbContext _db;
         private string phoneNumber;
+        private readonly IPasswordHasher<User_Details> _passwordHasher;
 
-        public VehicleManagementController(ApplicationDbContext db)
+        
+
+        public VehicleManagementController(ApplicationDbContext db, IPasswordHasher<User_Details> passwordHasher)
         {
             _db = db;
+            _passwordHasher = passwordHasher;
         }
 
        
@@ -63,6 +68,7 @@ namespace FleetManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Add_Vehicle(Vehicle_Management obj)
         {
+
             if (ModelState.IsValid)
             {
                 // Save vehicle details
@@ -85,6 +91,7 @@ namespace FleetManagementSystem.Controllers
                     Role = "Driver"
                 };
 
+                user.Password = _passwordHasher.HashPassword(user, "Driver@123");
                 // Save user details
                 await _db.UserDetails.AddAsync(user);
 
