@@ -18,6 +18,15 @@ namespace FleetManagementSystem.Controllers
             _db = db;
         }
 
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear all session data
+            HttpContext.Session.Clear();
+
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login","Customer");
+        }
         public IActionResult Performance_Analysis()
         {
             var monthlyAcceptedTrips = GetMonthlyAcceptedTrips();
