@@ -1,0 +1,73 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model FleetManagementSystem.Models.User_Details
+@{
+    Layout = "~/Views/Shared/_DriverLayout.cshtml";
+    ViewData["Title"] = "Profile";
+}
+
+
+<link href="/css/CustomerProfile.css" rel="stylesheet" />
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar">
+
+            <a href="#">Edit Profile</a>
+            <a asp-controller="Driver" asp-action="DriverPage"></>Back</a>
+            <form method="post" asp-action="Logout">
+                <button type="submit" class="btn btn-dark">🚪 Logout</button>
+
+            </form>
+        </div>
+
+        <!-- Profile Form -->
+        <div class="col-md-9 col-lg-10 p-5">
+            <div class="profile-card">
+                <h3 class="mb-4">Edit Profile</h3>
+                <form asp-action="UpdateProfile" asp-controller="Driver" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label">First Name</label>
+                            <input asp-for="FirstName" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label">Last Name</label>
+                            <input asp-for="LastName" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" class="form-control" readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-primary">Save Details</button>
+                    </div>
+                </form>
+                <form asp-action="ChangePassword" asp-controller="Driver" method="post">
+                    <div class="row g-3 mt-5">
+                        <div class="col-md-6">
+                            <label for="NewPassword" class="form-label">New Password</label>
+                            <input name="NewPassword" type="password" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ConfirmPassword" class="form-label">Confirm Password</label>
+                            <input name="ConfirmPassword" type="password" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-warning">Change Password</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Net.Http.Json;
 using FleetManagementSystem.Data;
 
@@ -27,9 +28,11 @@ public class CustomerController : Controller
     }
     public IActionResult CustomerPage()
     {
+
         ViewBag.HideFooter = false;
         return View("~/Views/Customer/CustomerPage.cshtml");
     }
+  
 
     [HttpPost]
     public async Task<IActionResult> Registration(RegisterDto dto)
@@ -37,17 +40,29 @@ public class CustomerController : Controller
         var client = _httpClientFactory.CreateClient();
         var response = await client.PostAsJsonAsync($"{BaseUrl}/register", dto);
 
-        if (response.IsSuccessStatusCode)
+        if (!response.IsSuccessStatusCode)
         {
-            return RedirectToAction("Login");
+            var error = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode == HttpStatusCode.Conflict || error.Contains("already registered", StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("Email", "This email is already registered.");
+            }
+            else
+            {
+                ModelState.AddModelError("", $"Registration failed: {error}");
+            }
+
+            ViewBag.HideFooter = true;
+            return View(dto);
         }
 
-        var error = await response.Content.ReadAsStringAsync();
-        ModelState.AddModelError("", $"Registration failed: {error}");
-        return View(dto);
+        // Registration succeeded — redirect or show success
+        return RedirectToAction("Login");
     }
 
-  
+
+
     [HttpPost]
     public async Task<IActionResult> Login(LoginDto dto)
     {
@@ -127,15 +142,17 @@ public class CustomerController : Controller
         }
 
         var phone = user.PhoneNumber?.Trim().ToLower();
+
+        var allTrips = _db.Trips
+    .Where(t => t.PhoneNumber.Trim().ToLower() == phone)
+    .OrderByDescending(t => t.BookingTime)
+    .ToList();
+
        
-        var history = _db.Trips
-            .Where(t => t.VehicleId != null && t.PhoneNumber.Trim().ToLower() == phone)
-            .OrderByDescending(t => t.BookingTime)
-            .ToList();
 
         ViewBag.HideFooter = true; // ✅ You can still set this here
 
-        return View("~/Views/Customer/CustomerHistory.cshtml", history);
+        return View("~/Views/Customer/CustomerHistory.cshtml", allTrips);
     }
 
     public async Task<IActionResult> CustomerProfile()

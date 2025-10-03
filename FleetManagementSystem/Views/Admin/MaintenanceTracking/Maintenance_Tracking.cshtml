@@ -28,7 +28,20 @@
             border-color: #0d6efd;
             color: white;
         }
-    </style>
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
+
+        .dropdown-menu {
+            min-width: 140px;
+            right: 0;
+            left: auto;
+        }</style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 
 <div>
@@ -37,7 +50,7 @@
 
     <nav id="navBar" class="navbar navbar-expand-sm bg-dark navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage" id="logo">Fleetora</a>
+            <a class="navbar-brand my-2 text-white" asp-controller="Admin" asp-action="AdminPage"> <i class="fa-solid fa-truck">  </i> Fleetora</a>
 
             <!-- Toggler added here -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
@@ -46,20 +59,21 @@
             </button>
         </div>
 
+        <!-- Collapsible content wrapper -->
         <div class="dropdown">
-<a class="nav-link mx-2 text-white" asp-controller="Customer" asp-action="CustomerProfile" style="cursor: pointer;">
-<i class="fa-solid fa-user"></i>
-</a>
-<ul class="dropdown-menu dropdown-menu-end">
-<li>
-<form asp-controller="Customer" asp-action="Logout" method="post" class="dropdown-item p-0">
-<button type="submit" class="btn text-danger w-100 text-start">
-<i class="fa-solid fa-right-from-bracket me-2"></i> Logout
-</button>
-</form>
-</li>
-</ul>
-</div>
+            <a class="nav-link mx-2 text-white" asp-controller="Customer" asp-action="Logout" style="cursor: pointer;">
+                <i class="fa-solid fa-user"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <form asp-controller="Customer" asp-action="Logout" method="post" class="dropdown-item p-0">
+                        <button type="submit" class="btn text-danger w-100 text-start">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
     </nav>
 
     <div class="text-start mt-3 ms-3">
@@ -78,6 +92,8 @@
     }
 
     <!-- Schedule Maintenance Form -->
+         @if (ViewBag.SearchPerformed == null || ViewBag.SearchPerformed == false)
+   {
     <div class="card">
         <div class="card-header bg-primary text-white">Schedule Maintenance</div>
         <div class="card-body">
@@ -105,6 +121,7 @@
             </form>
         </div>
     </div>
+    }
 
     <!--Search Records-->
     <div class="card mb-5">
@@ -203,7 +220,7 @@
                         <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
                             <a class="page-link" asp-action="Maintenance_Tracking" asp-route-page="@i">@i</a>
                         </li>
-                    }s
+                    }
                 </ul>
             </nav>
         </div>

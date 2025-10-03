@@ -74,6 +74,7 @@ namespace FleetManagementSystem.Controllers
                 return View(obj); // Return form with validation errors
             }
 
+            obj.Status = "Pending";
             await _db.AddAsync(obj);
             await _db.SaveChangesAsync();
             TempData["FleetBooked"] = true;
