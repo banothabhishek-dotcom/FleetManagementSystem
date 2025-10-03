@@ -109,7 +109,7 @@ namespace FleetManagementSystem.Controllers
             HttpContext.Session.Clear();
 
             // Optionally, redirect to login or home page
-            return RedirectToAction("Login");
+            return RedirectToAction("Login","Customer");
         }
 
     }

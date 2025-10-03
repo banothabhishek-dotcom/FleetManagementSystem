@@ -51,6 +51,18 @@ ViewData["Title"] = "Fuel_Management";
             background-color: #0b5ed7;
 
         }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            margin-top: 0;
+        }
+
+        .dropdown-menu {
+            min-width: 140px;
+            right: 0;
+            left: auto;
+        }
+        
     </style>
 </head>
 
@@ -66,36 +78,38 @@ ViewData["Title"] = "Fuel_Management";
             </button>
         </div>
 
-         
+
         <div class="dropdown">
-<a class="nav-link mx-2 text-white" asp-controller="Customer" asp-action="CustomerProfile" style="cursor: pointer;">
-<i class="fa-solid fa-user"></i>
-</a>
-<ul class="dropdown-menu dropdown-menu-end">
-<li>
-<form asp-controller="Customer" asp-action="Logout" method="post" class="dropdown-item p-0">
-<button type="submit" class="btn text-danger w-100 text-start">
-<i class="fa-solid fa-right-from-bracket me-2"></i> Logout
-</button>
-</form>
-</li>
-</ul>
-</div>
+            <a class="nav-link mx-2 text-white" asp-controller="Customer" asp-action="CustomerProfile"
+                style="cursor: pointer;">
+                <i class="fa-solid fa-user"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <form asp-controller="Customer" asp-action="Logout" method="post" class="dropdown-item p-0">
+                        <button type="submit" class="btn text-danger w-100 text-start">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </div>
 
     </nav>
 
     <div class="text-start mt-3 ms-3">
         <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
     </div>
-    
+
 
     <div class="container ">
         <h2 class="mb-7 text-center header-title">
             <medium>Fuel Management</medium>
         </h2>
         <div class="text-start mt-3 mb-3">
-                   <a  asp-action="Fuel_Management" asp-controller="FuelManagement" class="btn btn-custom">Back to All Records</a>
-                </div>
+            <a asp-action="Fuel_Management" asp-controller="FuelManagement" class="btn btn-custom">Back to All
+                Records</a>
+        </div>
         <!-- Add Fuel Record -->
         <div class="card mb-5">
             <div class="card-header bg-primary text-white">Add Fuel Record</div>
@@ -103,11 +117,13 @@ ViewData["Title"] = "Fuel_Management";
                 <form asp-action="AddFuelEntries" asp-validation-summary="ModelOnly">
                     <div class="row mb-3">
 
-                        
+
                         <div class="col-md-6">
                             <label class="form-label">Vehicle Registration Number</label>
-                            <input type="text" name="RegistrationNumber" class="form-control" placeholder="Enter Registration Number" required />
-                             <span class="text-danger">@ViewData.ModelState["RegistrationNumber"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
+                            <input type="text" name="RegistrationNumber" class="form-control"
+                                placeholder="Enter Registration Number" required />
+                            <span
+                                class="text-danger">@ViewData.ModelState["RegistrationNumber"]?.Errors.FirstOrDefault()?.ErrorMessage</span>
                         </div>
 
 
@@ -141,5 +157,5 @@ ViewData["Title"] = "Fuel_Management";
                 </form>
             </div>
         </div>
+    </div>
 </div>
-
