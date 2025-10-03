@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 public class CustomerController : Controller
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly string BaseUrl = "https://localhost:7114/api/Account";
+    private readonly string BaseUrl = "http://localhost:5259/api/Account";
     private readonly ApplicationDbContext _db;
     public CustomerController(ApplicationDbContext db, IHttpClientFactory httpClientFactory)
     {
