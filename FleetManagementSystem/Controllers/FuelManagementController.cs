@@ -22,9 +22,20 @@ namespace FleetManagementSystem.Controllers
             _db = db;
 
         }
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear all session data
+            HttpContext.Session.Clear();
+
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login", "Customer");
+        }
 
         public IActionResult Fuel_Management(int page = 1)
+
         {
+            ViewBag.HideFooter = true;
             int pageSize = 10;
 
             var fuelQuery = _db.FuelRecords
@@ -48,6 +59,7 @@ namespace FleetManagementSystem.Controllers
 
         public IActionResult AddFuelEntries()
         {
+            ViewBag.HideFooter = true;
             return View("~/Views/Admin/FuelManagement/AddFuelEntries.cshtml");
         }
 
@@ -100,15 +112,7 @@ namespace FleetManagementSystem.Controllers
 
             return View("~/Views/Admin/FuelManagement/Fuel_Management.cshtml", records);
         }
-        [HttpPost]
-        public IActionResult Logout()
-        {
-            // Clear all session data
-            HttpContext.Session.Clear();
-
-            // Optionally, redirect to login or home page
-            return RedirectToAction("Login");
-        }
+       
 
 
 

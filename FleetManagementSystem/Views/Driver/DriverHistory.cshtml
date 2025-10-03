@@ -43,6 +43,19 @@
 }
 else
 {
-    <p class="text-center mt-5">No ride history available.</p>
+        <div class="container my-4">
+            <div class="card shadow border-0">
+                <div class="card-body text-center py-5">
+                    <h4 class="text-muted">
+                        <i class="fa-solid fa-truck-fast me-2"></i> No assigned trips available
+                    </h4>
+                    <p class="text-secondary">You haven't been assigned any trips yet. Please check back later.</p>
+                    <a asp-action="DriverPage" asp-controller="Driver" class="btn btn-outline-primary mt-3">
+                        Go to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+
 }
 </div>

@@ -12,10 +12,14 @@
     @foreach (var trip in Model)
     {
         <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between bg-success">
-                @trip.BookingTime.ToString("dd MMMM yyyy") 
-                <span><i class="fa-solid fa-circle-check"></i> Completed</span>
+            <div class="card-header d-flex justify-content-between align-items-center bg-info">
+                <span class="text-dark">@trip.BookingTime.ToString("dd MMMM yyyy")</span>
+                <span class="badge @(trip.Status == "Pending" ? "bg-warning text-dark" : "bg-success")">
+                    @trip.Status
+                </span>
             </div>
+
+
 
             <div class="card-body py-3">
                 <div class="pickup my-3">
@@ -32,7 +36,20 @@
     }
 } else
 {
-    <p>No fleet history available.</p>
+    <div class="container my-4">
+        <div class="card shadow border-0">
+            <div class="card-body text-center py-5">
+                <h4 class="text-muted">
+                    <i class="fa-solid fa-truck-fast me-2"></i> No fleet history available
+                </h4>
+                <p class="text-secondary">You haven't booked any fleet yet. Start your journey by booking one now!</p>
+                <a asp-action="CustomerPage" asp-controller="Customer" class="btn btn-outline-primary mt-3">
+                    Book a Fleet
+                </a>
+            </div>
+        </div>
+    </div>
+
 }
 
 
