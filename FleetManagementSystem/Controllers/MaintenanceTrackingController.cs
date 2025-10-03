@@ -13,6 +13,8 @@ namespace FleetManagementSystem.Controllers
 		{
 			int pageSize = 5;
 			var records = _db.MaintenanceRecords
+				 .Include(m => m.Vehicle)
+								 .Where(m => m.Vehicle != null && !m.Vehicle.IsDeleted)
 							 .OrderByDescending(m => m.ScheduledDate)
 							 .Skip((page - 1) * pageSize)
 							 .Take(pageSize)
@@ -26,36 +28,45 @@ namespace FleetManagementSystem.Controllers
 			return View("~/Views/Admin/MaintenanceTracking/Maintenance_Tracking.cshtml", records);
 		}
 
+		
 		[HttpPost]
-		public async Task<IActionResult> AddMaintenanceRecord(Maintenance_Management obj)
+		public async Task<IActionResult> AddMaintenanceRecord(string RegistrationNumber, DateTime ScheduledDate, string Description)
 		{
-			// Check if the vehicle exists
-			var vehicleExists = await _db.Vehicles.AnyAsync(v => v.VehicleId == obj.VehicleId);
-			if (!vehicleExists)
-			{
-				// Add validation error
-				ModelState.AddModelError("VehicleID", $"Vehicle ID {obj.VehicleId} not found.");
+			// Find the vehicle by registration number
+			var vehicle = await _db.Vehicles
+				.FirstOrDefaultAsync(v => v.RegistrationNumber == RegistrationNumber && !v.IsDeleted);
 
-				// Fetch paginated maintenance records
+			if (vehicle == null)
+			{
+				ModelState.AddModelError("RegistrationNumber", $"Vehicle with registration number '{RegistrationNumber}' not found.");
+
+				// Re-fetch maintenance records for the view
 				int pageSize = 5;
 				int page = 1;
-				var records = _db.MaintenanceRecords
-								 .OrderByDescending(m => m.ScheduledDate)
-								 .Skip((page - 1) * pageSize)
-								 .Take(pageSize)
-								 .ToList();
+				var records = await _db.MaintenanceRecords
+					.Include(m => m.Vehicle)
+					.Where(m => m.Vehicle != null && !m.Vehicle.IsDeleted)
+					.OrderByDescending(m => m.ScheduledDate)
+					.Skip((page - 1) * pageSize)
+					.Take(pageSize)
+					.ToListAsync();
 
-				int totalRecords = _db.MaintenanceRecords.Count();
-				ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+				ViewBag.TotalPages = (int)Math.Ceiling((double)await _db.MaintenanceRecords.CountAsync() / pageSize);
 				ViewBag.CurrentPage = page;
 
-				// Return the same view with the list and error
 				return View("~/Views/Admin/MaintenanceTracking/Maintenance_Tracking.cshtml", records);
 			}
 
-			// Save the new record
-			obj.Status = "Scheduled";
-			await _db.MaintenanceRecords.AddAsync(obj);
+			// Create and save the maintenance record
+			var newRecord = new Maintenance_Management
+			{
+				VehicleId = vehicle.VehicleId,
+				ScheduledDate = ScheduledDate,
+				Description = Description,
+				Status = "Scheduled"
+			};
+
+			await _db.MaintenanceRecords.AddAsync(newRecord);
 			await _db.SaveChangesAsync();
 
 			return RedirectToAction("Maintenance_Tracking");
@@ -85,16 +96,44 @@ namespace FleetManagementSystem.Controllers
 			return RedirectToAction("Maintenance_Tracking");
 		}
 		[HttpPost]
-		public async Task<IActionResult> Maintenancesearch(string vehicleId)
+		public async Task<IActionResult> Maintenancesearch(string registrationNumber)
 		{
-			var records = await _db.MaintenanceRecords
-								   .Where(f => f.VehicleId.ToString() == vehicleId)
+			List<Maintenance_Management> records;
+
+			if (string.IsNullOrWhiteSpace(registrationNumber))
+			{
+				// If no registration number is provided, fetch all records
+				records = await _db.MaintenanceRecords
+								   .Include(m => m.Vehicle)
+								   .Where(m => m.Vehicle != null && !m.Vehicle.IsDeleted)
 								   .ToListAsync();
+			}
+			else
+			{
+				// If a registration number is provided, filter the records
+				records = await _db.MaintenanceRecords
+								   .Include(m => m.Vehicle)
+								   .Where(m => m.Vehicle != null &&
+											   !m.Vehicle.IsDeleted &&
+											   m.Vehicle.RegistrationNumber == registrationNumber)
+								   .ToListAsync();
+			}
 
 			ViewBag.HasRecords = records.Any();
 			ViewBag.SearchPerformed = true;
 
 			return View("~/Views/Admin/MaintenanceTracking/Maintenance_Tracking.cshtml", records);
 		}
+
+		[HttpPost]
+		public IActionResult Logout()
+		{
+			// Clear session
+			HttpContext.Session.Clear();
+
+			// Redirect to login page
+			return RedirectToAction("Login", "Admin"); // or "Account" depending on your setup
+		}
+
 	}
 }

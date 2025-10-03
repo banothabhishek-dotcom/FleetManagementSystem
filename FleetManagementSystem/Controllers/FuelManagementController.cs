@@ -22,7 +22,6 @@ namespace FleetManagementSystem.Controllers
             _db = db;
 
         }
-
         [HttpPost]
         public IActionResult Logout()
         {
@@ -30,8 +29,11 @@ namespace FleetManagementSystem.Controllers
             HttpContext.Session.Clear();
 
             // Optionally, redirect to login or home page
-            return RedirectToAction("Login","Customer");
+            return RedirectToAction("Login", "Customer");
         }
+
+        
+       
         public IActionResult Fuel_Management(int page = 1)
         {
             int pageSize = 10;
