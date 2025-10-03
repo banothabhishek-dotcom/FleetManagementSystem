@@ -24,8 +24,16 @@ namespace FleetManagementSystem.Controllers
             _db = db;
             _passwordHasher = passwordHasher;
         }
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear all session data
+            HttpContext.Session.Clear();
 
-       
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login", "Customer");
+        }
+
         public IActionResult Vehicle_Management(int page = 1)
         {
             ViewBag.HideFooter = true;

@@ -37,6 +37,15 @@ namespace FleetManagementSystem.Controllers
                 _ => 0
             };
         }
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear all session data
+            HttpContext.Session.Clear();
+
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login", "Customer");
+        }
 
         [HttpGet]
         public IActionResult Trip_Scheduling()
