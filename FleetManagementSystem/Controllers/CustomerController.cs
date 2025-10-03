@@ -129,15 +129,17 @@ public class CustomerController : Controller
         }
 
         var phone = user.PhoneNumber?.Trim().ToLower();
+
+        var allTrips = _db.Trips
+    .Where(t => t.PhoneNumber.Trim().ToLower() == phone)
+    .OrderByDescending(t => t.BookingTime)
+    .ToList();
+
        
-        var history = _db.Trips
-            .Where(t => t.VehicleId != null && t.PhoneNumber.Trim().ToLower() == phone)
-            .OrderByDescending(t => t.BookingTime)
-            .ToList();
 
         ViewBag.HideFooter = true; // ✅ You can still set this here
 
-        return View("~/Views/Customer/CustomerHistory.cshtml", history);
+        return View("~/Views/Customer/CustomerHistory.cshtml", allTrips);
     }
 
     public async Task<IActionResult> CustomerProfile()
