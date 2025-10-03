@@ -33,7 +33,9 @@ namespace FleetManagementSystem.Controllers
         }
 
         public IActionResult Fuel_Management(int page = 1)
+
         {
+            ViewBag.HideFooter = true;
             int pageSize = 10;
 
             var fuelQuery = _db.FuelRecords
@@ -57,6 +59,7 @@ namespace FleetManagementSystem.Controllers
 
         public IActionResult AddFuelEntries()
         {
+            ViewBag.HideFooter = true;
             return View("~/Views/Admin/FuelManagement/AddFuelEntries.cshtml");
         }
 

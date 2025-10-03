@@ -11,6 +11,7 @@ namespace FleetManagementSystem.Controllers
 
 		public IActionResult Maintenance_Tracking(int page = 1)
 		{
+			ViewBag.HideFooter = true;
 			int pageSize = 5;
 			var records = _db.MaintenanceRecords
 				 .Include(m => m.Vehicle)
@@ -71,20 +72,6 @@ namespace FleetManagementSystem.Controllers
 
 			return RedirectToAction("Maintenance_Tracking");
 		}
-
-		public async Task<IActionResult> DeleteMaintenanceRecord(int id)
-		{
-			var record = await _db.MaintenanceRecords.FindAsync(id);
-			if (record == null)
-			{
-				return NotFound();
-			}
-
-			_db.MaintenanceRecords.Remove(record);
-			await _db.SaveChangesAsync();
-			return RedirectToAction("Maintenance_Tracking");
-		}
-
 		public async Task<IActionResult> MarkAsComplete(int id)
 		{
 			var record = await _db.MaintenanceRecords.FindAsync(id);
@@ -98,6 +85,7 @@ namespace FleetManagementSystem.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Maintenancesearch(string registrationNumber)
 		{
+			ViewBag.HideFooter = true;
 			List<Maintenance_Management> records;
 
 			if (string.IsNullOrWhiteSpace(registrationNumber))

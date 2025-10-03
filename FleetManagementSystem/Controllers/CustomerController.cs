@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using System.Net.Http.Json;
 using FleetManagementSystem.Data;
 
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 public class CustomerController : Controller
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly string BaseUrl = "https://localhost:7114/api/Account";
+    private readonly string BaseUrl = "http://localhost:5259/api/Account";
     private readonly ApplicationDbContext _db;
     public CustomerController(ApplicationDbContext db, IHttpClientFactory httpClientFactory)
     {
@@ -39,17 +40,29 @@ public class CustomerController : Controller
         var client = _httpClientFactory.CreateClient();
         var response = await client.PostAsJsonAsync($"{BaseUrl}/register", dto);
 
-        if (response.IsSuccessStatusCode)
+        if (!response.IsSuccessStatusCode)
         {
-            return RedirectToAction("Login");
+            var error = await response.Content.ReadAsStringAsync();
+
+            if (response.StatusCode == HttpStatusCode.Conflict || error.Contains("already registered", StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("Email", "This email is already registered.");
+            }
+            else
+            {
+                ModelState.AddModelError("", $"Registration failed: {error}");
+            }
+
+            ViewBag.HideFooter = true;
+            return View(dto);
         }
 
-        var error = await response.Content.ReadAsStringAsync();
-        ModelState.AddModelError("", $"Registration failed: {error}");
-        return View(dto);
+        // Registration succeeded — redirect or show success
+        return RedirectToAction("Login");
     }
 
-  
+
+
     [HttpPost]
     public async Task<IActionResult> Login(LoginDto dto)
     {
