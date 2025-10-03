@@ -27,9 +27,11 @@ public class CustomerController : Controller
     }
     public IActionResult CustomerPage()
     {
+
         ViewBag.HideFooter = false;
         return View("~/Views/Customer/CustomerPage.cshtml");
     }
+  
 
     [HttpPost]
     public async Task<IActionResult> Registration(RegisterDto dto)

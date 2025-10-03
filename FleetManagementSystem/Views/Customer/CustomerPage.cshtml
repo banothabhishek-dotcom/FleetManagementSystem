@@ -93,42 +93,36 @@
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
 
                     </div>
-                    <div class="row">
-                        <div class="col-6 mb-3">
+                    <div class="row g-3">
+                        <div class="col-md-6">
                             <label asp-for="PickupPoint" class="form-label">Pick Up Address</label>
-                            <input asp-for="PickupPoint" type="text" id="source" class="form-control" placeholder="Enter your pickup address">
+                            <input asp-for="PickupPoint" type="text" class="form-control" placeholder="Enter your pickup address" />
                             <span asp-validation-for="PickupPoint" class="text-danger"></span>
-
                         </div>
-                        <div class="col-6 mb-3">
+                        <div class="col-md-6">
                             <label asp-for="DropPoint" class="form-label">Drop Point</label>
-                            <input asp-for="DropPoint" type="text" id="destination" class="form-control" placeholder="Enter your Drop Address">
+                            <input asp-for="DropPoint" type="text" class="form-control" placeholder="Enter your drop address" />
                             <span asp-validation-for="DropPoint" class="text-danger"></span>
-
                         </div>
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <div class="mb-3">
-                                    <label asp-for="VehicleType" class="form-label">Vehicle Type</label>
-                                    <select asp-for="VehicleType" id="roleSelect" class="form-select" required>
-                                        <option value="">Select Vehicle</option>
-                                        <option value="4Wheeler">Mini Truck</option>
-                                        <option value="6Wheeler">6 Wheeler</option>
-                                        <option value="10Wheeler">10 Wheeler</option>
-                                    </select>
-                                    <span asp-validation-for="VehicleType" class="text-danger"></span>
-
-                                </div>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label asp-for="BookingTime" class="form-label">Booking Time</label>
-                                <input asp-for="BookingTime" type="datetime-local" id="time" class="form-control"
-                                       min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
-                                <span asp-validation-for="BookingTime" class="text-danger"></span>
-                            </div>
+                        <div class="col-md-6">
+                            <label asp-for="VehicleType" class="form-label">Vehicle Type</label>
+                            <select asp-for="VehicleType" class="form-select" required>
+                                <option value="">Select Vehicle</option>
+                                <option value="4Wheeler">Mini Truck</option>
+                                <option value="6Wheeler">6 Wheeler</option>
+                                <option value="10Wheeler">10 Wheeler</option>
+                            </select>
+                            <span asp-validation-for="VehicleType" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="BookingTime" class="form-label">Booking Time</label>
+                            <input asp-for="BookingTime" type="datetime-local" class="form-control"
+                                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
+                            <span asp-validation-for="BookingTime" class="text-danger"></span>
                         </div>
                     </div>
-                    <div class="text-center"><button type="submit" class="btn btn-primary w-100">Submit</button></div>
+
+                    <div class="text-center mt-2"><button type="submit" class="btn btn-primary w-100">Submit</button></div>
                 </form>
             </div>
         </div>
