@@ -96,7 +96,7 @@ ViewData["Title"] = "Fuel_Management";
         <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
     </div>
     <div class="container ">
-        <h2 class="mb-7 text-center header-title">
+        <h2 class="mb-5 text-center header-title">
             <medium>Fuel Management</medium>
         </h2>
         <!-- Add button  -->
@@ -108,7 +108,7 @@ ViewData["Title"] = "Fuel_Management";
         
             @if (ViewBag.SearchPerformed == true)
             {
-                <div class="text-start mt-3 mb-3">
+                <div class="text-start my-3">
                    <a  asp-action="Fuel_Management" asp-controller="FuelManagement" class="btn btn-custom">Back to All Records</a>
                 </div>
             }
@@ -131,6 +131,7 @@ ViewData["Title"] = "Fuel_Management";
             <div id="fuelUsageResults">
                 @if (ViewBag.HasRecords != null)
                 {
+                    if (ViewBag.HasRecords)
                     if (ViewBag.HasRecords)
                     {
                         <table class="table table-bordered table-striped mt-3">
@@ -185,7 +186,7 @@ ViewData["Title"] = "Fuel_Management";
     <!-- Fuel Records Table -->
     @if (ViewBag.SearchPerformed == null || ViewBag.SearchPerformed == false)
    {
-    <div class="card mt-4 mb-4">
+    <div class="card my-4">
         <div class="card-header bg-primary text-white">Fuel Records</div>
         <div class="card-body">
             <table class="table table-bordered table-striped">
