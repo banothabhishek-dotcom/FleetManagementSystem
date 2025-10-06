@@ -8,11 +8,15 @@
     <style>
         body {
             background-color: #f8f9fa;
-
         }
 
         .card {
-            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-title {
+            font-weight: 600;
+            color: #343a40;
         }
 
         .btn-custom {
@@ -81,26 +85,26 @@
         <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
     </div>
     <div class="container">
-        <h2 class="mb-7 text-center header-title">
+        <h2 class="mb-5 text-center header-title">
             <medium>Maintenance Tracking</medium>
         </h2>
     </div>
     @if (ViewBag.SearchPerformed == true)
     {
-        <div class="text-start mt-3 mb-3">
-            <a asp-action="Maintenance_Tracking" asp-controller="MaintenanceTracking" class="btn btn-custom">Back to All Records</a>
+        <div class="text-start mx-5">
+            <a asp-action="Maintenance_Tracking" asp-controller="MaintenanceTracking" class="btn btn-custom mx-3">Back to All Records</a>
         </div>
     }
 
     <!-- Schedule Maintenance Form -->
          @if (ViewBag.SearchPerformed == null || ViewBag.SearchPerformed == false)
    {
-    <div class="card m-3">
+    <div class="card mx-5 my-3">
         <div class="card-header bg-primary text-white">Schedule Maintenance</div>
         <div class="card-body">
             <form asp-action="AddMaintenanceRecord" method="post">
                 <div class="row mb-3">
-                   <div class="col-md-6">
+                   <div class="col-md-5">
                         <label for="registrationNumber" class="form-label">Registration Number</label>
                         <input type="text" class="form-control" id="registrationNumber" name="RegistrationNumber" required />
 
@@ -125,14 +129,14 @@
     }
 
     <!--Search Records-->
-    <div class="card m-3">
+    <div class="card mx-5 my-3">
         
 
         <div class="card-body">
             <!-- Form for search -->
            <form method="post" asp-action="Maintenancesearch" asp-controller="MaintenanceTracking">
            <div class="input-group">
-            <input type="text" class="form-control" id="searchRegistrationNumber" name="registrationNumber" placeholder="Enter Registration Number" required />
+            <input type="text" class="form-control" id="searchRegistrationNumber" name="registrationNumber" placeholder="Enter Registration Number" />
             <button type="submit" class="btn btn-outline-primary" id="searchBtn">Search</button>
            </div>
           </form>
@@ -168,7 +172,7 @@
                     else
                     {
                         <div class="alert alert-danger mt-3">
-                            No records found for the given Vehicle ID.
+                            No records found for the given Vehicle Registration Number.
                         </div>
                     }
                 }
@@ -178,8 +182,8 @@
     <!-- Maintenance Records Table -->
      @if (ViewBag.SearchPerformed == null || ViewBag.SearchPerformed == false)
    {
-    <div class="card m-3">
-        <div class="card-header bg-secondary text-white">Maintenance Records</div>
+    <div class="card mx-5 mb-3">
+        <div class="card-header bg-primary text-white">Maintenance Records</div>
         <div class="card-body">
             <table class="table table-bordered table-striped">
                 <thead>

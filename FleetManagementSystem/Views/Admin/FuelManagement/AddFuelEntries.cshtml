@@ -21,7 +21,7 @@
         .header-title {
             font-weight: 600;
             color: #343a40;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+           
         }
 
         .btn-custom {
@@ -131,7 +131,8 @@
 
                         <div class="col-md-6">
                             <label asp-for="Date" class="form-label">Date</label>
-                            <input asp-for="Date" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                            <input asp-for="Date" type="datetime-local" class="form-control"
+                                   max="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
                             <span asp-validation-for="Date" class="text-danger"></span>
                         </div>
 
