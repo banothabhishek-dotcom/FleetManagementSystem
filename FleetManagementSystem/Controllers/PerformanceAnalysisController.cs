@@ -18,8 +18,19 @@ namespace FleetManagementSystem.Controllers
             _db = db;
         }
 
-        public IActionResult Performance_Analysis()
+        [HttpPost]
+        public IActionResult Logout()
         {
+            // Clear all session data
+            HttpContext.Session.Clear();
+
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login","Customer");
+        }
+        public IActionResult Performance_Analysis()
+
+        {
+            ViewBag.HideFooter = true;
             var monthlyAcceptedTrips = GetMonthlyAcceptedTrips();
             var monthlyFuelData = GetMonthlyFuelData();
             var acceptedTripsChartBytes = ChartGenerator.GenerateAcceptedTripsChart(monthlyAcceptedTrips);

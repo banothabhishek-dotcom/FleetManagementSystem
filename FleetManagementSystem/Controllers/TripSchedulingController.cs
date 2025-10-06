@@ -37,6 +37,15 @@ namespace FleetManagementSystem.Controllers
                 _ => 0
             };
         }
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear all session data
+            HttpContext.Session.Clear();
+
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login", "Customer");
+        }
 
         [HttpGet]
         public IActionResult Trip_Scheduling()
@@ -157,6 +166,7 @@ namespace FleetManagementSystem.Controllers
 
         public IActionResult TripHistory()
         {
+            ViewBag.HideFooter = true;
             var trips = _db.Trips
         .Where(t => !string.IsNullOrEmpty(t.AssignedDriver) || t.AssignedDriver=="Declined")
         .ToList();

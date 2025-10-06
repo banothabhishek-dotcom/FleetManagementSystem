@@ -24,8 +24,16 @@ namespace FleetManagementSystem.Controllers
             _db = db;
             _passwordHasher = passwordHasher;
         }
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            // Clear all session data
+            HttpContext.Session.Clear();
 
-       
+            // Optionally, redirect to login or home page
+            return RedirectToAction("Login", "Customer");
+        }
+
         public IActionResult Vehicle_Management(int page = 1)
         {
             ViewBag.HideFooter = true;
@@ -62,7 +70,9 @@ namespace FleetManagementSystem.Controllers
 
 
         public IActionResult Add_Vehicle()
+
         {
+            ViewBag.HideFooter = true;
             return View("~/Views/Admin/VehicleManagement/Add_Vehicle.cshtml");
         }
         [HttpPost]
@@ -106,6 +116,7 @@ namespace FleetManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit_Vehicle(int? id)
         {
+            ViewBag.HideFooter = true;
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -136,6 +147,7 @@ namespace FleetManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete_Vehicle(int? id)
         {
+            ViewBag.HideFooter = true;
             if (id == null || id == 0)
             {
                 return NotFound();

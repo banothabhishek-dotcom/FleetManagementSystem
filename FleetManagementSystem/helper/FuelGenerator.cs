@@ -30,8 +30,8 @@ public class FuelChartGenerator
         graphics.DrawLine(penAxis, 50, 50, 50, 350);          // Y-axis
 
         // Draw Y-axis tick marks, labels, and horizontal grid lines
-        int yAxisMax = 2000;
-        int yStep = 500;
+        int yAxisMax = 5000;  // Updated from 2000
+        int yStep = 1000;     // Updated from 500
 
         for (int i = 0; i <= yAxisMax; i += yStep)
         {
@@ -40,6 +40,7 @@ public class FuelChartGenerator
             graphics.DrawString(i.ToString(), font, brush, 10, y - 7); // Label
             graphics.DrawLine(gridPen, 50, y, width - 50, y); // Grid line
         }
+
 
         int chartWidth = width - 100;
         int spacing = chartWidth / months.Count;

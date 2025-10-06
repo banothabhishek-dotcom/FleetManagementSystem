@@ -54,9 +54,9 @@
 </head>
 
 <div>
-    <nav id="navBar" class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <nav id="navBar" class="navbar navbar-expand-lg p-0 bg-dark navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" asp-controller="Admin" asp-action="AdminPage" id="logo">Fleetora</a>
+            <a class="navbar-brand my-2 text-white" asp-controller="Admin" asp-action="AdminPage"><i class="fa-solid fa-truck"> </i> Fleetora</a>
 
             <!-- Toggler added here -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
@@ -84,19 +84,18 @@
 
     </nav>
 
-    <div class="text-start mt-3 ms-3">
-        <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
-    </div>
-
 
     <div class="container ">
-        <h2 class="mb-7 text-center header-title">
+        <div class="text-start my-3">
+            <a asp-action="Fuel_Management" asp-controller="FuelManagement" class="btn btn-custom">
+                Back to All
+                Records
+            </a>
+        </div>
+        <h2 class="mb-3 text-center header-title">
             <medium>Fuel Management</medium>
         </h2>
-        <div class="text-start mt-3 mb-3">
-            <a asp-action="Fuel_Management" asp-controller="FuelManagement" class="btn btn-custom">Back to All
-                Records</a>
-        </div>
+        
         <!-- Add Fuel Record -->
         <div class="card mb-5">
             <div class="card-header bg-primary text-white">Add Fuel Record</div>

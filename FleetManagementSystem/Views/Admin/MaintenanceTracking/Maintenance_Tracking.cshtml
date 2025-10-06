@@ -8,6 +8,7 @@
     <style>
         body {
             background-color: #f8f9fa;
+
         }
 
         .card {
@@ -48,7 +49,7 @@
 
     <!--navbar-->
 
-    <nav id="navBar" class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <nav id="navBar" class="navbar navbar-expand-lg p-0 bg-dark navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand my-2 text-white" asp-controller="Admin" asp-action="AdminPage"> <i class="fa-solid fa-truck">  </i> Fleetora</a>
 
@@ -79,7 +80,7 @@
     <div class="text-start mt-3 ms-3">
         <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
     </div>
-    <div class="container ">
+    <div class="container">
         <h2 class="mb-7 text-center header-title">
             <medium>Maintenance Tracking</medium>
         </h2>
@@ -94,7 +95,7 @@
     <!-- Schedule Maintenance Form -->
          @if (ViewBag.SearchPerformed == null || ViewBag.SearchPerformed == false)
    {
-    <div class="card">
+    <div class="card m-3">
         <div class="card-header bg-primary text-white">Schedule Maintenance</div>
         <div class="card-body">
             <form asp-action="AddMaintenanceRecord" method="post">
@@ -124,7 +125,7 @@
     }
 
     <!--Search Records-->
-    <div class="card mb-5">
+    <div class="card m-3">
         
 
         <div class="card-body">
@@ -177,7 +178,7 @@
     <!-- Maintenance Records Table -->
      @if (ViewBag.SearchPerformed == null || ViewBag.SearchPerformed == false)
    {
-    <div class="card ">
+    <div class="card m-3">
         <div class="card-header bg-secondary text-white">Maintenance Records</div>
         <div class="card-body">
             <table class="table table-bordered table-striped">
