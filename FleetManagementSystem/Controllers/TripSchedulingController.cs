@@ -166,6 +166,7 @@ namespace FleetManagementSystem.Controllers
 
         public IActionResult TripHistory()
         {
+            ViewBag.HideFooter = true;
             var trips = _db.Trips
         .Where(t => !string.IsNullOrEmpty(t.AssignedDriver) || t.AssignedDriver=="Declined")
         .ToList();

@@ -28,7 +28,9 @@ namespace FleetManagementSystem.Controllers
             return RedirectToAction("Login","Customer");
         }
         public IActionResult Performance_Analysis()
+
         {
+            ViewBag.HideFooter = true;
             var monthlyAcceptedTrips = GetMonthlyAcceptedTrips();
             var monthlyFuelData = GetMonthlyFuelData();
             var acceptedTripsChartBytes = ChartGenerator.GenerateAcceptedTripsChart(monthlyAcceptedTrips);

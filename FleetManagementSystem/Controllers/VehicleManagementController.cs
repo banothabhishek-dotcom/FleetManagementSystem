@@ -70,7 +70,9 @@ namespace FleetManagementSystem.Controllers
 
 
         public IActionResult Add_Vehicle()
+
         {
+            ViewBag.HideFooter = true;
             return View("~/Views/Admin/VehicleManagement/Add_Vehicle.cshtml");
         }
         [HttpPost]
@@ -114,6 +116,7 @@ namespace FleetManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit_Vehicle(int? id)
         {
+            ViewBag.HideFooter = true;
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -144,6 +147,7 @@ namespace FleetManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete_Vehicle(int? id)
         {
+            ViewBag.HideFooter = true;
             if (id == null || id == 0)
             {
                 return NotFound();
