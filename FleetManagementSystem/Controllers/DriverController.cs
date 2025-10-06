@@ -116,6 +116,7 @@ namespace FleetManagementSystem.Controllers
 
         public async Task<IActionResult> DriverProfile()
         {
+            ViewBag.HideFooter = true;
             var email = HttpContext.Session.GetString("UserEmail");
             if (string.IsNullOrEmpty(email))
             {

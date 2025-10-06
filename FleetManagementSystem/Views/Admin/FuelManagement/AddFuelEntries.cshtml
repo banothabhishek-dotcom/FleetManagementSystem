@@ -86,13 +86,16 @@
 
 
     <div class="container ">
-        <h2 class="mb-7 text-center header-title">
+        <div class="text-start my-3">
+            <a asp-action="Fuel_Management" asp-controller="FuelManagement" class="btn btn-custom">
+                Back to All
+                Records
+            </a>
+        </div>
+        <h2 class="mb-3 text-center header-title">
             <medium>Fuel Management</medium>
         </h2>
-        <div class="text-start mt-3 mb-3">
-            <a asp-action="Fuel_Management" asp-controller="FuelManagement" class="btn btn-custom">Back to All
-                Records</a>
-        </div>
+        
         <!-- Add Fuel Record -->
         <div class="card mb-5">
             <div class="card-header bg-primary text-white">Add Fuel Record</div>

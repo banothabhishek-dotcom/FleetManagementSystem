@@ -8,6 +8,7 @@
     <style>
         body {
             background-color: #f8f9fa;
+
         }
 
         .card {
@@ -94,7 +95,7 @@
     <!-- Schedule Maintenance Form -->
          @if (ViewBag.SearchPerformed == null || ViewBag.SearchPerformed == false)
    {
-    <div class="card">
+    <div class="card m-3">
         <div class="card-header bg-primary text-white">Schedule Maintenance</div>
         <div class="card-body">
             <form asp-action="AddMaintenanceRecord" method="post">
@@ -124,7 +125,7 @@
     }
 
     <!--Search Records-->
-    <div class="card mb-5">
+    <div class="card m-3">
         
 
         <div class="card-body">
@@ -177,7 +178,7 @@
     <!-- Maintenance Records Table -->
      @if (ViewBag.SearchPerformed == null || ViewBag.SearchPerformed == false)
    {
-    <div class="card ">
+    <div class="card m-3">
         <div class="card-header bg-secondary text-white">Maintenance Records</div>
         <div class="card-body">
             <table class="table table-bordered table-striped">

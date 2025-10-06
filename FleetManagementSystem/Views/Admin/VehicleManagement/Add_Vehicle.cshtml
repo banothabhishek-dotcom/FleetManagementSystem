@@ -44,7 +44,7 @@
     </div>
 </nav>
 
-<div class="container py-5">
+<div class="container ">
     <div class="text-start mt-3 mb-3">
         <a asp-action="Vehicle_Management" asp-controller="VehicleManagement" class="btn btn-primary">Back
         </a>
@@ -66,7 +66,7 @@
 
                         <!-- Capacity -->
                         <div class="mb-3">
-                            <label asp-for="Capacity" class="form-label"></label>
+                            <label asp-for="Capacity" class="form-label">Capacity (Tons)</label>
                             <input asp-for="Capacity" class="form-control" min="1" required />
                             <span asp-validation-for="Capacity" class="text-danger"></span>
                         </div>
