@@ -37,6 +37,7 @@ namespace FleetManagementSystem.Controllers
                 _ => 0
             };
         }
+
         [HttpPost]
         public IActionResult Logout()
         {

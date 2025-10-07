@@ -8,6 +8,14 @@
 <link rel="stylesheet" href="/css/DriverPage.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+@if (TempData["RideCompleted"] != null && (bool)TempData["RideCompleted"])
+{
+    <div class="alert alert1 alert-success alert-dismissible fade show " role="alert">
+        <strong>✅ Payment successfull Ride Completed !</strong> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <div style="margin-top:100px">
     
     <div class="container mt-5">
@@ -201,5 +209,16 @@
 
         });
     });
+        
+        setTimeout(() => {
+            const alert = document.querySelector('.alert1');
+            if (alert) {
+                alert.classList.remove('show'); // fade out
+                setTimeout(() => {
+                    alert.remove(); // remove from DOM after fade
+                }, 500); // wait for fade-out animation to finish
+            }
+        }, 4000);
+   
 </script>
 }

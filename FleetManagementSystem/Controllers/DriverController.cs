@@ -49,7 +49,6 @@ namespace FleetManagementSystem.Controllers
 
 
             ViewBag.HideFooter = true;
-
             return View("~/Views/Driver/DriverPage.cshtml", assignedTrips);
         }
 
@@ -98,6 +97,7 @@ namespace FleetManagementSystem.Controllers
                 }
 
                 await _db.SaveChangesAsync();
+                TempData["RideCompleted"] = true;
                 TempData["SuccessMessage"] = "Payment successful. Trip completed.";
             }
 

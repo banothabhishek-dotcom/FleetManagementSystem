@@ -53,7 +53,7 @@
 
     <!--navbar-->
 
-    <nav id="navBar" class="navbar navbar-expand-lg p-0 bg-dark navbar-dark">
+    <nav id="navBar" class="navbar navbar-expand-lg p-0 bg-dark navbar-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand my-2 text-white" asp-controller="Admin" asp-action="AdminPage"> <i class="fa-solid fa-truck">  </i> Fleetora</a>
 
@@ -81,7 +81,7 @@
         </div>
     </nav>
 
-    <div class="text-start mt-3 ms-3">
+    <div class="text-start ms-3" style="margin-top:75px">
         <a asp-controller="Admin" asp-action="AdminPage" type="back" class="btn btn-custom">Back</a>
     </div>
     <div class="container">
@@ -115,8 +115,8 @@
                    </div>
                     <div class="col-md-6">
                         <label for="scheduledDate" class="form-label">Scheduled Date</label>
-                        <input for="ScheduledDate" type="datetime-local" class="form-control"
-                                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
+                            <input for="ScheduledDate" id="ScheduledDate" type="date" name="ScheduledDate" class="form-control"
+                                   min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
                     </div>
                 </div>
                 <div class="mb-3">
@@ -151,7 +151,7 @@
                         <table class="table table-bordered table-striped mt-3">
                             <thead>
                                 <tr>
-                                    <th>Vehicle ID</th>
+                                    <th>Vehicle Number</th>
                                     <th>Description</th>
                                     <th>Date</th>
                                     <th>Status</th>
@@ -190,29 +190,28 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Maintenance ID</th>
-                        <th>Vehicle ID</th>
+                        @* <th>Maintenance ID</th> *@
+                            <th>Vehicle Number</th>
                         <th>Description</th>
                         <th>Scheduled Date</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        @* <th>Actions</th> *@
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.MaintenanceId</td>
+                            @* <td>@item.MaintenanceId</td> *@
                            <td>@item.Vehicle.RegistrationNumber</td>
                             <td>@item.Description</td>
                             <td>@item.ScheduledDate.ToString("dd-MM-yyyy")</td>
-                            <td>@item.Status</td>
-                            <td>
+                            <td>@item.Status   
                                 @if (item.Status == "Scheduled")
                                 {
-                                    <a asp-action="MarkAsComplete" asp-route-id="@item.MaintenanceId" class="btn btn-sm btn-success">Mark Completed</a>
+                                    <a asp-action="MarkAsComplete" asp-route-id="@item.MaintenanceId" class="btn btn-sm btn-success ms-3">Mark Completed</a>
                                 }
-                                <a asp-action="DeleteMaintenanceRecord" asp-route-id="@item.MaintenanceId" class="btn btn-sm btn-danger">Delete</a>
+                                @* <a asp-action="DeleteMaintenanceRecord" asp-route-id="@item.MaintenanceId" class="btn btn-sm btn-danger">Delete</a> *@
                             </td>
                         </tr>
                     }
