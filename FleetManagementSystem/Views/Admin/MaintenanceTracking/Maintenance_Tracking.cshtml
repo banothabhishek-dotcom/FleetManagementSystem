@@ -115,7 +115,8 @@
                    </div>
                     <div class="col-md-6">
                         <label for="scheduledDate" class="form-label">Scheduled Date</label>
-                        <input type="date" class="form-control" id="scheduledDate" name="ScheduledDate" required />
+                        <input for="ScheduledDate" type="datetime-local" class="form-control"
+                                   min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" required />
                     </div>
                 </div>
                 <div class="mb-3">
