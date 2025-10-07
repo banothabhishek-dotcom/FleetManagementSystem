@@ -89,6 +89,7 @@ namespace FleetManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Fuelsearch(string registrationNumber, int page = 1)
         {
+            ViewBag.HideFooter = true;
             int pageSize = 10;
             IQueryable<Fuel_Management> query = _db.FuelRecords.Include(f => f.Vehicle);
 
