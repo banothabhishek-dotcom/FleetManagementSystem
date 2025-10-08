@@ -11,10 +11,12 @@ namespace FleetManagementSystem.Models
         public int TripId { get; set; }
 
         [Required(ErrorMessage = "First name is required.")]
+        [RegularExpression("^[A-Za-z]+$", ErrorMessage = "First name must contain only letters.")]
         [MaxLength(50, ErrorMessage = "First name cannot exceed 50 characters.")]
         public string Firstname { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Last name is required.")]
+        [RegularExpression("^[A-Za-z]+$", ErrorMessage = "First name must contain only letters.")]
         [MaxLength(50, ErrorMessage = "Last name cannot exceed 50 characters.")]
         public string Lastname { get; set; } = string.Empty;
 

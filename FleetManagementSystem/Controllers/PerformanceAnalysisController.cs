@@ -62,7 +62,7 @@ namespace FleetManagementSystem.Controllers
             var fuelChartBytes = FuelChartGenerator.GenerateFuelBarChart(monthlyFuelData);
             var stats = GetFleetStats(monthlyAcceptedTrips);
 
-            // ✅ Insert into Performance table
+            // Insert into Performance table
             var report = new Performance_Analysis
             {
                 ReportType = "pdf",
