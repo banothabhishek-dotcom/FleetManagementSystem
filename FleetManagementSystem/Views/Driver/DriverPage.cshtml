@@ -17,7 +17,7 @@
 }
 
 <div style="margin-top:100px">
-    
+
     <div class="container mt-5">
         <div class="card shadow-lg rounded p-4 mb-4 bg-light">
             <div class="row align-items-center">
@@ -55,19 +55,19 @@
                                 <div class="col-md-6"><strong>Date:</strong> @trip.BookingTime</div>
                             </div>
                             <div class="mt-3 d-flex align-items-center justify-content-between trackRow" style="position: relative; height: 60px;">
-                                <button class="btn btn-success startBtn" data-vehicle="@trip.VehicleType">Start</button>
+                                <button class="btn btn-success startBtn" data-vehicle="@trip.VehicleType" data-tripid="@trip.TripId">Start</button>
                                 <div class="trackArea" style="flex-grow: 1; position: relative; height: 40px; margin: 0 20px;">
                                     <i class="fa-solid fa-truck truckIcon" style="position: absolute; top: 8px; left: 0; font-size: 24px; color: #131313;"></i>
                                 </div>
-                                <button class="btn btn-danger stopBtn" data-vehicle="@trip.VehicleType">End</button>
+                                <button class="btn btn-danger stopBtn" data-vehicle="@trip.VehicleType" data-tripid="@trip.TripId">End</button>
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade mt-5" id="fareModal" tabindex="-1" aria-labelledby="fareModalLabel" aria-hidden="true">
+                    <div class="modal fade mt-5" id="fareModal-@trip.TripId" tabindex="-1" aria-labelledby="fareModalLabel-@trip.TripId" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content shadow">
                                 <div class="modal-header bg-primary text-white">
-                                    <h5 class="modal-title" id="fareModalLabel">Fare Calculation</h5>
+                                    <h5 class="modal-title" id="fareModalLabel-@trip.TripId">Fare Calculation</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -75,18 +75,18 @@
                                         <input type="hidden" name="tripId" value="@trip.TripId" />
                                         <div class="mb-3">
                                             <label for="kilometers" class="form-label">Kilometers</label>
-                                            <input type="number" class="form-control" id="kilometers" required />
+                                            <input type="number" class="form-control kilometers" required />
                                         </div>
                                         <div class="mb-3">
                                             <label for="costPerKm" class="form-label">Cost per Km</label>
-                                            <input type="number" class="form-control" id="costPerKm" readonly />
+                                            <input type="number" class="form-control costPerKm" readonly />
                                         </div>
                                         <div class="mb-3">
                                             <label for="totalFare" class="form-label">Total Fare</label>
-                                            <input type="text" class="form-control" id="totalFare" readonly />
+                                            <input type="text" class="form-control totalFare" readonly />
                                         </div>
-                                        <button type="button" class="btn btn-primary w-100" id="calculateFareBtn">Calculate</button>
-                                        <div id="paymentSection" class="mt-4" style="display: none;">
+                                        <button type="button" class="btn btn-primary w-100 calculateFareBtn" >Calculate</button>
+                                        <div class="paymentSection mt-4" style="display: none;">
                                             <h6>Choose Payment Method</h6>
                                             <div class="mb-3">
                                                 <select class="form-select" id="paymentMethod">
@@ -97,7 +97,7 @@
                                                     <option value="cash">Cash</option>
                                                 </select>
                                             </div>
-                                            <button type="submit" class="btn btn-success w-100" id="confirmPaymentBtn" asp-controller="Driver" asp-action="CompleteTrip" >Confirm Payment</button>
+                                            <button type="submit" class="btn btn-success w-100" id="confirmPaymentBtn" asp-controller="Driver" asp-action="CompleteTrip">Confirm Payment</button>
                                         </div>
                                     </form>
                                 </div>
@@ -113,115 +113,85 @@
         </div>
     </div>
 
-    <!-- Fare Calculation Modal -->
-    @* <div class="modal fade mt-5" id="fareModal" tabindex="-1" aria-labelledby="fareModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content shadow">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="fareModalLabel">Fare Calculation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="post" asp-controller="Driver" asp-action="CompleteTrip">
-                        <input type="hidden" name="tripId" value="@trip.TripId" />
-                        <div class="mb-3">
-                            <label for="kilometers" class="form-label">Kilometers</label>
-                            <input type="number" class="form-control" id="kilometers" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="costPerKm" class="form-label">Cost per Km</label>
-                            <input type="number" class="form-control" id="costPerKm" readonly />
-                        </div>
-                        <div class="mb-3">
-                            <label for="totalFare" class="form-label">Total Fare</label>
-                            <input type="text" class="form-control" id="totalFare" readonly />
-                        </div>
-                        <button type="button" class="btn btn-primary w-100" id="calculateFareBtn">Calculate</button>
-                        <div id="paymentSection" class="mt-4" style="display: none;">
-                            <h6>Choose Payment Method</h6>
-                            <div class="mb-3">
-                                <select class="form-select" id="paymentMethod">
-                                    <option value="" disabled selected>Select a method</option>
-                                    <option value="credit">Credit Card</option>
-                                    <option value="debit">Debit Card</option>
-                                    <option value="upi">UPI</option>
-                                    <option value="cash">Cash</option>
-                                </select>
-                            </div>
-                            <button type="button" class="btn btn-success w-100" id="confirmPaymentBtn">Confirm Payment</button>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> *@
-    
 
 </div>
 
 @section Scripts {
-<script>
-    $(document).ready(function () {
-        let costPerKm = 0;
-       
-        $(".startBtn").click(function () {
-            const vehicleType = $(this).data("vehicle")?.toString().trim().toLowerCase();
+    <script>
+        $(document).ready(function () {
+            
 
-            if (vehicleType === "4wheeler") {
-                costPerKm = 15;
-            } else if (vehicleType === "6wheeler") {
-                costPerKm = 30;
-            } else if (vehicleType === "10wheeler") {
-                costPerKm = 50;
-            }
+            $(".startBtn").click(function () {
+                const vehicleType = $(this).data("vehicle")?.toString().trim().toLowerCase();
+                let costPerKm = 0;
+                if (vehicleType === "4wheeler") {
+                    costPerKm = 15;
+                } else if (vehicleType === "6wheeler") {
+                    costPerKm = 30;
+                } else if (vehicleType === "10wheeler") {
+                    costPerKm = 50;
+                }
+                 $(this).data("cost", costPerKm); // store for later
+        const tripCard = $(this).closest(".card");
+            const tripId = tripCard.find("input[name='tripId']").val();
+            const modal = $(`#fareModal-${tripId}`);
 
-            $("#costPerKm").val(costPerKm).prop("readonly", true);
+            // Set costPerKm inside that modal
+            modal.find(".costPerKm").val(costPerKm).prop("readonly", true);
+                const track = $(this).closest(".trackRow");
+                const truck = track.find(".truckIcon");
+                const stopBtn = track.find(".stopBtn");
 
-            const track = $(this).closest(".trackRow");
-            const truck = track.find(".truckIcon");
-            const stopBtn = track.find(".stopBtn");
+                const startLeft = $(this).outerWidth(true);
+                const endLeft = track.width() - stopBtn.outerWidth(true) - truck.outerWidth(true) - 90;
 
-            const startLeft = $(this).outerWidth(true);
-            const endLeft = track.width() - stopBtn.outerWidth(true) - truck.outerWidth(true) - 90;
+                truck.css("left", startLeft).stop().animate({ left: endLeft }, 10000);
+            });
 
-            truck.css("left", startLeft).stop().animate({ left: endLeft }, 10000);
-        });
-
-        $(".stopBtn").click(function () {
+                         $(".stopBtn").click(function () {
             const track = $(this).closest(".trackRow");
             const truck = track.find(".truckIcon");
             const stopBtn = $(this);
-
             const endLeft = track.width() - stopBtn.outerWidth(true) - truck.outerWidth(true) - 90;
             truck.stop().css("left", endLeft);
 
-            new bootstrap.Modal(document.getElementById("fareModal")).show();
+            const tripId = $(this).data("tripid");
+            const cost = track.find(".startBtn").data("cost");
+
+            const modalElement = document.getElementById(`fareModal-${tripId}`);
+            if (modalElement) {
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+
+                $(`#fareModal-${tripId}`).find(".costPerKm").val(cost).prop("readonly", true);
+            }
         });
 
-        $("#calculateFareBtn").click(function () {
-            const km = parseFloat($("#kilometers").val());
-            const cost = parseFloat($("#costPerKm").val());
-            if (!isNaN(km) && !isNaN(cost)) {
-                $("#totalFare").val(`₹${(km * cost).toFixed(2)}`);
-                    $("#paymentSection").slideDown();
+                    $(document).on("click", ".calculateFareBtn", function () {
+            const form = $(this).closest("form");
+            const km = parseFloat(form.find(".kilometers").val());
+            const cost = parseFloat(form.find(".costPerKm").val());
 
+            if (!isNaN(km) && !isNaN(cost)) {
+                form.find(".totalFare").val(`₹${(km * cost).toFixed(2)}`);
+                form.find(".paymentSection").slideDown();
             } else {
                 alert("Please enter valid numbers.");
             }
-
         });
-    });
+
+
         
-        setTimeout(() => {
-            const alert = document.querySelector('.alert1');
-            if (alert) {
-                alert.classList.remove('show'); // fade out
-                setTimeout(() => {
-                    alert.remove(); // remove from DOM after fade
-                }, 500); // wait for fade-out animation to finish
-            }
-        }, 4000);
-   
-</script>
+
+            setTimeout(() => {
+                const alert = document.querySelector('.alert1');
+                if (alert) {
+                    alert.classList.remove('show'); // fade out
+                    setTimeout(() => {
+                        alert.remove(); // remove from DOM after fade
+                    }, 500); // wait for fade-out animation to finish
+                }
+            }, 4000);
+            });
+    </script>
 }
