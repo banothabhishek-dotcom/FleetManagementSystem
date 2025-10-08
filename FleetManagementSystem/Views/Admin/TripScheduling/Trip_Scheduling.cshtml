@@ -105,10 +105,20 @@
                                         _ => 0
                                     };
 
-                                    var filteredDrivers = (ViewBag.AvailableVehicles as List<FleetManagementSystem.Models.Vehicle_Management>)
-                                    .Where(v => v.Capacity == requiredCapacity)
+                                    var allVehicles = ViewBag.AvailableVehicles as List<FleetManagementSystem.Models.Vehicle_Management>;
+                                    var allTrips = ViewBag.AllTrips as List<FleetManagementSystem.Models.Trip_Scheduling>;
+
+                                    var busyDriversOnSameDate = allTrips
+                                    .Where(t => t.BookingTime.Date == entry.BookingTime.Date && !string.IsNullOrEmpty(t.AssignedDriver))
+                                    .Select(t => t.AssignedDriver)
+                                    .ToHashSet();
+
+                                    var filteredDrivers = allVehicles
+                                    .Where(v => v.Capacity == requiredCapacity && !busyDriversOnSameDate.Contains(v.DriverName))
                                     .Select(v => v.DriverName)
+                                    .Distinct()
                                     .ToList();
+
 
                                     foreach (var driver in filteredDrivers)
                                     {
@@ -133,37 +143,46 @@
 
     <!-- 💡 jQuery Logic -->
     <script>
-        $('.view-more').on('click', function () {
-          const cardBody = $(this).closest('.card-body');
-          const details = cardBody.find('.details');
-
-          details.slideToggle();
-          $(this).text(function (_, text) {
-            return text === 'View More' ? 'View Less' : 'View More';
-          });
-        });
-
-        $('.driver-select').on('change', function () {
-          const card = $(this).closest('.booking-card');
-         // const vehicle = card.find('.vehicle-select').val();
-          const driver = card.find('.driver-select').val();
-          const acceptBtn = card.find('.accept');
-          acceptBtn.prop('disabled', !( driver));
-        });
-
-              $('.accept').on('click', function () {
+     
+            $('.driver-select').on('change', function () {
             const card = $(this).closest('.booking-card');
-            const name = card.find('.card-title').text();
             const driver = card.find('.driver-select').val();
-            const acceptedAt = new Date().toLocaleString();
+            const acceptBtn = card.find('.accept');
+            acceptBtn.prop('disabled', !driver);
+        });
 
-            alert(`Accepted booking for ${name} driven by ${driver} at ${acceptedAt}`);
-            card.slideUp(400, function () {
-                $(this).remove();
+                       $('.accept').on('click', function (e) {
+            e.preventDefault(); // Prevent form submission
+
+            const card = $(this).closest('.booking-card');
+            const tripId = card.find('input[name="tripId"]').val();
+            const vehicleType = card.find('input[name="vehicleType"]').val();
+            const driverName = card.find('.driver-select').val();
+
+            if (!driverName) return;
+
+            $.ajax({
+                type: 'POST',
+                url: '/TripScheduling/AssignDriver',
+                data: {
+                    tripId: tripId,
+                    driverName: driverName,
+                    vehicleType: vehicleType
+                },
+                success: function () {
+                    card.slideUp(400, function () {
+                        $(this).remove();
+                    });
+                },
+                error: function () {
+                    alert("Failed to assign driver. Please try again.");
+                }
             });
         });
 
 
+
+        // Decline button: send POST and remove card
         $('.decline').on('click', function () {
             const card = $(this).closest('.booking-card');
             const tripId = $(this).data('trip-id');
@@ -174,7 +193,6 @@
                 });
             });
         });
-
     </script>
 
     <!-- Bootstrap JS Bundle -->

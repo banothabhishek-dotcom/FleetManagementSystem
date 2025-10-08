@@ -18,17 +18,13 @@ namespace FleetManagementSystem.Controllers
             if (string.IsNullOrWhiteSpace(vehicleType))
                 return 0;
 
-            // Normalize: remove hyphens, trim spaces, convert to lowercase
             var normalized = vehicleType.Replace("-", "").Trim().ToLower();
-
-            // Extract numeric part (e.g., "6wheeler" → 6)
             var match = System.Text.RegularExpressions.Regex.Match(normalized, @"(\d+)");
             if (!match.Success)
                 return 0;
 
             int wheelCount = int.Parse(match.Value);
 
-            // Map wheel count to capacity
             return wheelCount switch
             {
                 4 => 5,
@@ -37,6 +33,7 @@ namespace FleetManagementSystem.Controllers
                 _ => 0
             };
         }
+
         [HttpPost]
         public IActionResult Logout()
         {
@@ -51,20 +48,27 @@ namespace FleetManagementSystem.Controllers
         public IActionResult Trip_Scheduling()
         {
             ViewBag.HideFooter = true;
-            //List<Models.Trip_Scheduling> objTripEntries = _db.Trips.ToList();
 
-            List<Models.Trip_Scheduling> objTripEntries = _db.Trips
-       .Where(t => string.IsNullOrEmpty(t.AssignedDriver))
-       .ToList();
+            // Get trips that still need driver assignment
+            var objTripEntries = _db.Trips
+                .Where(t => string.IsNullOrEmpty(t.AssignedDriver))
+                .ToList();
 
-            var availableVehicles = _db.Vehicles
-                .Where(v => v.Status == "Available")
+            
+            var availableVehicles = _db.Vehicles.ToList(); // Include all vehicles
+
+
+            // Get all trips for conflict checking
+            var allTrips = _db.Trips
+                .Where(t => !string.IsNullOrEmpty(t.AssignedDriver))
                 .ToList();
 
             ViewBag.AvailableVehicles = availableVehicles;
+            ViewBag.AllTrips = allTrips;
 
             return View("~/Views/Admin/TripScheduling/Trip_Scheduling.cshtml", objTripEntries);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddTrip(Trip_Scheduling obj)
@@ -120,36 +124,36 @@ namespace FleetManagementSystem.Controllers
             int requiredCapacity = GetRequiredCapacity(vehicleType);
 
             if (requiredCapacity == 0)
-            {
-                TempData["Error"] = "Unsupported vehicle type.";
-                return RedirectToAction("Trip_Scheduling", new { vehicleType });
-            }
+                return BadRequest();
 
-            var driver = _db.Vehicles.FirstOrDefault(v =>
+            var trip = _db.Trips.FirstOrDefault(t => t.TripId == tripId);
+            if (trip == null)
+                return NotFound();
+
+            bool isDriverBusy = _db.Trips.Any(t =>
+                t.BookingTime.Date == trip.BookingTime.Date &&
+                t.AssignedDriver == driverName &&
+                t.TripId != tripId);
+
+            if (isDriverBusy)
+                return Conflict();
+
+            var driverVehicle = _db.Vehicles.FirstOrDefault(v =>
                 v.DriverName == driverName &&
-                v.Status == "Available" &&
                 v.Capacity == requiredCapacity);
 
-            if (driver != null)
-            {
-                driver.Status = "Unavailable";
+            if (driverVehicle == null)
+                return NotFound();
 
-                var trip = _db.Trips.FirstOrDefault(t => t.TripId == tripId);
-                if (trip != null)
-                {
-                    trip.AssignedDriver = driverName;
-                    trip.VehicleId = driver.VehicleId;
-                }
+            trip.AssignedDriver = driverName;
+            trip.VehicleId = driverVehicle.VehicleId;
 
-                _db.SaveChanges();
-            }
-            else
-            {
-                TempData["Error"] = "No available driver found with matching capacity.";
-            }
+            _db.SaveChanges();
 
-            return RedirectToAction("Trip_Scheduling", new { vehicleType });
+            return Ok(); // ✅ AJAX expects this
         }
+
+
         [HttpPost]
         public IActionResult DeclineTrip(int tripId)
         {
@@ -173,26 +177,7 @@ namespace FleetManagementSystem.Controllers
             return View("~/Views/Admin/TripScheduling/Trip_History.cshtml", trips);
         }
 
-        public async Task<IActionResult> EditTrip(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            var TripFromDb = await _db.Trips.FindAsync(id);
-            if (TripFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(TripFromDb);
-        }
-        [HttpPost]
-        public async Task<IActionResult> EditTrip(Trip_Scheduling obj)
-        {
-            _db.Update(obj);
-            await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+   
         public int GetAcceptedTripCountForMonth(int month)
         {
             var currentYear = DateTime.Now.Year;

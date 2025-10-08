@@ -8,6 +8,14 @@
 <link rel="stylesheet" href="/css/DriverPage.css" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+@if (TempData["RideCompleted"] != null && (bool)TempData["RideCompleted"])
+{
+    <div style="margin-top:55px" class="alert alert1 alert-success alert-dismissible fade show " role="alert">
+        <strong>✅ Payment successfull Ride Completed !</strong> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <div style="margin-top:100px">
     
     <div class="container mt-5">
@@ -39,9 +47,12 @@
                                 <div class="col-md-6"><strong>Name:</strong> @(trip.Firstname + " " + trip.Lastname)</div>
                                 <div class="col-md-6"><strong>Phone:</strong> @trip.PhoneNumber</div>
                             </div>
-                            <div class="row">
+                            <div class="row mb-2">
                                 <div class="col-md-6"><strong>Pickup:</strong> @trip.PickupPoint</div>
                                 <div class="col-md-6"><strong>Drop:</strong> @trip.DropPoint</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6"><strong>Date:</strong> @trip.BookingTime</div>
                             </div>
                             <div class="mt-3 d-flex align-items-center justify-content-between trackRow" style="position: relative; height: 60px;">
                                 <button class="btn btn-success startBtn" data-vehicle="@trip.VehicleType">Start</button>
@@ -201,5 +212,16 @@
 
         });
     });
+        
+        setTimeout(() => {
+            const alert = document.querySelector('.alert1');
+            if (alert) {
+                alert.classList.remove('show'); // fade out
+                setTimeout(() => {
+                    alert.remove(); // remove from DOM after fade
+                }, 500); // wait for fade-out animation to finish
+            }
+        }, 4000);
+   
 </script>
 }
