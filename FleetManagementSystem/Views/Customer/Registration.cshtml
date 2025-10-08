@@ -18,12 +18,12 @@
             <div class="row">
                 <div class="col-6 mb-3">
                     <label asp-for="FirstName" class="form-label">First Name</label>
-                    <input asp-for="FirstName" id="firstname" class="form-control" placeholder="Enter your first name">
+                    <input asp-for="FirstName" id="firstname" class="form-control" placeholder="Enter your first name" pattern="[A-Za-z]+" title="Only letters allowed">
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
                 <div class="col-6 mb-3">
                     <label asp-for="LastName" class="form-label">Last Name</label>
-                    <input asp-for="LastName" class="form-control" placeholder="Enter your last name" />
+                    <input asp-for="LastName" class="form-control" placeholder="Enter your last name" pattern="[A-Za-z]+" title="Only letters allowed" />
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
             </div>

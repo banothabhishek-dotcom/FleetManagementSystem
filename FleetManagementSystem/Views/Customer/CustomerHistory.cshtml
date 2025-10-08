@@ -22,15 +22,32 @@
 
 
             <div class="card-body py-3">
-                <div class="pickup my-3">
-                    <h5 class="card-title"><i class="fa-solid fa-circle"></i> Pickup Point</h5>
-                    <p class="card-text">@trip.PickupPoint </p>
+                <div class="pickup my-3 d-flex">
+                    <p class="card-text me-3">
+                        <strong>Name:</strong> @(trip.Firstname + " " + trip.Lastname)
+                    </p>
+                    <p class="card-text" style="margin-left:38%">
+                        <strong>Vehicle Type:</strong> @trip.VehicleType
+                    </p>
                 </div>
 
-                <div class="drop my-4">
-                    <h5 class="card-title"><i class="fa-solid fa-location-dot"></i> Drop Point</h5>
-                    <p class="card-text">@trip.DropPoint </p>
+
+                <div class="row my-3">
+                    <div class="col-md-6 pickup">
+                        <h5 class="card-title">
+                            <i class="fa-solid fa-circle"></i> Pickup Point
+                        </h5>
+                        <p class="card-text">@trip.PickupPoint</p>
+                    </div>
+
+                    <div class="col-md-6 drop">
+                        <h5 class="card-title">
+                            <i class="fa-solid fa-location-dot"></i> Drop Point
+                        </h5>
+                        <p class="card-text">@trip.DropPoint</p>
+                    </div>
                 </div>
+
             </div>
         </div>
     }

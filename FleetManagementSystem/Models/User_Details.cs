@@ -10,10 +10,12 @@ namespace FleetManagementSystem.Models
         public int UserId { get; set; }
 
         [Required(ErrorMessage = "First name is required")]
+        [RegularExpression("^[A-Za-z]+$", ErrorMessage = "First name must contain only letters.")]
         [MaxLength(50, ErrorMessage = "First name can't exceed 50 characters")]
         public string FirstName { get; set; }=string.Empty;
 
         [Required(ErrorMessage = "Last name is required")]
+        [RegularExpression("^[A-Za-z]+$", ErrorMessage = "First name must contain only letters.")]
         [MaxLength(50, ErrorMessage = "Last name can't exceed 50 characters")]
         public string LastName { get; set; } = string.Empty;
 

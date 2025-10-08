@@ -7,7 +7,7 @@
 
 @if (TempData["FleetBooked"] != null && (bool)TempData["FleetBooked"])
 {
-    <div class="alert alert-success alert-dismissible fade show "  role="alert">
+    <div class="alert alert-success alert-dismissible fade show " style="margin-top:55px" role="alert">
         <strong>✅ Thank you for booking!</strong> @TempData["SuccessMessage"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -78,12 +78,12 @@
                     <div class="row">
                         <div class="col-6 mb-3">
                             <label asp-for="Firstname" class="form-label">First Name</label>
-                            <input asp-for="Firstname" type="text" id="firstname" class="form-control" placeholder="Enter your first name">
+                            <input asp-for="Firstname" type="text" id="firstname" class="form-control" placeholder="Enter your first name" pattern="[A-Za-z]+" title="Only letters allowed">
                             <span asp-validation-for="Firstname" class="text-danger"></span>
                         </div>
                         <div class="col-6 mb-3">
                             <label asp-for="Lastname" class="form-label">Last Name</label>
-                            <input asp-for="Lastname" type="text" id="lastname" class="form-control" placeholder="Enter your lastname">
+                            <input asp-for="Lastname" type="text" id="lastname" class="form-control" placeholder="Enter your lastname" pattern="[A-Za-z]+" title="Only letters allowed">
                             <span asp-validation-for="Lastname" class="text-danger"></span>
                         </div>
                     </div>
