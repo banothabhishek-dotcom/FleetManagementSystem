@@ -1,7 +1,6 @@
 ﻿using FleetManagementSystem.Data;
 using FleetManagementSystem.Helpers;
 using FleetManagementSystem.Models;
-using iText.Commons.Actions.Contexts;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
@@ -21,16 +20,14 @@ namespace FleetManagementSystem.Controllers
         [HttpPost]
         public IActionResult Logout()
         {
-            // Clear all session data
             HttpContext.Session.Clear();
-
-            // Optionally, redirect to login or home page
-            return RedirectToAction("Login","Customer");
+            return RedirectToAction("Login", "Customer");
         }
-        public IActionResult Performance_Analysis()
 
+        public IActionResult Performance_Analysis()
         {
             ViewBag.HideFooter = true;
+
             var monthlyAcceptedTrips = GetMonthlyAcceptedTrips();
             var monthlyFuelData = GetMonthlyFuelData();
             var acceptedTripsChartBytes = ChartGenerator.GenerateAcceptedTripsChart(monthlyAcceptedTrips);
@@ -52,47 +49,50 @@ namespace FleetManagementSystem.Controllers
 
             return View("~/Views/Admin/PerformanceAnalysis/Performance_Analysis.cshtml", model);
         }
-
+       
         [HttpGet]
         public async Task<IActionResult> DownloadPerformancePdf()
         {
+            // 1. Get data
             var monthlyAcceptedTrips = GetMonthlyAcceptedTrips();
             var monthlyFuelData = GetMonthlyFuelData();
             var acceptedTripsChartBytes = ChartGenerator.GenerateAcceptedTripsChart(monthlyAcceptedTrips);
             var fuelChartBytes = FuelChartGenerator.GenerateFuelBarChart(monthlyFuelData);
             var stats = GetFleetStats(monthlyAcceptedTrips);
 
-            // Insert into Performance table
+            // 2. Save report details in DB
             var report = new Performance_Analysis
             {
                 ReportType = "pdf",
                 Data = $"Total trips: {stats.TotalTrips}\n" +
-                $" Scheduled maintenance: {stats.ScheduledMaintenance}\n" +
-                $" Completed maintenance: {stats.CompletedMaintenance}\n" +
-                $" Available vehicles: {stats.AvailableVehicles}\n " +
-                $"Unavailable vehicles: {stats.UnavailableVehicles}",
+                       $"Scheduled maintenance: {stats.ScheduledMaintenance}\n" +
+                       $"Completed maintenance: {stats.CompletedMaintenance}\n" +
+                       $"Available vehicles: {stats.AvailableVehicles}\n" +
+                       $"Unavailable vehicles: {stats.UnavailableVehicles}",
                 GeneratedOn = DateTime.UtcNow
             };
 
             _db.PerformanceReports.Add(report);
             await _db.SaveChangesAsync();
 
-            // ✅ Generate PDF
+            // 3. Generate PDF
             using (MemoryStream ms = new MemoryStream())
             {
                 Document doc = new Document(PageSize.A4);
                 PdfWriter.GetInstance(doc, ms);
                 doc.Open();
 
+                // Title
                 doc.Add(new Paragraph("Fleet Performance Summary"));
-                doc.Add(new Paragraph($"Total Trips This Year: {stats.TotalTrips}"));
-                doc.Add(new Paragraph($"Maintenance Records - Scheduled: {stats.ScheduledMaintenance}, Completed: {stats.CompletedMaintenance}"));
-                doc.Add(new Paragraph($"Vehicle Status - Available: {stats.AvailableVehicles}, Unavailable: {stats.UnavailableVehicles}"));
+                doc.Add(new Paragraph($"Generated On: {DateTime.Now}"));
+                doc.Add(new Paragraph($"Total Trips: {stats.TotalTrips}"));
+                doc.Add(new Paragraph($"Maintenance - Scheduled: {stats.ScheduledMaintenance}, Completed: {stats.CompletedMaintenance}"));
+                doc.Add(new Paragraph($"Vehicles - Available: {stats.AvailableVehicles}, Unavailable: {stats.UnavailableVehicles}"));
                 doc.Add(new Paragraph(" "));
 
+                // Charts
                 iTextSharp.text.Image img1 = iTextSharp.text.Image.GetInstance(acceptedTripsChartBytes);
                 iTextSharp.text.Image img2 = iTextSharp.text.Image.GetInstance(fuelChartBytes);
-
                 img1.ScaleToFit(500f, 300f);
                 img2.ScaleToFit(500f, 300f);
 
@@ -102,28 +102,13 @@ namespace FleetManagementSystem.Controllers
                 doc.Add(img2);
 
                 doc.Close();
-                return File(ms.ToArray(), "application/pdf", "PerformanceGraphs.pdf");
+
+                // 4. Return PDF
+                return File(ms.ToArray(), "application/pdf", "PerformanceReport.pdf");
             }
-        }
-        [HttpPost]
-        private async Task<IActionResult> DownloadReport()
-        {
-            var report = new Performance_Analysis
-            {
-                ReportType = "pdf",
-                Data = "some info", // Replace with actual report summary or JSON
-                GeneratedOn = DateTime.UtcNow
-            };
-
-            _db.PerformanceReports.Add(report);
-            await _db.SaveChangesAsync();
-
-            // Proceed with file download logic here
-            return Ok("Report saved and download initiated.");
         }
 
         // 🔧 Helper Methods
-
         private Dictionary<string, int> GetMonthlyAcceptedTrips()
         {
             var tripController = new TripSchedulingController(_db);
