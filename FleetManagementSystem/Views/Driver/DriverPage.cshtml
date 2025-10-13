@@ -119,9 +119,10 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            
 
+            // When the Start button is clicked
             $(".startBtn").click(function () {
+                // Get the vehicle type from the button's data attribute
                 const vehicleType = $(this).data("vehicle")?.toString().trim().toLowerCase();
                 let costPerKm = 0;
                 if (vehicleType === "4wheeler") {
@@ -132,27 +133,39 @@
                     costPerKm = 50;
                 }
                  $(this).data("cost", costPerKm); // store for later
-        const tripCard = $(this).closest(".card");
-            const tripId = tripCard.find("input[name='tripId']").val();
-            const modal = $(`#fareModal-${tripId}`);
 
-            // Set costPerKm inside that modal
+
+        // Find the trip card and get the trip ID
+            const tripCard = $(this).closest(".card");
+            const tripId = tripCard.find("input[name='tripId']").val();
+
+            // Find the modal for this trip and set the cost per km
+            const modal = $(`#fareModal-${tripId}`);
             modal.find(".costPerKm").val(costPerKm).prop("readonly", true);
+
+                // Find the track row and truck icon
                 const track = $(this).closest(".trackRow");
                 const truck = track.find(".truckIcon");
                 const stopBtn = track.find(".stopBtn");
 
+                // Calculate the starting and ending position for the truck animation
                 const startLeft = $(this).outerWidth(true);
                 const endLeft = track.width() - stopBtn.outerWidth(true) - truck.outerWidth(true) - 90;
 
-                truck.css("left", startLeft).stop().animate({ left: endLeft }, 10000);
+                 // Move the truck from start to end over a long duration (1000000ms)
+                truck.css("left", startLeft).stop().animate({ left: endLeft }, 1000000);
             });
 
+
+        // When the Stop button is clicked
                          $(".stopBtn").click(function () {
             const track = $(this).closest(".trackRow");
             const truck = track.find(".truckIcon");
             const stopBtn = $(this);
+
+             // Calculate the final position for the truck
             const endLeft = track.width() - stopBtn.outerWidth(true) - truck.outerWidth(true) - 90;
+             // Stop the truck animation and place it at the end
             truck.stop().css("left", endLeft);
 
             const tripId = $(this).data("tripid");
@@ -167,8 +180,12 @@
             }
         });
 
+
+        // When the Calculate Fare button is clicked
                     $(document).on("click", ".calculateFareBtn", function () {
+                        // Find the form that contains the button
             const form = $(this).closest("form");
+            // Get the entered kilometers and cost per km
             const km = parseFloat(form.find(".kilometers").val());
             const cost = parseFloat(form.find(".costPerKm").val());
 

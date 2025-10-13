@@ -40,12 +40,16 @@ namespace FleetManagementSystem.Controllers
             ViewBag.HideFooter = true;
             int pageSize = 10;
 
+            // Query fuel records and include related vehicle data 
             var fuelQuery = _db.FuelRecords
                                .Include(f => f.Vehicle);
 
             int totalRecords = fuelQuery.Count();
+
+            // Calculate total number of pages needed
             int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
 
+            // Fetch only the records for the current page, sorted by date (latest first)
             var records = fuelQuery
                           .OrderByDescending(f => f.Date)
                           .Skip((page - 1) * pageSize)
@@ -69,6 +73,8 @@ namespace FleetManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFuelEntries(Fuel_Management obj, string RegistrationNumber)
         {
+            // Look up the vehicle by registration number, ignoring deleted ones 
+            //in vehicle table if isdeleted is 1 is nothing but deleted that record
             var vehicle = await _db.Vehicles
                                    .FirstOrDefaultAsync(v => v.RegistrationNumber == RegistrationNumber && !v.IsDeleted);
 
@@ -78,6 +84,7 @@ namespace FleetManagementSystem.Controllers
                 return View("~/Views/Admin/FuelManagement/AddFuelEntries.cshtml", obj);
             }
 
+            // Assign the found vehicle's ID to the fuel entry
             obj.VehicleId = vehicle.VehicleId;
 
             await _db.FuelRecords.AddAsync(obj);
@@ -98,20 +105,24 @@ namespace FleetManagementSystem.Controllers
                 query = query.Where(f => f.Vehicle.RegistrationNumber == registrationNumber);
             }
 
+            // Count total matching records for pagination
             int totalRecords = await query.CountAsync();
+
+            // Calculate total number of pages
             int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
 
+            // Fetch only the records for the current page, sorted by date (latest first)
             var records = await query
                 .OrderByDescending(f => f.Date)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            ViewBag.HasRecords = records.Any();
-            ViewBag.SearchPerformed = true;
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
-            ViewBag.SearchQuery = registrationNumber;
+            ViewBag.HasRecords = records.Any(); // True if any records were found
+            ViewBag.SearchPerformed = true;// Indicates a search was done
+            ViewBag.CurrentPage = page;// Current page number
+            ViewBag.TotalPages = totalPages;// Total number of pages
+            ViewBag.SearchQuery = registrationNumber;// Preserve search input
 
             return View("~/Views/Admin/FuelManagement/Fuel_Management.cshtml", records);
         }

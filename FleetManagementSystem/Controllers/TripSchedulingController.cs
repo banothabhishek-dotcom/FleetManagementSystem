@@ -103,19 +103,15 @@ namespace FleetManagementSystem.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var model = new Trip_Scheduling
-            {
-                Firstname = user.FirstName,
-                Lastname = user.LastName,
-                PhoneNumber = user.PhoneNumber
-            };
+            //var model = new Trip_Scheduling
+            //{
+            //    Firstname = user.FirstName,
+            //    Lastname = user.LastName,
+            //    PhoneNumber = user.PhoneNumber
+            //};
 
-            return View("~/Views/Customer/CustomerPage.cshtml", model);
+            return View("~/Views/Customer/CustomerPage.cshtml");
         }
-
-
-
-
 
 
         [HttpPost]
@@ -150,7 +146,7 @@ namespace FleetManagementSystem.Controllers
 
             _db.SaveChanges();
 
-            return Ok(); // ✅ AJAX expects this
+            return Ok(); 
         }
 
 
@@ -178,6 +174,8 @@ namespace FleetManagementSystem.Controllers
         }
 
    
+
+
         public int GetAcceptedTripCountForMonth(int month)
         {
             var currentYear = DateTime.Now.Year;

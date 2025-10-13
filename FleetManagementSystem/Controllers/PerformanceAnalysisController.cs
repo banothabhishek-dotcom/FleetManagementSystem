@@ -27,18 +27,22 @@ namespace FleetManagementSystem.Controllers
         public IActionResult Performance_Analysis()
         {
             ViewBag.HideFooter = true;
-
+            // Retrieve monthly accepted trips and fuel data
             var monthlyAcceptedTrips = GetMonthlyAcceptedTrips();
             var monthlyFuelData = GetMonthlyFuelData();
+            // Generate chart images as byte arrays
             var acceptedTripsChartBytes = ChartGenerator.GenerateAcceptedTripsChart(monthlyAcceptedTrips);
             var fuelChartBytes = FuelChartGenerator.GenerateFuelBarChart(monthlyFuelData);
+            // Calculate fleet statistics based on trip data
             var stats = GetFleetStats(monthlyAcceptedTrips);
 
+            // Create model with total trips
             var model = new Performance_Analysis
             {
                 TotalTrips = stats.TotalTrips
             };
 
+            // Pass chart images and stats to the view using ViewBag
             ViewBag.ChartImage = Convert.ToBase64String(acceptedTripsChartBytes);
             ViewBag.FuelChartImage = Convert.ToBase64String(fuelChartBytes);
             ViewBag.MonthlyData = monthlyAcceptedTrips;
@@ -49,7 +53,8 @@ namespace FleetManagementSystem.Controllers
 
             return View("~/Views/Admin/PerformanceAnalysis/Performance_Analysis.cshtml", model);
         }
-       
+
+        // HTTP GET action to generate and download a performance PDF report
         [HttpGet]
         public async Task<IActionResult> DownloadPerformancePdf()
         {
@@ -116,6 +121,7 @@ namespace FleetManagementSystem.Controllers
 
             for (int month = 1; month <= 12; month++)
             {
+                // Get accepted trip count for the month
                 int acceptedCount = tripController.GetAcceptedTripCountForMonth(month);
                 string monthName = new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM");
                 monthlyAcceptedTrips.Add(monthName, acceptedCount);
@@ -130,14 +136,18 @@ namespace FleetManagementSystem.Controllers
 
             for (int month = 1; month <= 12; month++)
             {
+                // Filter fuel records by month and current year
                 var monthFuelRecords = _db.FuelRecords
                     .Where(f => f.Date.Month == month && f.Date.Year == DateTime.Now.Year)
                     .ToList();
 
+                // Calculate averages if records exist
                 decimal averageQuantity = monthFuelRecords.Any() ? monthFuelRecords.Average(f => f.FuelQuantity) : 0;
                 decimal averageCost = monthFuelRecords.Any() ? monthFuelRecords.Average(f => f.Cost) : 0;
-
+                // Convert month number to name
                 string monthName = new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM");
+
+                // Store in dictionary
                 monthlyFuelData.Add(monthName, (averageQuantity, averageCost));
             }
 

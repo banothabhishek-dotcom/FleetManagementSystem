@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 public class CustomerController : Controller
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly string BaseUrl = "http://localhost:5259/api/Account";
+    private readonly string BaseUrl = "https://localhost:7114/api/Account";
     private readonly ApplicationDbContext _db;
     public CustomerController(ApplicationDbContext db, IHttpClientFactory httpClientFactory)
     {
@@ -37,7 +37,14 @@ public class CustomerController : Controller
     [HttpPost]
     public async Task<IActionResult> Registration(RegisterDto dto)
     {
+        if (!ModelState.IsValid)
+        {
+            ViewBag.HideFooter = true;
+            return View(dto); // Return the view with validation errors
+        }
+        //creating http instance
         var client = _httpClientFactory.CreateClient();
+        //calls to the outside API
         var response = await client.PostAsJsonAsync($"{BaseUrl}/register", dto);
 
         if (!response.IsSuccessStatusCode)
@@ -80,7 +87,7 @@ public class CustomerController : Controller
         HttpContext.Session.SetString("JwtToken", result.Token);
         HttpContext.Session.SetString("UserEmail", dto.Email);
 
-        // 🔍 Fetch user from database to get role
+        // Fetch user from database to get role
         var user = await _db.UserDetails.FirstOrDefaultAsync(u => u.Email == dto.Email);
         if (user == null)
         {
@@ -93,7 +100,7 @@ public class CustomerController : Controller
         HttpContext.Session.SetString("UserRole", user.Role);
         HttpContext.Session.SetString("DriverName", user.FirstName + " " + user.LastName);
 
-        // 🔀 Redirect based on role
+        //  Redirect based on role
         if (user.Role == "Customer")
         {
             return RedirectToAction("CustomerPage","Customer");
@@ -150,7 +157,7 @@ public class CustomerController : Controller
 
        
 
-        ViewBag.HideFooter = true; // ✅ You can still set this here
+        ViewBag.HideFooter = true; 
 
         return View("~/Views/Customer/CustomerHistory.cshtml", allTrips);
     }

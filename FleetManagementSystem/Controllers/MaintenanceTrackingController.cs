@@ -42,7 +42,7 @@ namespace FleetManagementSystem.Controllers
 				ModelState.AddModelError("RegistrationNumber", $"Vehicle with registration number '{RegistrationNumber}' not found.");
 
 				// Re-fetch maintenance records for the view
-				int pageSize = 5;
+				int pageSize = 10;
 				int page = 1;
 				var records = await _db.MaintenanceRecords
 					.Include(m => m.Vehicle)

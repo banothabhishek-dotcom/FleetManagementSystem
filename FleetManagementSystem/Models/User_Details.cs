@@ -21,7 +21,8 @@ namespace FleetManagementSystem.Models
 
         [Required(ErrorMessage = "Phone number is required")]
         [Phone(ErrorMessage = "Invalid phone number format")]
-        [MaxLength(15, ErrorMessage = "Phone number can't exceed 15 characters")]
+        [RegularExpression(@"^[6-9]\d{9}$", ErrorMessage = "Please enter a valid 10-digit mobile number.")]
+        [MaxLength(10, ErrorMessage = "Phone number can't exceed 10 digits")]
         public string PhoneNumber { get; set; }=string.Empty;
 
         [Required(ErrorMessage = "Email is required")]

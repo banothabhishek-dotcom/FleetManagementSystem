@@ -36,14 +36,15 @@
 
             <div class="mb-3">
                 <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
-                <input asp-for="PhoneNumber" class="form-control" placeholder="Enter your mobile number" />
+                <input asp-for="PhoneNumber" class="form-control" type="text" placeholder="Enter your mobile number" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
             <div class="row">
                 <div class="col-12 mb-3">
                     <label asp-for="Password" class="form-label">Password</label>
-                    <input type="password" asp-for="Password" class="form-control" placeholder="Enter your password" />
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 @* <div class="col-6 mb-3">

@@ -38,10 +38,12 @@ namespace FleetManagementSystem.Controllers
 
             var normalizedDriverName = driverName.Trim().ToLower();
 
+
+            // Only show pending trips which are assignerd 
             var assignedTrips = _db.Trips
         .Where(t => t.AssignedDriver != null &&
                     t.AssignedDriver.Trim().ToLower() == normalizedDriverName &&
-                    t.Status == "Pending") // ✅ Only show pending trips
+                    t.Status == "Pending") 
         .OrderByDescending(t => t.BookingTime)
         .ToList();
 
